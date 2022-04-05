@@ -1,0 +1,148 @@
+#clickCaptureOverlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+#overlaytext{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 16px;
+  color: white;
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+}
+
+
+
+
+/*for the message overlay in email headers*/
+
+.message-overlay{
+            border-radius: 8px;
+            background-color:  #455a64;
+            width: auto;
+            height: fit-content;
+            position: absolute;
+            left: calc(100% + 15px);
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            z-index: 1;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 11px 8px;
+        }
+        .message-overlay::after{
+            content: " ";
+            position: absolute;
+            top: 50%;
+            right: 100%; /* To the left of the tooltip */
+            margin-top: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color:  transparent #455a64 transparent transparent;
+        }
+        .overlay-text{
+            padding: 0px;
+            overflow: hidden;
+            max-width: 250px;
+            max-height: 300px;
+            width: max-content;
+        }
+        .overlay-text p{
+            font-size: 12px;
+            margin: 0;
+            font-family: 'Roboto';
+            color: white;
+        }
+        .overlay-image{
+            height: 20px;
+            width: 20px;
+            z-index: 2;
+            margin-right: 10px;
+        }
+
+        .overlay-container{
+            position: relative;
+            width: fit-content;
+        }
+
+
+#overlay-hour-container{
+    left: 70%;
+}
+
+#overlay-hour-container>img{
+    left: -15px;
+    top: -15px;
+
+}
+
+  
+
+/*This will style the overlays in the body*/
+        .overlay-inline{
+            z-index: 1;
+            position: absolute;
+            width: fit-content;
+            bottom: 20px;
+            left: -50px;
+            border-radius: 8px;
+            box-shadow: 0px 1px 7px 2px rgb(38 50 56 / 17%);
+            background-color: #455a64;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            max-width: 200px;
+            height: auto;
+            padding: 11px 8px;
+        }
+        .body-overlay-text{
+            width: max-content;
+            text-align: center;
+            margin: auto;
+            font-family: 'Roboto';
+            font-size: 12px;
+            display: inline-block;
+            color: white;
+            font-family: 'Roboto';
+            
+
+        }
+        .overlay-inline::after{
+            content: " ";
+            position: absolute;
+            top: 100%; /* At the bottom of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #455a64 transparent transparent transparent;
+        }
+        .body-overlay-image{
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+    .body-overlay-wrapper{
+        position: relative;
+        display: inline-block;
+    }
+	
+	 .overlay{
+        display: none;
+    }

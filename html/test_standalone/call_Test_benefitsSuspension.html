@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800&display=swap');
+
+      :root{
+        --blue1 :#002a5c;
+        --grey1 :#263238;
+    }
+	
+		.boxed {
+		  border: 2px solid black ;
+		  width:200px; /* or whatever width you want. */
+		  max-width:200px; /* or whatever width you want. */
+		  display: inline-block;
+		}
+      .screen *,
+      .component-wrapper * {
+        box-sizing: border-box;
+        width: 100%;
+      }
+      .center-horizontalf {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+          width: 100%;
+      }
+      
+      .letter{
+          width: 612px;
+          height: 700px;
+          padding: 40px 30px;
+          margin: auto;
+          box-sizing: border-box;
+          box-shadow: 0px 0px 6px rgb(144 164 174 / 50%);
+          position: relative;
+      }
+      .letter *{
+        font-family: 'Roboto Slab', sans-serif;
+      }
+
+      .letter-header{
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+      }
+      .SSA-Title{
+        color: var(--blue1);
+        margin: 0 0 0 15px;
+        border-bottom: 1px solid var(--blue1);
+        width: 100%;
+        font-size: 14px;
+      }
+
+      .header-info{
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .recipient{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        position: relative;
+      }
+      .sender{
+        position: relative;
+      }
+
+      .recipient-content *, .sender *{
+        margin: 0;
+        font-family: 'Roboto';
+        font-size: 11px;
+        color: var(--grey1);
+        line-height: 13px;
+      }
+
+      .recipient-content p:last-child{
+        margin-top: 10px;
+      }
+
+
+      .letter-footer{
+        position: absolute;
+        bottom: 40px;
+        left: 0;
+        width: 100%;
+      }
+
+      .letter-body{
+        margin-top: 30px ;
+      }
+      
+      .letter-footer *{
+        text-align: center;
+        width: 100%;
+        margin: 0;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--grey1);
+
+      }
+
+      .body-title{
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--grey);
+        width: 100%;
+      }
+      .body-subtitle{
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--grey);
+        width: 100%;
+      }
+      .body-paragraph{
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--grey);
+        width: 100%;
+        line-height: 16px;
+      }
+
+      .center-text{
+        text-align: center;
+      }
+      .right-text{
+        text-align: right;
+      }
+
+      .request-sender{
+        margin-left: 30%;
+      }
+      .request-sender *{
+        margin: 0;
+      }
+
+      /*FOR THE TOOLTIPS*/
+      .message-overlay{
+            border-radius: 8px;
+            background-color:  #455a64;
+            height: fit-content;
+            position: absolute;
+            width: max-content;
+            max-width: 150px;
+            left: 0;
+            right: 0;
+            bottom: 60%;
+            margin: auto;
+            z-index: 99999;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 11px 8px;
+        }
+        .message-overlay::after{
+            content: " ";
+            position: absolute;
+            border-style: solid;
+            top: 100%;
+            left: 50%; /* To the left of the tooltip */
+            margin-left: -5px;
+            border-width: 5px;
+           
+            border-color: #455a64 transparent  transparent transparent;
+        }
+        .overlay-text{
+            padding: 0px;
+            overflow: hidden;
+            max-width: 250px;
+            max-height: 300px;
+            width: max-content;
+            font-size: 12px;
+            font-family: 'Roboto';
+            color: white;
+        }
+
+        .overlay-image{
+            height: 20px;
+            width: 20px;
+            z-index: 2;
+            margin-right: 10px;
+        }
+
+        .overlay-recipient{
+            left: unset;
+            right: 250px;
+        }
+        .overlay-date{
+          left: unset;
+          right: 250px;
+          bottom: unset;
+          top: 50px;
+        }
+
+        .overlay-recipient::after{
+            top: 50%;
+            left: 100%;
+            margin-left: unset;
+            margin-top: -5px;
+            border-width: 5px;
+            border-color:  transparent  transparent transparent #455a64;
+        }
+        .overlay-date::after{
+            top: 50%;
+            left:  100%;
+            margin-left: unset;
+            margin-top: -5px;
+            border-width: 5px;
+            border-color:  transparent transparent transparent #455a64;
+        }
+        .overlay-sender
+        {
+          left: -30px;
+          right: unset;
+          bottom: 110%;
+        }
+
+        /*For the body overlays*/
+        .overlay-inline{
+            z-index: 1;
+            position: absolute;
+            width: fit-content;
+            bottom: 20px;
+            left: -50px;
+            border-radius: 8px;
+            box-shadow: 0px 1px 7px 2px rgb(38 50 56 / 17%);
+            background-color: #455a64;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            max-width: 200px;
+            height: auto;
+            padding: 11px 8px;
+        }
+        .body-overlay-text{
+            width: max-content;
+            text-align: center;
+            margin: auto;
+            font-family: 'Roboto';
+            font-size: 12px;
+            display: inline-block;
+            color: white;
+            font-family: 'Roboto';
+        }
+		
+        .overlay-inline::after{
+            content: " ";
+            position: absolute;
+            top: 100%; /* At the bottom of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #455a64 transparent transparent transparent;
+        }
+		
+        .body-overlay-image{
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+    .body-overlay-wrapper{
+        position: relative;
+        display: inline-block;
+    }
+
+	 .overlay{
+        display: none;
+    }
+      
+    </style>
+  </head>
+  
+  
+  
+  <body>
+    <div class="center-horizontal">
+      <div class="letter">
+          <div class="letter-body">
+			<!-- This is filled in using the javascript code and "letter body" text below --> 
+
+ <p class="body-title center-text"><font size="+2">Please listen to the following message that could have been sent to your phone</font></p>
+<input type="button" value="Play Recording" onclick="playMusic()" />
+
+<p class="body-paragraph">&nbsp;</p>
+<div class="boxed">
+
+</div>
+<p class="body-paragraph">&nbsp;</p>
+
+		</div>
+		  
+
+          
+              
+      </div>
+    </div>
+  </body>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+        
+        
+  <script>
+
+// Here is where you fill in the template with text 
+
+const overlayMessages = `{
+    "Sender" : "",
+    "Recipient_Direction" : "",
+    "Date" : ""
+}`
+
+  
+  </script>
+    <script type='text/javascript'>
+	function playMusic(){
+		var music = new Audio('audio/ssa_robocall.mp3');
+		music.play();
+	};
+  
+
+        $(document).ready(function(){
+                var data = JSON.parse(jsonData);
+                
+                document.getElementById("form-id").innerHTML = data.Form_ID;
+
+
+
+                //ADDING THE SET OVERLAY MESSAGES
+				const queryString = window.location.search;
+				const urlParams = new URLSearchParams(queryString);
+                // var params = window.location.search.substring(1);
+				var displayTheOverlays = false;
+				if (urlParams.has('showOverlays')) {
+					var theParam = urlParams.get('showOverlays');
+					if (theParam == 'true') {
+						displayTheOverlays = true;
+					}
+				}
+               
+                if(displayTheOverlays){
+                    var overlays = document.querySelectorAll(".overlay");
+                    overlays.forEach((overlay)=>{
+                        overlay.style.display = "flex";
+                    });
+                }
+
+
+                /*FOR THE OVERLAYS*/
+                var overlay_Messages = JSON.parse(overlayMessages);
+                if(overlay_Messages.Sender == "" || overlay_Messages.Sender == null){
+                    document.querySelector(".overlay-sender").style.display = "none";
+                }
+                else{
+                    document.getElementById("overlay-sender").innerHTML = overlay_Messages.Sender;
+                }
+                if(overlay_Messages.Recipient_Direction == "" || overlay_Messages.Recipient_Direction == null){
+                    document.querySelector(".overlay-recipient").style.display = "none";
+                }
+                else{
+                    document.getElementById("overlay-recipient").innerHTML = overlay_Messages.Recipient_Direction;
+                }
+                if(overlay_Messages.Date == "" || overlay_Messages.Date == null){
+                    document.querySelector(".overlay-date").style.display = "none";
+                }
+                else{
+                    document.getElementById("overlay-date").innerHTML = overlay_Messages.Date;
+                }
+				
+
+				// Fill in the name, if there is a space for it & we have a name to put in
+				const nameElement = document.getElementById('nametofill')
+				if (nameElement && urlParams.has('name')) {
+					var theNewName = urlParams.get('name');
+					if (theNewName && theNewName.length > 1) {
+						nameElement.textContent = theNewName;
+					}
+				}
+        });
+
+
+        function addOverlaysToBody(bodyWithTags){
+            var result = bodyWithTags;
+            var overlayComponent;
+            const OverlayTexts = getAllTheOverlayTexts(bodyWithTags);
+            OverlayTexts.forEach((element)=>{
+                    overlayComponent = getOverlayComponent(getTagText(element[0]))
+                    result = result.replace(element[0], overlayComponent);
+                })
+
+            return result;
+
+        }
+
+        function getAllTheOverlayTexts(bodyToOverlay){
+            // var regularExpression =  new RegExp("@@(.| \n)+@@", "g");
+            var regularExpression =  new RegExp("@@(.)+@@", "g");
+            return [...bodyToOverlay.matchAll(regularExpression)]; 
+
+        }
+        function getTagText(tag){
+            return tag.replaceAll('@@', '');
+        }
+        function getOverlayComponent(desiredText){
+            return `<span class="body-overlay-wrapper"> <span class="overlay-inline overlay"><img class="body-overlay-image" src="./images/letter-alert-triangle.svg"><span class="body-overlay-text">${desiredText}</span></span></span>`;
+        }
+            </script>
+</html>
