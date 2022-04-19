@@ -1,0 +1,49 @@
+// A script that includes other javascript resources on the page.
+
+// Included Scripts
+include_js('/static_assets/js/reporting','google-analytics.js');
+include_js('/static_assets/js/leftnav', 'height.js');
+include_js('/static_assets/js', 'https.js');
+
+function include_js(path, filename) {
+	var location = path + "/" + filename;
+	var head_dom = document.getElementsByTagName('head').item(0);
+	var js = document.createElement('script');
+	js.type = 'text/javascript';
+	js.src = location;
+	head_dom.appendChild(js);
+}
+
+// Federated Analytics
+include_fed('/static_assets/js/reporting','federated-analytics.js?agency=Treasury&subagency=IRS&sdor=true');
+
+function include_fed(path, filename) {
+	var location = path + "/" + filename;
+	var head_dom = document.getElementsByTagName('head').item(0);
+	var js = document.createElement('script');
+	js.id = '_fed_an_ua_tag';
+	js.type = 'text/javascript';
+	js.src = location;
+	head_dom.appendChild(js);
+}
+
+    // Instructions: please embed this snippet directly into every page of your website template.
+    // For optimal performance, this must be embedded directly into the template, not referenced
+    // as an external file.
+
+    // ForeSee Embed Script v2.00
+// DO NOT MODIFY BELOW THIS LINE *****************************************
+             ;(function (g) {
+              var d = document, am = d.createElement('script'), h = d.head || d.getElementsByTagName("head")[0], fsr = 'fsReady',
+                aex = {
+                 "src": "//gateway.foresee.com/sites/irs-gov/production/gateway.min.js",
+                 "type": "text/javascript",
+                 "async": "true",
+                 "data-vendor": "fs",
+                 "data-role": "gateway"
+                     };
+              for (var attr in aex){am.setAttribute(attr, aex[attr]);}h.appendChild(am);g[fsr] = function () {var aT = '__' + fsr + '_stk__';g[aT] = g[aT] || [];g[aT].push(arguments);};
+              })(window);
+          // DO NOT MODIFY ABOVE THIS LINE *****************************************
+
+;

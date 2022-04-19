@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	<link rel="stylesheet" href="./util/ssaTrust_emailWrapper.css">
+	<link rel="stylesheet" href="./util/ssaTrust_common.css">
+
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Roboto:900,400");
+    </style>
+  </head>
+  <body>
+    <div class="container-center-horizontal">
+	
+		<!-- Start HTML for Email Reader  -- code that makes it look lik this is in an email client
+		You SHOULD NOT need to change any of this --> 
+
+        <div class="sidebar"> 
+            <img class="sidebar-icon" src="./images/inbox.svg">
+            <img class="sidebar-icon" src="./images/sent.svg">
+            <img class="sidebar-icon" src="./images/star.svg">
+            <img class="sidebar-icon" src="./images/edit.svg">
+            <img class="sidebar-icon" src="./images/alert-octagon.svg">
+        </div>
+        <div class="top-body-bar">
+            <img class="back-arrow" src="./images/arrow-left.svg">
+            <div class="body-bar-container">
+                <div class="body-bar-item">
+                    <img src="./images/archive.svg">
+                    <p class="mobile-hide" >Archive</p>
+                </div>
+                <div class="body-bar-item">
+                    <img src="./images/slash.svg">
+                    <p class="mobile-hide" >Report Spam</p>
+                </div>
+                <div class="body-bar-item">
+                    <img src="./images/trash.svg">
+                    <p class="mobile-hide">Delete</p>
+                </div>
+            </div>
+            <div class="body-bar-item">
+                <img class="more-dots" src="./images/more-vertical.svg">
+            </div>
+            
+            
+        </div>
+		
+		<!-- End HTML for Email Reader Wrapper --> 
+
+        <div class="email-content">
+            <div class="email-content-container">
+			
+
+				<!-- Start HTML for Email Header.  
+				See the data file for setting these values -- they are all parameterized, with option overlays.  
+				You SHOULD NOT need to change any of this --> 
+								
+                <div class = "overlay-container">
+                    <h1 id="subject">Subject of the email</h1>
+                    <div class="message-overlay overlay-subject overlay">
+                        <img class="overlay-image" src="./images/alert-triangle (1).svg" onclick="displayOverlay('Overlay-subject')">
+                        <div id="Overlay-subject" class="overlay-text">
+                            <p>Body with just explanation</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mail-info">
+                    <div class="info">
+                        <img src="./images/sender icon.svg">
+                        <div class="name-receptor">
+                            <div class="name-date-sender">
+                                <p id="name"> Name</p>
+                                <p id ="date-left" class="hide-desktop span-date-hour">Date, Hour (2 days ago)</p>
+                                <p id= "sender-top" class="tablet-hide"><email@email.com></p>
+                                <div class="message-overlay overlay-name overlay">
+                                    <img class="overlay-image" src="./images/alert-triangle (1).svg" onclick="displayOverlay('Overlay-name')">
+                                    <div id="Overlay-name" class="overlay-text">
+                                        <p>Body with just explanation</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="toMe">
+                                <p>to: <span>Me</span></p>
+                                <img id="toMe-Arrow"class="toMe-arrow" src="./images/chevron-up.svg" onclick="displayMailBoxTable()">
+                                <div class="message-overlay overlay-toMe overlay">
+                                    <img class="overlay-image" src="./images/alert-triangle (1).svg" onclick="displayOverlay('Overlay-toMe')">
+                                    <div id="Overlay-toMe" class="overlay-text">
+                                        <p>Body with just explanation</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mail-options">
+                        <p id= "date-right" class="tablet-hide">Date, Hour (2 days ago)</p>
+                        <a onclick="return clickCaptureOverlayOn()" href="https://www.behavioralsurvey.com/replyto"><img src="./images/corner-up-left.svg"></a>
+                        <a onclick="return clickCaptureOverlayOn()" href="https://www.behavioralsurvey.com/replyall"><img class="tablet-hide" src="./images/Reply All.svg"></a>
+                        <a onclick="return clickCaptureOverlayOn()" href="https://www.behavioralsurvey.com/forward"><img class="tablet-hide" src="./images/Forward.svg"></a>
+                        <img src="./images/more-vertical.svg" onclick="hideOverlays()">
+                        <div id="overlay-hour-container" class="message-overlay tablet-hide overlay">
+                            <img class="overlay-image" src="./images/alert-triangle (1).svg" onclick="displayOverlay('Overlay-hour')">
+                            <div id="Overlay-hour" class="overlay-text">
+                                <p>Body with just explanation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                    <div id="mail-box-table" class="mail-box-table">
+                        <div class="box-mail-row">
+                            <p class="box-mail-column-left">From</p>
+                            <p id="sender" class="box-mail-column-right">Name | senderemail@email.com </p>
+                            <div class="message-overlay overlay-from overlay">
+                                <img class="overlay-image" src="./images/alert-triangle (1).svg" onclick="displayOverlay('Overlay-1')">
+                                <div id="Overlay-1" class="overlay-text">
+                                    <p>Body with just explanation</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-mail-row">
+                            <p class="box-mail-column-left">Reply to</p>
+                            <p id= "reply-to"class="box-mail-column-right">senderemail@email.com</p>
+                            <div class="message-overlay overlay-reply-to overlay">
+                                <img class="overlay-image" src="./images/alert-triangle (1).svg" onclick="displayOverlay('Overlay-2')">
+                                <div id="Overlay-2" class="overlay-text">
+                                    <p>Body with just explanation</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-mail-row">
+                            <p class="box-mail-column-left">To</p>
+                            <p id= "to" class="box-mail-column-right">myemail@email.com</p>
+                            <div class="message-overlay overlay-to overlay">
+                                <img class="overlay-image" src="./images/alert-triangle (1).svg" onclick="displayOverlay('Overlay-3')">
+                                <div id="Overlay-3" class="overlay-text">
+                                    <p>Body with just explanation</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-mail-row">
+                            <p class="box-mail-column-left">Date</p>
+                            <p id= "date"class="box-mail-column-right">Month, Day, Year, 00:00</p>
+                            <div class="message-overlay overlay-date overlay">
+                                <img class="overlay-image" src="./images/alert-triangle (1).svg" onclick="displayOverlay('Overlay-4')">
+                                <div id="Overlay-4" class="overlay-text">
+                                    <p>Body with just explanation</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-mail-row">
+                            <p class="box-mail-column-left">Mailed by</p>
+                            <p id= "mailed-by"class="box-mail-column-right">mail3.ssa.gov</p>
+                            <div class="message-overlay overlay-mailed-by overlay">
+                                <img class="overlay-image " src="./images/alert-triangle (1).svg" onclick="displayOverlay('Overlay-5')">
+                                <div id="Overlay-5" class="overlay-text">
+                                    <p>Body with just explanation</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-mail-row">
+                            <div class="box-mail-column-left">
+                                <img src="./images/lock.svg">
+                            </div>
+                            
+                            <p class="box-mail-column-right">Standard Encryption</p>
+                        </div>
+                    </div>
+                    
+
+				<!-- End HTML for Email Header --> 
+                
+                <div class="mail-text">    
+                        
+						<!-- Here is where the core of the email goes. The rest is a wrapper to make it 
+						look like the person is viewing an email client. -->
+						
+                </div>
+                
+                <!-- Click Capture Overlay  -->
+				<div id="clickCaptureOverlay">
+					<div id="overlaytext">Links have been disabled in this email for testing purposes. Please select "real" in the survey question below to move to the next question.  
+					</div>
+				</div>
+
+            </div>
+            
+           
+            </div>
+
+           
+
+            
+    </div>
+  </body>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+  
+  <script src='./util/ssaTrust_common.js'></script>
+
+  <!-- Here is where all of the template content goes.  
+  You can include it as a separate Javascript file, or simply add it in a script tag.
+  The two variables you need to define are:
+  
+	# Email content and header
+	const jsonData = `{
+		"Name" : "Jose Chavarria",
+		"Reply_to": "replyto@gmail.com",
+		"From": "sendermail1@gmail.com",
+		"Mailed_by": "sendermail@email.com",
+		"To": "myemail@email.com",
+		"Month": "Mar",
+		"Day": "04",
+		"Year":"2021",
+		"Hour": "12:00pm",
+		"Subject": "The mail subject",
+		"Email_body": ${email_body}   # This is most easily done as another variable with the core of the email.
+				# Include overlays text within pairs of "@@"s. 
+	}`;
+
+
+	# Popup overlay messages
+	const overlayMessages = `{
+		"Subject" : "",
+		"toMe": "",
+		"Name_Sender": "",
+		"Date": "",
+		"Reply_to": "",
+		"From": "",
+		"Mailed_by": "",
+		"To": ""
+	}`;
+  -->
+  
+  <script>
+  var email_body = `
+
+<table id="m_2901997501867980665bodyTable" width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color:#f4f7fa">
+<tbody><tr>
+<td valign="top">
+<table width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<tbody><tr>
+<td width="100%">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td></td>
+<td height="15"></td>
+<td></td>
+</tr>
+<tr>
+<td width="15"></td>
+<td align="center"><img src="./images/mcafee.png" alt="Identity Theft Protection by McAfee" width="468" style="width:468px;height:auto;display:block" border="0"></td>
+<td width="15"></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td height="15"></td>
+<td>&nbsp;</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td width="100%">
+<table id="m_2901997501867980665BorderBGTable" style="border:10px solid #fff;background:#ffffff" width="100%" border="0" cellpadding="0" cellspacing="0">
+<tbody><tr>
+<td width="100%" height="100">
+<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<tbody><tr>
+<td bgcolor="#FFFFFF" style="background:#ffffff">
+<table id="m_2901997501867980665bannerTable" height="90" width="100%" border="0" cellpadding="0" cellspacing="0">
+<tbody><tr>
+<td height="15"></td>
+</tr>
+<tr>
+<td width="15"></td>
+<td align="left" valign="middle" style="color:#53565a;font-family:Open Sans,Arial,sans-serif;font-size:24px;font-weight:normal;text-align:center;line-height:36px;margin:0">
+<h1 style="color:#53565a;font-family:Open Sans,Arial,sans-serif;font-size:24px;font-weight:normal;text-align:center;line-height:36px;margin:0">Your monthly activity report is here</h1>
+</td>
+<td width="15"></td>
+</tr>
+<tr>
+<td height="15"></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td style="font-family:'Open Sans',Arial,sans-serif;color:#53565a;font-size:14px">
+<table id="m_2901997501867980665textTable" width="100%" border="0" cellpadding="0" cellspacing="0">
+<tbody><tr>
+<td height="15"></td>
+</tr>
+<tr>
+<td width="15"></td>
+<td align="left" style="font-family:'Open Sans',Arial,sans-serif;color:#53565a;font-size:14px">
+<p style="margin:0">Hi,</p><br>
+</td>
+</tr>
+<tr>
+<td width="15"></td>
+<td align="left" style="font-family:'Open Sans',Arial,sans-serif;color:#53565a;font-size:14px">
+<p style="margin:0">We're looking out for you 24/7/365.<br><br>Your McAfee Identity Theft Protection service includes a monthly summary of the alerts found on your account.<br><br><strong>Good news!</strong> You didn't have any new notifications on the data you asked us to monitor.<br><br>If you'd like McAfee to monitor more data, such as new accounts, email addresses, phone numbers, or medical IDs, now is a great time to update your profile.<br><br>
+<strong>Haven't setup your profile yet?</strong><br><br>@@Links to the same, official McAfee Site@@<a onclick="return clickCaptureOverlayOn()" href="https://idtheftsecurity.mcafee.com/enrollment/validate-member-number?RTN=90000177&amp;memberNumber=TmCrdtMntr-6a53313ce919339400b188832151acedeaad4236" style="color:#00aeef" target="_blank" data-saferedirecturl="https://idtheftsecurity.mcafee.com/enrollment/validate-member-number">Complete your Identity Theft Protection profile now</a>.<br><br>
+If you've setup a profile but have forgotten your password, you can <a onclick="return clickCaptureOverlayOn()" href="https://idtheftsecurity.mcafee.com/forgot-password" style="color:#00aeef" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://idtheftsecurity.mcafee.com/forgot-password&amp;source=gmail&amp;ust=1650322025462000&amp;usg=AOvVaw0aJnnNniA5uN8zGsNw6Duk">reset</a> it here.<br><br>Our Support Team is always ready to answer your questions. Just call @@You can verify this phone number by searching for it online -- it's McAfee@@855-223-8057.<br><br>
+Thank you for choosing McAfee Identity Theft Protection.<br>We're here to help you protect what matters.<br><br></p>
+</td>
+<td width="15"></td>
+</tr>
+<tr>
+<td width="15"></td>
+<td align="center">
+</td>
+<td width="15"></td>
+</tr>
+<tr>
+<td></td>
+<td height="15"></td>
+<td></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td height="30" style="text-align:left">&nbsp;</td>
+</tr>
+</tbody></table>
+<table id="m_2901997501867980665footerTable" align="center" width="100%" border="0" cellpadding="0" cellspacing="0">
+</table>
+</td>
+</tr>
+</tbody></table>
+`;
+
+email_body = JSON.stringify(email_body);
+
+//THIS IS THE DATA TO BE INSERTED IN THE EMAIL TEMPLATE
+const jsonData = `{
+    "Name" : "Identity Theft Protection by McAfee",
+    "Reply_to": "noreply@mail.idtheftsecurity.mcafee.com",
+    "From": "noreply@mail.idtheftsecurity.mcafee.com",
+    "Mailed_by": "outbound.mcafee.com",
+    "To": "youremail@gmail.com",
+    "Month": "Mar",
+    "Day": "04",
+    "Year":"2022",
+    "Hour": "4:23pm",
+    "Subject": "Your monthly activity report is here",
+    "Email_body": ${email_body}
+}`;
+
+
+const overlayMessages = `{
+    "Subject" : "",
+    "toMe": "",
+    "Name_Sender": "Sender appears fine - but that's not enough to know its trustworthy",
+    "Date": "",
+    "Reply_to": "If you double check the email headers: it really is the official McAfee domain",
+    "From": "",
+    "Mailed_by": "",
+    "To": ""
+}`;
+  </script>
+  
+<!-- Load the script that substitutes in the email header stuff -->  
+<script src='./util/ssaTrust_emailFooter.js'></script>
+
+</html>

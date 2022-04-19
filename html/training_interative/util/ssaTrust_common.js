@@ -10,17 +10,6 @@ function clickCaptureOverlayOff() {
   return false;  // Used to override the link
 }
 
-function clickCaptureCallback(e) {
-    var e = window.e || e;
-
-    if (e.target.tagName !== 'A')
-        return;
-
-    // Do something
-	clickCaptureOverlayOn()
-}
-
-
 // Hijack ALL clicks
 //if (document.addEventListener)
 //    document.addEventListener('click', clickCaptureCallback, false);
@@ -45,8 +34,8 @@ function addOverlaysToBody(bodyWithTags){
 function getAllTheOverlayTexts(bodyToOverlay){
 	var regularExpression =  new RegExp("@@(.)+@@", "g");
 	return [...bodyToOverlay.matchAll(regularExpression)]; 
-
 }
+
 function getTagText(tag){
 	return tag.replaceAll('@@', '');
 }

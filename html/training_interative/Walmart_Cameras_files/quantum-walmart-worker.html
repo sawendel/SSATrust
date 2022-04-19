@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)https://cdn.quantummetric.com/workers/quantum-walmart-worker.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <script>
+            
+var c=window.parent,d=window.location.pathname.match(/quantum-(\w+)-worker/);
+if(d&&d[1]){var e=new Worker("quantum-"+d[1]+"-worker.js");e.onerror=function(a){console.error("Quantum Web Worker error:",a)};e.addEventListener("message",function(a){var b=a.data;b&&"object"==typeof b&&"quantum_worker"==b.namespace&&c.postMessage(a.data,"*")});window.addEventListener("message",function(a){var b=a.data;b&&"object"==typeof b&&"quantum_worker"==b.namespace&&e.postMessage(a.data)});e.postMessage({action:"install",namespace:"quantum_worker",token:Date.now()})}else throw Error("Invalid setup for worker-frame");
+
+        </script>
+    </head>
+    <body>
+    
+</body></html>

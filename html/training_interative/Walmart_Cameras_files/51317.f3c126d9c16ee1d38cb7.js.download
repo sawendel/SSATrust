@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[51317],{51317:function(e,a,s){s.r(a);var t=s(30567),b=s(94358),i=s.n(b);a.default=({isSelected:e})=>(0,t.jsx)("div",{className:i()("bb bw2 pt1 w-100",{"b--blue":e,"b--white":!e}),"data-testid":"image-marker"})}}]);
