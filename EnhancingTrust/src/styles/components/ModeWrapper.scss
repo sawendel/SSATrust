@@ -1,0 +1,42 @@
+@import '../variables';
+
+.et-mode-wrapper {
+  position: sticky;
+  top: 0;
+  left: 0;
+  color: $white;
+  z-index: 1;
+
+  &__qn {
+    margin: 0;
+
+    strong {
+      text-transform: capitalize;
+    }
+  }
+
+  &__result-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+
+    i {
+      margin-left: .7rem;
+    }
+
+    &-success {
+      &:hover,
+      &.active {
+        color: $success;
+      }
+    }
+
+    &-danger {
+      &:hover,
+      &.active {
+        color: $danger;
+      }
+    }
+  }
+}

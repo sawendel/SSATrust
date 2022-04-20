@@ -1,0 +1,46 @@
+@import '~bootstrap/scss/mixins';
+@import '../variables';
+
+.et-email {
+  position: relative;
+
+  &-header {
+    border-bottom: 1px solid $tower-gray;
+    padding-bottom: .85em;
+    margin-bottom: .85em;
+
+    @include media-breakpoint-down(md) {
+      border-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    &__actions * {
+      padding-left: 1.25rem;
+    }
+  }
+
+  &__menu {
+    &-side {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #455A64;
+    }
+
+    &-top {
+      color: #455A64;
+      box-shadow: 0px 1px 6px rgba(144, 164, 174, .5);
+      display: flex;
+
+      &__item {
+        display: flex;
+        align-items: center;
+        padding-right: 2.3rem;
+        
+        span {
+          padding-left: 1.2rem;
+        }
+      }
+    }
+  }
+}
