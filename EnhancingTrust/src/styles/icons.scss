@@ -2,11 +2,11 @@
 
 @font-face {
   font-family: '#{$icomoon-font-family}';
-  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?syjk0c');
-  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?syjk0c#iefix') format('embedded-opentype'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?syjk0c') format('truetype'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?syjk0c') format('woff'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?syjk0c##{$icomoon-font-family}') format('svg');
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?mtttz1');
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?mtttz1#iefix') format('embedded-opentype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?mtttz1') format('truetype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?mtttz1') format('woff'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?mtttz1##{$icomoon-font-family}') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -26,49 +26,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.et-info-octa {
+.et-caret-down {
   &:before {
-    content: $et-info-octa; 
+    content: $et-caret-down; 
   }
 }
-.et-warning {
+.et-lock {
   &:before {
-    content: $et-warning; 
-  }
-}
-.et-camera {
-  &:before {
-    content: $et-camera; 
-  }
-}
-.et-caret-left {
-  &:before {
-    content: $et-caret-left; 
-  }
-}
-.et-face-happy {
-  &:before {
-    content: $et-face-happy; 
-  }
-}
-.et-image-upload {
-  &:before {
-    content: $et-image-upload; 
-  }
-}
-.et-info-circle {
-  &:before {
-    content: $et-info-circle; 
-  }
-}
-.et-mic {
-  &:before {
-    content: $et-mic; 
-  }
-}
-.et-user {
-  &:before {
-    content: $et-user; 
+    content: $et-lock; 
   }
 }
 .et-archive {
@@ -141,13 +106,58 @@
     content: $et-tray; 
   }
 }
+.et-user {
+  &:before {
+    content: $et-user; 
+  }
+}
+.et-camera {
+  &:before {
+    content: $et-camera; 
+  }
+}
+.et-caret-left {
+  &:before {
+    content: $et-caret-left; 
+  }
+}
+.et-face-happy {
+  &:before {
+    content: $et-face-happy; 
+  }
+}
+.et-image-upload {
+  &:before {
+    content: $et-image-upload; 
+  }
+}
+.et-info-circle {
+  &:before {
+    content: $et-info-circle; 
+  }
+}
+.et-mic {
+  &:before {
+    content: $et-mic; 
+  }
+}
+.et-info-octa {
+  &:before {
+    content: $et-info-octa; 
+  }
+}
+.et-warning {
+  &:before {
+    content: $et-warning; 
+  }
+}
 .et-play {
   &:before {
-    content: $et-play; 
+    content: $et-play;
   }
 }
 .et-pause {
   &:before {
-    content: $et-pause; 
+    content: $et-pause;
   }
 }

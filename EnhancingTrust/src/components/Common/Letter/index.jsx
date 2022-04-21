@@ -21,14 +21,14 @@ const Letter = (props) => {
 
         <div className='et-letter__header__separator pt-2'></div>
 
-        <div className='et-letter__header__down'>
+        <div className='et-letter__header__down py-md-3'>
           <div className='et-letter__header__companyName py-2 px-1'>
             <span className='et-letter__header__tittle'>{config?.companyInfo?.name}</span>
             <span>{config?.companyInfo?.streetAddress}</span>
             <span>{config?.companyInfo?.addressLine}</span>
             <span>{config?.companyInfo?.country}</span>
           </div>
-          <div className='et-letter__header__recipientName py-2 px-13 px-md-15 px-lg-13'>
+          <div className='et-letter__header__recipientName py-2 px-1'>
             <span className='et-letter__header__tittle'>{config?.recipientInfo?.name}</span>
             <span>{config?.recipientInfo?.title}</span>
             <span>{config?.recipientInfo?.streetAddress}</span>
@@ -37,19 +37,19 @@ const Letter = (props) => {
         </div>
 
         <div className='et-letter__content px-1'>
-          <div className='et-letter__content__date'>
+          <div className='et-letter__content__date py-md-3 py-lg-0'>
             <span>{config?.salutation}</span>
             <span>{date}</span>
           </div>
           <div className='et-letter__content__text py-2'>
             <TemplateRenderer {...props} setOptions={setConfig} />
           </div>
-          <div className='et-letter__content__footer'>
+          <div className='et-letter__content__footer py-md-3'>
             <div className='et-letter__sender'>
               <span>{config?.senderInfo?.name}</span>
               <span>{config?.senderInfo?.title}</span>
             </div>
-            <div className='et-letter__contact px-4'>
+            <div className='et-letter__contact'>
               <span>Contact info:</span>
               <span>Phone: {config?.contactInfo?.phone}</span>
               <span>Mail: {config?.contactInfo?.email}</span>
@@ -57,7 +57,7 @@ const Letter = (props) => {
           </div>
         </div>
 
-        <div className='et-letter__final px-15 py-4'>
+        <div className='et-letter__final px-15 py-4 py-lg-1'>
           <p>
             {config?.footer}
           </p>
