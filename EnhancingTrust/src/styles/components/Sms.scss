@@ -1,0 +1,91 @@
+@import "../variables";
+
+.et-sms {
+  width: 335px;
+  height: 690px;
+
+  &__img{
+    background-image: url('../../../public/img/cellphone.png');
+    position: absolute;
+    width: 335px;
+    height: 690px;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid $light-gray;
+  }
+
+  &__avatar {
+    text-align: center;
+
+    img {
+      margin-bottom: 0.5rem;
+    }
+
+    span {
+      font-size: 0.875rem;
+      color: $light-gray;
+    }
+  }
+  &__content {
+    height: 470px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-content: flex-end;
+
+    span {
+      font-size: 0.875rem;
+      color: $light-gray;
+    }
+  }
+
+  &__bubble {
+    position: relative;
+    background: $light;
+    color: $black;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+
+  &__bubble:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 0;
+    z-index: 1;
+    border-style: solid;
+    border-width: 0 0 22px 20px;
+    border-color: transparent transparent $light transparent;
+    top: calc(100% - 20px);
+    left: -20px;
+    margin-top: -10px;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    background-color: $light;
+
+    &__icon {
+      margin-top: 0.125rem;
+    }
+    &__iconText {
+      z-index: 2;
+      position: relative;
+      left: -50px;
+    }
+
+    input {
+      width: 16.688rem;
+      height: 2.5rem;
+      border-radius: 25px;
+      border: none;
+      padding: 1rem 1.25rem;
+      z-index: 1;
+    }
+  }
+}

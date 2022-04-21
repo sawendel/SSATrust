@@ -1,0 +1,96 @@
+$font-size-base: 1rem;
+$h1-font-size: $font-size-base * 3;
+$h2-font-size: $font-size-base * 2;
+$h3-font-size: $font-size-base * 1.75;
+$h4-font-size: $font-size-base * 1.5;
+$h5-font-size: $font-size-base * 1.25;
+$h6-font-size: $font-size-base;
+
+$font-family-sans-serif: Roboto, "et-icons", "Helvetica Neue", system-ui, -apple-system, "Segoe UI", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+$btn-border-radius: 10px;
+
+$light: #ECEFF1;
+$danger: #C5050C;
+$secondary: #005779;
+$primary: #0F65EF;
+$info: #0479A8;
+$success: #005A5F;
+$warning: #BA5701;
+$blue:#03269E;
+$light-gray: #78909C;
+$black: #000000;
+$shadow: #263238;
+$red: #f26b6c;
+$orange: #fcd9d9;
+$gray: #e6e6e6;
+$white: white;
+$tower-gray: #B0BEC5;
+$lynch: #607D8B;
+
+$theme-colors: (
+  "white": $white,
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "lynch": $lynch,
+);
+
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+  6: $spacer * 4.5,
+  7: $spacer * 6,
+  8: $spacer * 7.5,
+  9: $spacer * 9,
+  10: $spacer * 10.5,
+  11: $spacer * 1.25,
+  12: $spacer * .625,
+  13: $spacer * 2.5,
+  14: $spacer * 5.625,
+  15: $spacer * 3.75,
+  16: $spacer * 8.5,
+  17: $spacer * 6.5,
+  19: $spacer * 1.125,
+  20: $spacer * 2,
+);
+
+// Icons
+$icomoon-font-family: "et-icons" !default;
+$icomoon-font-path: "./fonts" !default;
+
+$et-info-octa: "\e915";
+$et-warning: "\e916";
+$et-camera: "\e90f";
+$et-caret-left: "\e910";
+$et-face-happy: "\e911";
+$et-image-upload: "\e912";
+$et-info-circle: "\e913";
+$et-mic: "\e914";
+$et-user: "\e90e";
+$et-archive: "\e900";
+$et-arrow-left: "\e901";
+$et-caret-right: "\e902";
+$et-check: "\e903";
+$et-close: "\e904";
+$et-dots: "\e905";
+$et-forbiden: "\e906";
+$et-forward: "\e907";
+$et-pen: "\e908";
+$et-reply-all: "\e909";
+$et-response: "\e90a";
+$et-star: "\e90b";
+$et-trash: "\e90c";
+$et-tray: "\e90d";
+$et-play: "\ea1c";
+$et-pause: "\ea1d";
+

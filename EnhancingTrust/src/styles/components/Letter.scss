@@ -1,0 +1,139 @@
+@import "../variables";
+
+.et-letter {
+  width: 21.563rem;
+  height: 27.813rem;
+  box-shadow: 0px 6px 30px $shadow;
+
+  &__header {
+    &__up {
+      display: flex;
+      justify-content: space-between;
+    }
+    &__logo {
+      display: flex;
+      flex-direction: row;
+      color: $blue;
+      span {
+        font-size: 0.625rem;
+      }
+    }
+    &__slogan {
+      font-size: 0.625rem;
+    }
+    &__separator {
+      border-bottom: 3px solid $blue;
+    }
+    &__down {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.5rem;
+    }
+    &__companyName {
+      flex-direction: column;
+      display: flex;
+    }
+    &__recipientName {
+      flex-direction: column;
+      display: flex;
+    }
+    &__tittle {
+      color: $blue;
+    }
+  }
+
+  &__content {
+    &__date {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 0.563rem;
+    }
+
+    &__footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.5rem;
+    }
+  }
+
+  &__sender {
+    flex-direction: column;
+    display: flex;
+  }
+  &__contact {
+    flex-direction: column;
+    display: flex;
+  }
+  &__final {
+    font-size: 0.375rem;
+    text-align: center;
+  }
+
+  @include media-breakpoint-up(md) {
+    width: 36.25rem;
+    height: 46.875rem;
+
+    &__header {
+      &__logo {
+        span {
+          font-size: 1rem;
+        }
+      }
+      &__slogan {
+        font-size: 1rem;
+      }
+      &__down {
+        font-size: 0.75rem;
+      }
+    }
+    &__content {
+      &__date {
+        font-size: 0.938rem;
+      }
+      &__text {
+        font-size: 0.875rem;
+      }
+      &__footer {
+        font-size: 0.75rem;
+      }
+    }
+    &__final {
+      font-size: 0.625rem;
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    width: 27.5rem;
+    height: 35.625rem;
+
+    &__header{
+      &__logo {
+        span {
+          font-size: 0.75rem;
+        }
+      }
+      &__slogan {
+        font-size: 0.75rem;
+      }
+      &__down {
+        font-size: 0.625rem;
+      }
+    }
+
+    &__content{
+      &__date {
+        font-size: 0.75rem;
+      }
+      &__text {
+        font-size: 0.75rem;
+      }
+      &__footer {
+        font-size: 0.625rem;
+      }
+    }
+    &__final {
+      font-size: 0.5rem;
+    }
+  }
+}
