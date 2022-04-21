@@ -5,12 +5,15 @@ from ResultsAnalyzer import *
 import random
 
 debugging = False
-trainingQuestions = {'CyberAttack':'Fake',
-                     'ProtectYourself':'Real',
-                     'AnnualReminder':'Real',
-                     'CovidSSA':'Fake',
-                     'GetProtected':'Fake',
-                     'lt_favorable':'Real'}
+trainingQuestions = {'ProtectYourself':'Real',
+                    'AmazonHP':'Real',
+                    'email_IRS': 'Scam',
+                    'web_IRS': 'Real',
+                    'apple':'Real',
+                     'amazon_Product':'Scam',
+                     'email_mcafee':'Real',
+                     'GetProtected':'Scam',
+                     }
 
 def doIt(surveyVersion):
 
@@ -37,6 +40,6 @@ def doIt(surveyVersion):
 
 # Default "Main"
 if __name__ == '__main__':
-    doIt("6")
+    doIt("1")
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

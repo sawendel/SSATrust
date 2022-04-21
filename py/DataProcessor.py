@@ -30,18 +30,15 @@ def processTwoPartQualtricsTestResults(dataDir, dataFileName_p1, dataFileName_p2
 
 def getTestQuestions(surveyVersion):
     if surveyVersion == '1':  # There was an unintentional mistake in the SSA_Optout and Replacement Card in v3
-        testQuestions = {'ImportantInformation': ('Real', 'Email', 'Amazon'),
-                         'AmazonPayment': ('Fake', 'Email', 'Amazon'),
-                         'AmazonDelay': ('Real', 'Email', 'Amazon'),
-                         'RedCross': ('Fake', 'Email', 'RedCross'),
-                         'Disability': ('Fake', 'Email', 'Lawyer'),
-                         'ssa_optout': ('Fake', 'Email', 'SSA'),
-                         'replacementCard': ('Real', 'Email', 'SSA'),
-                         'annualReminderKLEW': ('Fake', 'Email', 'SSA'),
-                         'lt_medicare': ('Real', 'Letter', 'SSA'),
-                         'sms_disability': ('Fake', 'SMS', 'SSA'),
-                         'lt_suspension': ('Fake', 'Letter', 'SSA'),
-                         'sms_redcross': ('Real', 'SMS', 'RedCross')
+        testQuestions = {
+                            'RedCross': ('Scam', 'Email', 'Biz'),
+                            'SSA_HP': ('Real', 'Web', 'Govt'),
+                            'mySSA': ('Scam', 'Web', 'Govt'),
+                            'AmazonDeliveryDelay': ('Real', 'Email', 'Biz'),
+                            'FB_SSA': ('Scam', 'Web', 'Biz'),
+                            'ssa_optout': ('Scam', 'Email', 'Govt'),
+                            'replacementCard': ('Real', 'Email', 'Govt'),
+                            'WalmartProduct': ('Real', 'Web', 'Biz')
                          }
     return testQuestions
 
@@ -50,7 +47,7 @@ def readData(surveyVersion):
 
     dataDir = "C:/Users/steve/Google Drive/Dev/src/SSATrust/SSATrust/data/"
 
-    surveyOutputFilesByVersion = {'1': "V1/SSA_Y4_v1_SinglePart_April 19, 2022_16.25_clean.csv",
+    surveyOutputFilesByVersion = {'1': "V1/SSA_Y4_v1_SinglePart_April 20, 2022_09.26_clean.csv",
                     }
 
     # ###############
@@ -88,16 +85,15 @@ def readData(surveyVersion):
         dta['IsPrimaryWave'] = True
 
     dta.rename(columns={'Previous Fraud':'previousFraud',    # From V5
-                        'Previously_Targeted':'previousFraud', 'Lost_Money':'lose_money', # From v4
                         'Duration (in seconds)':'duration_p1',
                         'Duration (in seconds)_p2':'duration_p2'}, inplace=True)
 
     dta['previousFraudYN'] = ~dta.previousFraud.isna()
     dta['lose_moneyYN'] = dta.lose_money == "Yes"
     dta['duration_p1_Quantile'] = pd.qcut(dta.duration_p1, q=5, labels=False)
-    dta['duration_p2_Quantile'] = pd.qcut(dta.duration_p2, q=5, labels=False)
+    # dta['duration_p2_Quantile'] = pd.qcut(dta.duration_p2, q=5, labels=False)
 
-    dta['daysFromTrainingToTest'] = (dta['StartDate_p2'].astype('datetime64') - dta['StartDate'].astype('datetime64')).dt.days
+    # dta['daysFromTrainingToTest'] = (dta['StartDate_p2'].astype('datetime64') - dta['StartDate'].astype('datetime64')).dt.days
 
     return (dta, priorPids)
 
@@ -109,7 +105,8 @@ def cleanData(dta, priorPids, surveyVersion, testQuestions):
     # ###############
 
     dta['cleanStatus'] = "Keep"
-    dta.loc[(dta['cleanStatus'] == "Keep") & (dta.PID.isin(priorPids)), 'cleanStatus'] = 'PID from prior version'
+    if priorPids is not None:
+        dta.loc[(dta['cleanStatus'] == "Keep") & (dta.PID.isin(priorPids)), 'cleanStatus'] = 'PID from prior version'
 
     if surveyVersion == '3':
         dta.loc[(dta['cleanStatus'] == "Keep") & (dta['Duration (in seconds)'] < 60*3), 'cleanStatus'] = 'Too Fast'
@@ -191,9 +188,9 @@ def processDemographics(dta):
     # ##############
     # Demographic processing, etc
     # ##############
-    dta['trustScore'] = dta['GeneralTrust'].replace({"Most people can't be trusted":0, "Most people can be trusted":1}) + \
-                        dta['TakeAdvantage'].replace({"Would try to take advantage of you if they got a chance": 0, "Would try to be fair no matter what": 1}) + \
-                        dta['TryToHelp'].replace({"Just look out for themselves": 0, "Try to help others": 1})
+    #dta['trustScore'] = dta['GeneralTrust'].replace({"Most people can't be trusted":0, "Most people can be trusted":1}) + \
+    #                    dta['TakeAdvantage'].replace({"Would try to take advantage of you if they got a chance": 0, "Would try to be fair no matter what": 1}) + \
+    #                    dta['TryToHelp'].replace({"Just look out for themselves": 0, "Try to help others": 1})
 
     dta['incomeAmount'] = dta['TotalIncome'].replace({"$0 - $19,999":10, "$20,000 - $39,999":30,
                         "$40,000 - $59,999":60, "$60,000 - $79,999":70, "$80,000 - $99,999":90,
@@ -225,18 +222,20 @@ def processDemographics(dta):
                 "Bachelor degree": 16,
                 "Graduate or professional degree": 18})
 
-    dta['marriedI'] = dta['Married'].replace({"Married": 1,
-                                             "Divorced or Separated": 0,
-                                             "Widowed": 0, "Single": 0,
-                                             "I prefer not to say": None})
+    #dta['marriedI'] = dta['Married'].replace({"Married": 1,
+    #                                         "Divorced or Separated": 0,
+    #                                         "Widowed": 0, "Single": 0,
+    #                                         "I prefer not to say": None})
 
-    dta['ageYears'] = dta['Age'].replace({"Under 18": 16,
-                                             "18-24": 21.5,
-                                             "25-34": 29.5, "35-44": 39.5,
-                                             "45-54": 49.5,
-                                             "55-64": 59.5,
-                                             "65 or older": 69.5,
-                                             "Prefer not to say": None})
+    dta['ageYears'] = dta['Age_1']
+
+    #dta['ageYears'] = dta['Age'].replace({"Under 18": 16,
+    #                                         "18-24": 21.5,
+    #                                         "25-34": 29.5, "35-44": 39.5,
+    #                                         "45-54": 49.5,
+    #                                         "55-64": 59.5,
+    #                                         "65 or older": 69.5,
+    #                                         "Prefer not to say": None})
 
     dta['genderI'] = dta['Gender'].replace({"Male": 0,
                                              "Female": 1,
@@ -307,19 +306,19 @@ def markCorrectAnswers(dta, testQuestions):
         scoringVars = scoringVars + ['Correct_' + testQuestion]
 
         # Dig into the response correct/incorrect to label as true positive / false positive , etc.
-        if (correctAnswer == "Fake"):
+        if (correctAnswer == "Scam"):
             dta.loc[(dta[testQuestion] == "Real"), 'numFakeLabeledReal'] = 1 + dta.loc[(dta[testQuestion] == "Real"), 'numFakeLabeledReal']
-            dta.loc[(dta[testQuestion] == "Fake"), 'numFakeLabeledFake'] = 1 + dta.loc[(dta[testQuestion] == "Fake"), 'numFakeLabeledFake']
+            dta.loc[(dta[testQuestion] == "Scam"), 'numFakeLabeledFake'] = 1 + dta.loc[(dta[testQuestion] == "Scam"), 'numFakeLabeledFake']
         elif (correctAnswer == "Real"):
             dta.loc[(dta[testQuestion] == "Real"), 'numRealLabeledReal'] = 1 + dta.loc[(dta[testQuestion] == "Real"), 'numRealLabeledReal']
-            dta.loc[(dta[testQuestion] == "Fake"), 'numRealLabeledFake'] = 1 + dta.loc[(dta[testQuestion] == "Fake"), 'numRealLabeledFake']
+            dta.loc[(dta[testQuestion] == "Scam"), 'numRealLabeledFake'] = 1 + dta.loc[(dta[testQuestion] == "Scam"), 'numRealLabeledFake']
         else:
             raise Exception("Invalid Question Data")
 
         # Count how many total they marked as 'real' or 'fake'
         dta.loc[dta[testQuestion] == 'Real', 'numLabeledReal'] = 1 + dta.loc[dta[testQuestion] == 'Real', 'numLabeledReal']
-        dta.loc[dta[testQuestion] == 'Fake', 'numLabeledFake'] = 1 + dta.loc[dta[testQuestion] == 'Fake', 'numLabeledFake']
-        dta.loc[~(dta[testQuestion].isin(['Fake','Real'])), 'numNoAnswer'] = 1 + dta.loc[~(dta[testQuestion].isin(['Fake','Real'])), 'numNoAnswer']
+        dta.loc[dta[testQuestion] == 'Scam', 'numLabeledFake'] = 1 + dta.loc[dta[testQuestion] == 'Scam', 'numLabeledFake']
+        dta.loc[~(dta[testQuestion].isin(['Scam','Real'])), 'numNoAnswer'] = 1 + dta.loc[~(dta[testQuestion].isin(['Scam','Real'])), 'numNoAnswer']
 
     dta['percentCorrect'] = dta.numCorrect/len(testQuestions) * 100
 

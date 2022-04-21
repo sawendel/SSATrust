@@ -24,9 +24,9 @@ def pToSign(pval):
 def analyzeExperiment_ContinuousVar(dta, varName):
 
     order_value_control_group = dta.loc[dta.surveyArm == "arm1_control", varName]
-    order_value_arm2_group = dta.loc[dta.surveyArm == "arm2_written_techniques", varName]
-    order_value_arm3_group = dta.loc[dta.surveyArm == "arm3_existingssa", varName]
-    order_value_arm4_group = dta.loc[dta.surveyArm == "arm4_interactive_training", varName]
+    order_value_arm2_group = dta.loc[dta.surveyArm == "arm2_generalinfo", varName]
+    order_value_arm3_group = dta.loc[dta.surveyArm == "arm3_tips", varName]
+    order_value_arm4_group = dta.loc[dta.surveyArm == "arm4_interactive", varName]
 
 
     # Arm 1
@@ -169,8 +169,9 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
     # Export summary stats
     # ###############
 
-    demographicVars = ['trustScore', 'TotalIncome', 'incomeAmount', 'Race', 'race5', 'employment3', 'educYears', 'Married', 'marriedI', 'Age', 'ageYears', 'Gender', 'genderI']
-    allSummaryVars = ["percentCorrect", "surveyArm", "Wave", "daysFromTrainingToTest"] + scoringVars + demographicVars
+    # demographicVars = ['trustScore', 'TotalIncome', 'incomeAmount', 'Race', 'race5', 'employment3', 'educYears', 'Married', 'marriedI', 'Age', 'ageYears', 'Gender', 'genderI']
+    demographicVars = ['TotalIncome', 'incomeAmount', 'Race', 'race5', 'employment3', 'educYears','ageYears', 'Gender', 'genderI']
+    allSummaryVars = ["percentCorrect", "surveyArm", "Wave"] + scoringVars + demographicVars # , "daysFromTrainingToTest"
 
     summaryStats = dta[allSummaryVars].describe()
 
