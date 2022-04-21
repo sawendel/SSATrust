@@ -5,15 +5,15 @@
       "mode": "educational",
       "steps": [
         {
+          "type": "email",
+          "template": "design.html"
+        },
+        {
           "type": "letter",
           "template": "design.html"
         },
         {
           "type": "sms",
-          "template": "design.html"
-        },
-        {
-          "type": "email",
           "template": "design.html"
         },
         {

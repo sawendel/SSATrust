@@ -12,6 +12,10 @@ const AudioPlayer = ({ audioScr }) => {
 
   const handlePlay = () => setIsPlaying(playing => !playing)
 
+  const onSrub = (e) => {
+      music.current.currentTime = e.target.value;
+  }
+
   useEffect(() => {
     if (isPlaying) {
       music.current.play();
@@ -31,6 +35,7 @@ const AudioPlayer = ({ audioScr }) => {
   }, [])
 
   useEffect(() => {
+      console.log({duration:music.current.duration})
     if (parseInt(music.current.duration)) {
       const ds = parseInt(music.current.duration % 60);
       const dm = parseInt((music.current.duration / 60) % 60);
@@ -43,6 +48,7 @@ const AudioPlayer = ({ audioScr }) => {
     }
   }, [music.current.duration])
 
+ 
   useEffect(() => {
     if (music.current.ended) {
       setIsPlaying(false);
@@ -55,7 +61,7 @@ const AudioPlayer = ({ audioScr }) => {
         <div className="et-musicBox">
           <div className="et-musicBar px-3 pt-13 pb-20">
             <span className="et-currentTime px-2">{currentTimeDisplay}</span>
-            <input type="range" step="1" ref={seekbar} value={music.current.currentTime} onChange={() => { }} min="0" max={duration} ></input>
+            <input type="range" step="1" ref={seekbar} value={Math.floor(music.current.currentTime)} onChange={onSrub} min="0"  max={Math.floor(duration)} ></input>
             <span className="et-duration px-2">{durationDisplay}</span>
           </div>
           <span className="et-audioPlay px-11 py-19" onClick={handlePlay}>

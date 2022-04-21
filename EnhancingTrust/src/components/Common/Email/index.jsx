@@ -19,19 +19,21 @@ const Email = (props) => {
         </Col>
         <Col>
           <div>
-            <div className="et-email__menu-top px-lg-7 px-md-5 px-3 py-3">
-              <i className="et-email__menu-top__item et-arrow-left" />
-              <div className="et-email__menu-top__item">
-                <i className="et-archive" />
-                <span className="d-sm-block d-none">Archive</span>
-              </div>
-              <div className="et-email__menu-top__item">
-                <i className="et-forbiden" />
-                <span className="d-sm-block d-none">Report Spam</span>
-              </div>
-              <div className="et-email__menu-top__item">
-                <i className="et-trash" />
-                <span className="d-sm-block d-none">Delete</span>
+            <div className="et-email__menu-top px-lg-7 px-md-5 px-3 py-3 justify-content-between">
+              <div className="d-flex">
+                <i className="et-email__menu-top__item et-arrow-left" />
+                <div className="et-email__menu-top__item">
+                  <i className="et-archive" />
+                  <span className="d-sm-block d-none">Archive</span>
+                </div>
+                <div className="et-email__menu-top__item">
+                  <i className="et-forbiden" />
+                  <span className="d-sm-block d-none">Report Spam</span>
+                </div>
+                <div className="et-email__menu-top__item">
+                  <i className="et-trash" />
+                  <span className="d-sm-block d-none">Delete</span>
+                </div>
               </div>
               <i className="et-dots et-email__menu-top__dots" />
             </div>
