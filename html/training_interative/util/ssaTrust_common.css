@@ -8,7 +8,7 @@
   right: 0;
   bottom: 0;
   background-color: rgba(0,0,0,0.5); /* Black background with opacity */
-  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  z-index: 999999; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */
 }
 
@@ -37,7 +37,7 @@
             top: 0;
             bottom: 0;
             margin: auto;
-            z-index: 1;
+			z-index: 999999; /* Specify a stack order in case you're using a different order for other elements */
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -70,7 +70,7 @@
         .overlay-image{
             height: 20px;
             width: 20px;
-            z-index: 2;
+			z-index: 9999999; /* Specify a stack order in case you're using a different order for other elements */
             margin-right: 10px;
         }
 
@@ -94,7 +94,7 @@
 
 /*This will style the overlays in the body*/
         .overlay-inline{
-            z-index: 1;
+            z-index: 999999;
             position: absolute;
             width: fit-content;
             bottom: 20px;
