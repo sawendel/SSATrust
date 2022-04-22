@@ -2,6 +2,6 @@ export const ModeTypes = Object.freeze({
   EMAIL: 'email',
   SMS: 'sms',
   LETTER: 'letter',
-  WEBSITE: 'website',
+  WEBPAGE: 'webpage',
   AUDIO: 'audio',
 });

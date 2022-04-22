@@ -27,6 +27,8 @@ $gray: #e6e6e6;
 $white: white;
 $tower-gray: #B0BEC5;
 $lynch: #607D8B;
+$mischka: #DEE1E6;
+$sylver: #BABCBE;
 
 $theme-colors: (
   "white": $white,
@@ -38,6 +40,7 @@ $theme-colors: (
   "danger": $danger,
   "light": $light,
   "lynch": $lynch,
+  "sylver": $sylver,
 );
 
 $spacer: 1rem;
@@ -68,30 +71,36 @@ $spacers: (
 $icomoon-font-family: "et-icons" !default;
 $icomoon-font-path: "./fonts" !default;
 
-$et-caret-down: "\e917";
-$et-lock: "\e918";
-$et-archive: "\e900";
-$et-arrow-left: "\e901";
-$et-caret-right: "\e902";
-$et-check: "\e903";
-$et-close: "\e904";
-$et-dots: "\e905";
-$et-forbiden: "\e906";
-$et-forward: "\e907";
-$et-pen: "\e908";
-$et-reply-all: "\e909";
-$et-response: "\e90a";
-$et-star: "\e90b";
-$et-trash: "\e90c";
-$et-tray: "\e90d";
-$et-user: "\e90e";
-$et-camera: "\e90f";
-$et-caret-left: "\e910";
-$et-face-happy: "\e911";
-$et-image-upload: "\e912";
-$et-info-circle: "\e913";
-$et-mic: "\e914";
-$et-info-octa: "\e915";
-$et-warning: "\e916";
+$et-refresh: "\e900";
+$et-plus: "\e901";
+$et-home: "\e902";
+$et-next: "\e903";
+$et-prev: "\e904";
+$et-lock-fill: "\e905";
+$et-archive: "\e906";
+$et-arrow-left: "\e907";
+$et-caret-right: "\e908";
+$et-check: "\e909";
+$et-close: "\e90a";
+$et-dots: "\e90b";
+$et-forbiden: "\e90c";
+$et-forward: "\e90d";
+$et-pen: "\e90e";
+$et-reply-all: "\e90f";
+$et-response: "\e910";
+$et-star: "\e911";
+$et-trash: "\e912";
+$et-tray: "\e913";
+$et-user: "\e914";
+$et-camera: "\e915";
+$et-caret-left: "\e916";
+$et-face-happy: "\e917";
+$et-image-upload: "\e918";
+$et-info-circle: "\e919";
+$et-mic: "\e91a";
+$et-info-octa: "\e91b";
+$et-warning: "\e91c";
+$et-caret-down: "\e91d";
+$et-lock: "\e91e";
 $et-play: "\ea1c";
 $et-pause: "\ea1d";

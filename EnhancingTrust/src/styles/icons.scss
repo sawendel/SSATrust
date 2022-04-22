@@ -26,14 +26,34 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.et-caret-down {
+.et-refresh {
   &:before {
-    content: $et-caret-down; 
+    content: $et-refresh; 
   }
 }
-.et-lock {
+.et-plus {
   &:before {
-    content: $et-lock; 
+    content: $et-plus; 
+  }
+}
+.et-home {
+  &:before {
+    content: $et-home; 
+  }
+}
+.et-next {
+  &:before {
+    content: $et-next; 
+  }
+}
+.et-prev {
+  &:before {
+    content: $et-prev; 
+  }
+}
+.et-lock-fill {
+  &:before {
+    content: $et-lock-fill; 
   }
 }
 .et-archive {
@@ -151,13 +171,23 @@
     content: $et-warning; 
   }
 }
+.et-caret-down {
+  &:before {
+    content: $et-caret-down; 
+  }
+}
+.et-lock {
+  &:before {
+    content: $et-lock; 
+  }
+}
 .et-play {
   &:before {
-    content: $et-play;
+    content: $et-play; 
   }
 }
 .et-pause {
   &:before {
-    content: $et-pause;
+    content: $et-pause; 
   }
 }

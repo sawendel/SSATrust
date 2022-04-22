@@ -1,0 +1,81 @@
+@import '../variables';
+
+.et-webpage {
+  &__window {
+    border-radius: 8px;
+    overflow: hidden;
+    filter: drop-shadow(0px 4px 18px rgba($black, .15));
+  }
+
+  &__toolbar {
+    background-color: $white;
+    box-shadow: inset 0px -1px 0px #DADCE0;
+
+    &-nav {
+      display: flex;
+      align-items: center;
+      background: #F1F3F4;
+      border-radius: 14px;
+
+      & > small:first-of-type {
+        font-size: .7rem;
+      }
+    }
+
+    &-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+    }
+  }
+
+  [class^="et-webpage__tabbar-btn-"] {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  &__tabbar {
+    background-color: $mischka;
+    align-items: center;
+
+    & > * {
+      margin-right: .5rem;
+    }
+
+    &-btn-close {
+      background: #FF6058;
+      border: 0.5px solid #E14942;
+    }
+
+    &-btn-minimize {
+      background: #FFC130;
+      border: 0.5px solid #E1A325;
+    }
+
+    &-btn-maximize {
+      background: #27CA40;
+      border: 0.5px solid #3EAF3F;
+    }
+
+    &-tab {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      gap: .5rem;
+      background-color: $white;
+      border-radius: 8px 8px 0px 0px;
+      margin: 0 .5rem;
+      position: relative;
+      width: 131px;
+
+      & > small:last-of-type {
+        margin-left: auto;
+      }
+
+      i {
+        font-size: .5rem;
+      }
+    }
+  }
+}
