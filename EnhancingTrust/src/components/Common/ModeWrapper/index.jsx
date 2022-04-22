@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { ModeResults, ModeTypes, Modes } from '../../../constants';
@@ -7,6 +7,7 @@ import Email from '../Email';
 import Audio from '../AudioPlayer';
 import Letter from '../Letter';
 import Sms from '../Sms';
+import Webpage from '../Webpage';
 
 const ModeWrapper = () => {
   const { id } = useParams();
@@ -19,6 +20,24 @@ const ModeWrapper = () => {
   const isLastStep = stepIndex === workflowSteps?.length - 1;
   const isEducational = workflow.mode === Modes.EDUCATIONAL;
 
+  // useEffect(() => {
+  //   const element = document.body;
+  //   if (element) {
+  //     const requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+  //     if (requestMethod) { // Native full screen.
+  //       requestMethod.call(element);
+  //     }
+  //       // document.body.requestFullscreen().then();
+  //     // }
+  //   }
+  //   return () => {
+  //     const requestMethod = element.cancelFullScreen || element.webkitCancelFullScreen || element.mozCancelFullScreen || element.exitFullscreen || element.webkitExitFullscreen;
+  //     if (requestMethod) {
+  //       requestMethod.call(element);
+  //     }
+  //   }
+  // }, []);
+
   const stepElement = useMemo(() => {
     switch (currentStep.type) {
       case ModeTypes.EMAIL:
@@ -29,6 +48,8 @@ const ModeWrapper = () => {
         return <Letter showTooltips={displayTooltips} templateUrl={`/letters/${currentStep.template}`} />;
       case ModeTypes.AUDIO:
         return <Audio audioScr={`/audios/${currentStep.template}`} />;
+      case ModeTypes.WEBPAGE:
+          return <Webpage templateUrl={`/webpages/${currentStep.template}`} />;
       default:
         throw new Error('Template not recognized');
     }

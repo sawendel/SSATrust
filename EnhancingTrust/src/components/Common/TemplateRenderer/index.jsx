@@ -78,7 +78,7 @@ const TemplateRenderer = ({ templateUrl, showTooltips = false, setOptions = () =
       const props = attributesToProps(domNode.attribs);
       const className = props.className;
       return (
-        <div {...props} className={`${domNode.name} ${className}`}>
+        <div {...props} className={`.${domNode.name} ${className}`}>
             {domToReact(domNode.children)}
         </div>
       )

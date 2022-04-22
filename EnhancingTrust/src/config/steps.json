@@ -2,8 +2,12 @@
   "workflows": [
     {
       "id": "1",
-      "mode": "educational",
+      "mode": "test",
       "steps": [
+        {
+          "type": "webpage",
+          "template": "ssa.html"
+        },
         {
           "type": "email",
           "template": "design.html"
