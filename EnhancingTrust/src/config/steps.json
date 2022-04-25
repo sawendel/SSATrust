@@ -6,6 +6,10 @@
       "steps": [
         {
           "type": "webpage",
+          "template": "irs.html"
+        },
+        {
+          "type": "webpage",
           "template": "ssa.html"
         },
         {
