@@ -12,3 +12,7 @@
 .btn:focus {
   box-shadow: none;
 }
+
+.et-template * {
+  all: revert;
+}

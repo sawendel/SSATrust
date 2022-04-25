@@ -27,11 +27,11 @@ const TemplateRenderer = ({ templateUrl, showTooltips = false, setOptions = () =
   };
 
   const replace = (domNode) => {
-    if (domNode.type === 'style') {
+    if (domNode.type === 'style' && domNode.children?.[0]?.data) {
       const outputString = domNode.children[0].data.replace(
         /(^(?:\s|[^@{])*?|[},]\s*)(\/\/.*\s+|.*\/\*[^*]*\*\/\s*|@media.*{\s*|@font-face.*{\s*)*([[.#]?-?[*_a-zA-Z]+[_a-zA-Z0-9-]*)(?=[^}]*{)/g,
         "$1$2 .et-template $3"
-      ).replace(/(html|body)/g, ".$1");
+      ).replace(/^(html|body)/g, ".$1");
       domNode.children[0].data = outputString;
     }
 
@@ -71,16 +71,6 @@ const TemplateRenderer = ({ templateUrl, showTooltips = false, setOptions = () =
         <a {...props} href={href} onClick={onLinkClick} title={href}>
             {domToReact(domNode.children)}
         </a>
-      )
-    }
-
-    if (domNode.type === 'tag' && (domNode.name === 'body' || domNode.name === 'html')) {
-      const props = attributesToProps(domNode.attribs);
-      const className = props.className;
-      return (
-        <div {...props} className={`.${domNode.name} ${className}`}>
-            {domToReact(domNode.children)}
-        </div>
       )
     }
   }
