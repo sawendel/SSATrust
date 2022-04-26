@@ -6,6 +6,14 @@
       "steps": [
         {
           "type": "webpage",
+          "template": "walmart.html"
+        },
+        {
+          "type": "webpage",
+          "template": "amazonProductPage.html"
+        },
+        {
+          "type": "webpage",
           "template": "irs.html"
         },
         {

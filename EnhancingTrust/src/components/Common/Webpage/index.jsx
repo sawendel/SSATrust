@@ -29,10 +29,10 @@ const Webpage = (props) => {
                 <small><i className="et-home" /></small>
               </div>
             </Col>
-            <Col>
+            <Col className="text-truncate">
               <div className="et-webpage__toolbar-nav px-3 py-2">
                 <small className="me-3"><i className="et-lock-fill" /></small>
-                <small>{config?.url}</small>
+                <small className="text-truncate">{config?.url}</small>
                 <small className="ms-auto d-none d-lg-block"><i className="et-star" /></small>
               </div>
             </Col>
