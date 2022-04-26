@@ -6,29 +6,31 @@ $h4-font-size: $font-size-base * 1.5;
 $h5-font-size: $font-size-base * 1.25;
 $h6-font-size: $font-size-base;
 
-$font-family-sans-serif: Roboto, "et-icons", "Helvetica Neue", system-ui, -apple-system, "Segoe UI", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-family-sans-serif: Roboto, "et-icons", "Helvetica Neue", system-ui,
+  -apple-system, "Segoe UI", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 $btn-border-radius: 10px;
 
-$light: #ECEFF1;
-$danger: #C5050C;
+$light: #eceff1;
+$danger: #c5050c;
 $secondary: #005779;
-$primary: #0F65EF;
-$info: #0479A8;
-$success: #005A5F;
-$warning: #BA5701;
-$blue:#03269E;
-$light-gray: #78909C;
+$primary: #0f65ef;
+$info: #0479a8;
+$success: #005a5f;
+$warning: #ba5701;
+$blue: #03269e;
+$light-gray: #78909c;
 $black: #000000;
 $shadow: #263238;
 $red: #f26b6c;
 $orange: #fcd9d9;
 $gray: #e6e6e6;
 $white: white;
-$tower-gray: #B0BEC5;
-$lynch: #607D8B;
-$mischka: #DEE1E6;
-$sylver: #BABCBE;
+$tower-gray: #b0bec5;
+$lynch: #607d8b;
+$mischka: #dee1e6;
+$sylver: #babcbe;
 
 $theme-colors: (
   "white": $white,
@@ -46,8 +48,8 @@ $theme-colors: (
 $spacer: 1rem;
 $spacers: (
   0: 0,
-  1: $spacer * .25,
-  2: $spacer * .5,
+  1: $spacer * 0.25,
+  2: $spacer * 0.5,
   3: $spacer,
   4: $spacer * 1.5,
   5: $spacer * 3,
@@ -57,7 +59,7 @@ $spacers: (
   9: $spacer * 9,
   10: $spacer * 10.5,
   11: $spacer * 1.25,
-  12: $spacer * .625,
+  12: $spacer * 0.625,
   13: $spacer * 2.5,
   14: $spacer * 5.625,
   15: $spacer * 3.75,
@@ -65,6 +67,7 @@ $spacers: (
   17: $spacer * 6.5,
   19: $spacer * 1.125,
   20: $spacer * 2,
+  21: $spacer * 17.25,
 );
 
 // Icons
