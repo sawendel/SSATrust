@@ -49,7 +49,10 @@ const ModeWrapper = () => {
       case ModeTypes.AUDIO:
         return <Audio audioScr={`/audios/${currentStep.template}`} />;
       case ModeTypes.WEBPAGE:
-          return <Webpage templateUrl={`/webpages/${currentStep.template}`} />;
+          return <Webpage
+            mobileTemplate={currentStep.mobileTemplate && `/webpages/${currentStep.mobileTemplate}`}
+            templateUrl={`/webpages/${currentStep.template}`}
+          />;
       default:
         throw new Error('Template not recognized');
     }

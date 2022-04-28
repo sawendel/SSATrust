@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import parse, { domToReact, attributesToProps } from 'html-react-parser';
 import { ajax } from 'rxjs/ajax';
 import Tooltip from 'rc-tooltip';
 
-const TemplateRenderer = ({ templateUrl, showTooltips = false, setOptions = () => {} }) => {
+const TemplateRenderer = ({ templateUrl, mobileTemplate, showTooltips = false, setOptions = () => {} }) => {
   const [html, setHtml] = useState('');
   const [opt, setOpt] = useState();
+  const template = useMemo(() => window.innerWidth < 768 && mobileTemplate
+    ? mobileTemplate : templateUrl, [mobileTemplate, templateUrl]);
 
   useEffect(() => {
     setOptions(opt && JSON.parse(opt));
@@ -13,13 +15,13 @@ const TemplateRenderer = ({ templateUrl, showTooltips = false, setOptions = () =
 
   useEffect(() => {
     ajax({
-      url: templateUrl,
+      url: template,
       type: 'GET',
       responseType: 'text',
     }).subscribe(({ response }) => {
       setHtml(response);
     });
-  }, [templateUrl]);
+  }, [template]);
 
   const onLinkClick = (e) => {
     e.preventDefault();

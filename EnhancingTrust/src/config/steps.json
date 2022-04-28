@@ -6,11 +6,17 @@
       "steps": [
         {
           "type": "webpage",
-          "template": "walmart.html"
+          "template": "ssaFb.html"
         },
         {
           "type": "webpage",
-          "template": "amazonProductPage.html"
+          "template": "amazonProductPage.html",
+          "mobileTemplate": "amazonProductPageMobile.html"
+        },
+        {
+          "type": "webpage",
+          "template": "walmart.html",
+          "mobileTemplate": "walmartMobile.html"
         },
         {
           "type": "webpage",
