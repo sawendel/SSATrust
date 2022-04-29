@@ -2,16 +2,11 @@
   "workflows": [
     {
       "id": "1",
-      "mode": "test",
+      "mode": "educational",
       "steps": [
         {
           "type": "webpage",
-          "template": "ssaFb.html"
-        },
-        {
-          "type": "webpage",
-          "template": "amazonProductPage.html",
-          "mobileTemplate": "amazonProductPageMobile.html"
+          "template": "irs.html"
         },
         {
           "type": "webpage",
@@ -20,7 +15,12 @@
         },
         {
           "type": "webpage",
-          "template": "irs.html"
+          "template": "ssaFb.html"
+        },
+        {
+          "type": "webpage",
+          "template": "amazonProductPage.html",
+          "mobileTemplate": "amazonProductPageMobile.html"
         },
         {
           "type": "webpage",

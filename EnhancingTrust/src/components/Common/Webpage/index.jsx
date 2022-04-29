@@ -13,7 +13,7 @@ const Webpage = (props) => {
           <div className="et-webpage__tabbar-btn-minimize" />
           <div className="et-webpage__tabbar-btn-maximize" />
           <div className="et-webpage__tabbar-tab p-2">
-            <img alt="Tab favicon" src={config?.tabIcon} width="16" height="16" />
+            {config?.tabIcon && <img alt="Tab favicon" src={config?.tabIcon} width="16" height="16" />}
             <small className="text-truncate" title={config?.tabName}>{config?.tabName}</small>
             <small><i className="et-close" /></small>
           </div>

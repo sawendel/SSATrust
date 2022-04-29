@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ModeResults, ModeTypes, Modes } from '../../../constants';
 import steps from '../../../config/steps.json';
 import Email from '../Email';
@@ -11,6 +11,7 @@ import Webpage from '../Webpage';
 
 const ModeWrapper = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const workflow = useMemo(() => steps.workflows.find((x) => x.id === id), [id]);
   const workflowSteps = useMemo(() => workflow?.steps, [workflow]);
   const [stepIndex, setStepIndex] = useState(0);
@@ -20,23 +21,15 @@ const ModeWrapper = () => {
   const isLastStep = stepIndex === workflowSteps?.length - 1;
   const isEducational = workflow.mode === Modes.EDUCATIONAL;
 
-  // useEffect(() => {
-  //   const element = document.body;
-  //   if (element) {
-  //     const requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
-  //     if (requestMethod) { // Native full screen.
-  //       requestMethod.call(element);
-  //     }
-  //       // document.body.requestFullscreen().then();
-  //     // }
-  //   }
-  //   return () => {
-  //     const requestMethod = element.cancelFullScreen || element.webkitCancelFullScreen || element.mozCancelFullScreen || element.exitFullscreen || element.webkitExitFullscreen;
-  //     if (requestMethod) {
-  //       requestMethod.call(element);
-  //     }
-  //   }
-  // }, []);
+  useEffect(() => {
+    const element = document.documentElement;
+    if (element) {
+      element.requestFullscreen().then();
+    }
+    return () => {
+      document.exitFullscreen().then();
+    }
+  }, []);
 
   const stepElement = useMemo(() => {
     switch (currentStep.type) {
@@ -50,6 +43,7 @@ const ModeWrapper = () => {
         return <Audio audioScr={`/audios/${currentStep.template}`} />;
       case ModeTypes.WEBPAGE:
           return <Webpage
+            showTooltips={displayTooltips}
             mobileTemplate={currentStep.mobileTemplate && `/webpages/${currentStep.mobileTemplate}`}
             templateUrl={`/webpages/${currentStep.template}`}
           />;
@@ -68,7 +62,7 @@ const ModeWrapper = () => {
   }
 
   const onNext = () => {
-    if (isEducational && !displayTooltips) {
+    if (isEducational && !displayTooltips && currentStep.type !== ModeTypes.AUDIO) {
       setDisplayTooltips(true);
       return;
     }
@@ -77,7 +71,10 @@ const ModeWrapper = () => {
       setSelected(undefined);
       setStepIndex(stepIndex + 1);
       setDisplayTooltips(false);
+      return;
     }
+
+    navigate('/', { replace: true });
   };
  
   return (

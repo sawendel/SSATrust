@@ -38,7 +38,7 @@ const TemplateRenderer = ({ templateUrl, mobileTemplate, showTooltips = false, s
       const outputString = domNode.children[0].data.replace(
         /(^(?:\s|[^@{])*?|[},]\s*)(\/\/.*\s+|.*\/\*[^*]*\*\/\s*|@media.*{\s*|@font-face.*{\s*)*([[.#]?-?[*_a-zA-Z]+[_a-zA-Z0-9-]*)(?=[^}]*{)/g,
         "$1$2 .et-template $3"
-      ).replace(/\s?(html|body)/g, ".$1");
+      ).replace(/[\s\}](html|body)/g, " .$1");
       domNode.children[0].data = outputString;
     }
 

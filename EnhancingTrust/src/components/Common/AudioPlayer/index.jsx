@@ -35,7 +35,6 @@ const AudioPlayer = ({ audioScr }) => {
   }, [])
 
   useEffect(() => {
-      console.log({duration:music.current.duration})
     if (parseInt(music.current.duration)) {
       const ds = parseInt(music.current.duration % 60);
       const dm = parseInt((music.current.duration / 60) % 60);
