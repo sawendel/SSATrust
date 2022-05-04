@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Row, Col, Image } from 'react-bootstrap';
 import TemplateRenderer from '../TemplateRenderer';
+import Tooltip from '../Tooltip';
 
-const Webpage = (props) => {
+const Webpage = ({ showTooltips, ...props }) => {
   const [config, setConfig] = useState();
 
   return (
@@ -32,7 +33,9 @@ const Webpage = (props) => {
             <Col className="text-truncate">
               <div className="et-webpage__toolbar-nav px-3 py-2">
                 <small className="me-3"><i className="et-lock-fill" /></small>
-                <small className="text-truncate">{config?.url}</small>
+                <Tooltip show={showTooltips} text={config?.urlTooltip} placement="bottom">
+                  <small className="text-truncate">{config?.url}</small>
+                </Tooltip>
                 <small className="ms-auto d-none d-lg-block"><i className="et-star" /></small>
               </div>
             </Col>
@@ -50,7 +53,7 @@ const Webpage = (props) => {
             </Col>
           </Row>
         </div>
-        <TemplateRenderer {...props} setOptions={setConfig} />
+        <TemplateRenderer showTooltips={showTooltips} {...props} setOptions={setConfig} />
       </div>
     </div>
   )

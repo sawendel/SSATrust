@@ -6,6 +6,14 @@
       "steps": [
         {
           "type": "webpage",
+          "template": "fedGov.html"
+        },
+        {
+          "type": "webpage",
+          "template": "appleID.html"
+        },
+        {
+          "type": "webpage",
           "template": "irs.html"
         },
         {

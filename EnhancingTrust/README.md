@@ -62,6 +62,23 @@ Each template type will have a specific configuration for some static content li
 </script>
 ```
 
+##### Webpages Configuration
+```
+<script data-config>
+  const Init = function() {
+    return {
+      tabIcon: '/webpages/fedGovFiles/favicon.ico',
+      tabName: 'Federal Goverment of the US',
+      url: 'https://www.usa-federal.gov/',
+      urlTooltip: 'Not the original url',
+    };
+  }
+  Init();
+</script>
+```
+
+***Note:*** Do not add html or body tags in a webpage template cause they won't be parsed correctly.
+
 #### Letter Configuration
 ```
 <script data-config>
@@ -96,6 +113,8 @@ Each template type will have a specific configuration for some static content li
   Init();
 </script>
 ```
+
+
 
 ## Workflows
 We call workflows to the set (steps) of templates that needs to be evaluated by the user. Workflows are configured in `/src/config/steps.json`. In this file you define the mode (educational/test) and the steps to follow when clicking the next button.
