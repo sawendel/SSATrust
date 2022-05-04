@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ModeResults, ModeTypes, Modes } from '../../constants';
+import { useQuery } from '../../hooks';
 import steps from '../../config/steps.json';
 import Email from '../Common/Email';
 import Audio from '../Common/AudioPlayer';
@@ -11,6 +12,7 @@ import Webpage from '../Common/Webpage';
 
 const ModeWrapper = () => {
   const { id } = useParams();
+  const query = useQuery();
   const navigate = useNavigate();
   const workflow = useMemo(() => steps.workflows.find((x) => x.id === id), [id]);
   const workflowSteps = useMemo(() => workflow?.steps, [workflow]);
@@ -74,7 +76,12 @@ const ModeWrapper = () => {
       return;
     }
 
-    navigate('/', { replace: true });
+    const redirect = query.get('redirectUrl');
+    if (redirect) {
+      window.location.href = redirect;
+    } else {
+      navigate('/', { replace: true });
+    }
   };
  
   return (

@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { useQuery } from '../../hooks';
 
 const HomePage = (props) => {
   const navigate = useNavigate();
+  const query = useQuery();
 
   return (
     <div className="et-homePage">
@@ -21,7 +23,7 @@ const HomePage = (props) => {
           <h5 className="pt-3">This is a study to teach you how could you getting scammed.</h5>
           <p className="py-20">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna al  iqua. Ut enim ad minim veniam.</p>
         </div>
-        <button className="et-homePage__content__button" onClick={() => navigate("/workflow/" + props.id)}>Get Started</button>
+        <button className="et-homePage__content__button" onClick={() => navigate(`/workflow/${props.id}?${query.toString()}`)}>Get Started</button>
       </div>
     </div >
   );
