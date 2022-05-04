@@ -9,6 +9,7 @@ import Audio from '../Common/AudioPlayer';
 import Letter from '../Common/Letter';
 import Sms from '../Common/Sms';
 import Webpage from '../Common/Webpage';
+import screenfull from 'screenfull';
 
 const ModeWrapper = () => {
   const { id } = useParams();
@@ -24,12 +25,11 @@ const ModeWrapper = () => {
   const isEducational = workflow.mode === Modes.EDUCATIONAL;
 
   useEffect(() => {
-    const element = document.documentElement;
-    if (element) {
-      element.requestFullscreen().then();
+    if (screenfull.isEnabled) {
+      screenfull.request();
     }
     return () => {
-      document.exitFullscreen().then();
+      screenfull.exit().then();
     }
   }, []);
 
