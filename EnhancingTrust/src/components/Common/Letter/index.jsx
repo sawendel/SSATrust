@@ -8,7 +8,7 @@ const Letter = (props) => {
   const date = useMemo(() => moment().subtract(2, 'days').format('MMMM Do, YYYY'), []);
 
   return (
-    <div className="d-flex justify-content-center pt-5">
+    <div className="d-flex justify-content-center py-5">
       <div className='et-letter px-4 py-3 px-md-13 py-md-11'>
         <div className='et-letter__header__up'>
           <div className='et-letter__header__logo'>
@@ -30,7 +30,7 @@ const Letter = (props) => {
 
         <div className='et-letter__header__down py-md-3'>
           <div className='et-letter__header__companyName py-2 px-1'>
-            <span className='et-letter__header__tittle'>{config?.companyInfo?.name}</span>
+            <span className='et-letter__header__title'>{config?.companyInfo?.name}</span>
             <Tooltip show={props.showTooltips} text={config?.companyInfo?.streetAddressTooltip}>
               <span>{config?.companyInfo?.streetAddress}</span>
             </Tooltip>
@@ -43,7 +43,7 @@ const Letter = (props) => {
           </div>
           <div className='et-letter__header__recipientName py-2 px-1'>
             <Tooltip show={props.showTooltips} text={config?.recipientInfo?.nameTooltip}>
-              <span className='et-letter__header__tittle'>{config?.recipientInfo?.name}</span>
+              <span className='et-letter__header__title'>{config?.recipientInfo?.name}</span>
             </Tooltip>
             <Tooltip show={props.showTooltips} text={config?.recipientInfo?.titleTooltip}>
               <span>{config?.recipientInfo?.title}</span>
