@@ -48,7 +48,8 @@
         },
         {
           "type": "audio",
-          "template": "autumn.mp3"
+          "template": "autumn.mp3",
+          "tooltip": "Fake audio"
         }
       ]
     }

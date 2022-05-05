@@ -42,7 +42,7 @@ const ModeWrapper = () => {
       case ModeTypes.LETTER:
         return <Letter showTooltips={displayTooltips} templateUrl={`/letters/${currentStep.template}`} />;
       case ModeTypes.AUDIO:
-        return <Audio audioScr={`/audios/${currentStep.template}`} />;
+        return <Audio audioScr={`/audios/${currentStep.template}`} tooltip={currentStep.tooltip} showTooltips={displayTooltips} />;
       case ModeTypes.WEBPAGE:
           return <Webpage
             showTooltips={displayTooltips}
@@ -64,7 +64,7 @@ const ModeWrapper = () => {
   }
 
   const onNext = () => {
-    if (isEducational && !displayTooltips && currentStep.type !== ModeTypes.AUDIO) {
+    if (isEducational && !displayTooltips) {
       setDisplayTooltips(true);
       return;
     }
@@ -73,6 +73,7 @@ const ModeWrapper = () => {
       setSelected(undefined);
       setStepIndex(stepIndex + 1);
       setDisplayTooltips(false);
+      window.scrollTo(0, 0);
       return;
     }
 

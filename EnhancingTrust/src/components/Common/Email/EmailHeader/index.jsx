@@ -1,23 +1,41 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types' ;
 import { Row, Col, Button } from 'react-bootstrap';
 import moment from 'moment';
 import Details from './Details';
+import Tooltip from '../../Tooltip';
 
-const EmailHeader = ({ config }) => {
+const EmailHeader = ({ config, showTooltips }) => {
   const [displayDetails, setDisplayDetails] = useState(false);
+  const [displayTooltips, setDisplayTooltips] = useState(false);
   const currentDate = moment().subtract(2, 'days').format('MMMM Do, H:MM');
   const dateElement = (className = 'd-none d-lg-block') => <small className={`${className} text-lynch`}>{currentDate} (2 days ago)</small>;
 
+  useEffect(() => {
+    if (showTooltips && (
+      config?.fromTooltip || config?.replyToTooltip || config?.toTooltip || config?.mailedByTooltip
+    )) {
+      setDisplayDetails(showTooltips);
+      setTimeout(() => setDisplayTooltips(showTooltips), 300);
+    } else if (!showTooltips) {
+      setDisplayDetails(false);
+      setDisplayTooltips(false);
+    }
+  }, [showTooltips]);
+
   const buildDetails = (isForMobile = false) => (
     <div className={`et-email-header__details ${isForMobile ? 'd-block d-sm-none' : 'd-none d-sm-block'} ${!displayDetails ? 'et-email-header__details--hidden' : ''}`}>
-      <Details config={config} date={currentDate} />
+      <Details config={config} date={currentDate} showTooltips={displayTooltips} />
     </div>
   );
 
   return config ? (
     <div className="et-email-header">
-      <h4 className="fw-normal">{config.subject}</h4>
+      <h4 className="fw-normal">
+        <Tooltip text={config?.subjectTooltip} show={showTooltips}>
+          <span>{config.subject}</span>
+        </Tooltip>
+      </h4>
       <Row>
         <Col lg={6} xs={8}>
           <Row>

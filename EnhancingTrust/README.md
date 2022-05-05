@@ -39,10 +39,16 @@ Each template type will have a specific configuration for some static content li
   const Init = function () {
     return {
       subject: 'Email Subject',
-      fromEmail: 'senderemail@email.com',
+      subjectTooltip: 'subject tooltip',
+      fromEmail: 'myemail@email.com',
       fromName: 'Rudiney',
-      to: 'senderemail@email.com',
+      fromTooltip: 'from tooltip',
+      replyTo: 'senderemail@email.com',
+      replyToTooltip: 'Reply to tooltip',
+      to: 'myemail@email.com',
+      toTooltip: 'to tooltip',
       mailedBy: 'mail3.ssa.gov',
+      mailedByTooltip: 'mailed by tooltip',
     };
   }
   Init();
@@ -62,6 +68,69 @@ Each template type will have a specific configuration for some static content li
 </script>
 ```
 
+##### Letter Configuration
+```
+<script data-config>
+  const Init = function () {
+    return {
+      companyInfo: {
+        logo: 'https://ui-avatars.com/api/?name=Company&size=45&background=03269E&color=fff',
+        logoTooltip: 'logo tooltip',
+        name: 'H-TECH',
+        nameTooltip: 'name tooltip',
+        slogan: 'Slogan',
+        sloganTooltip: 'slogan tooltip',
+        streetAddress: 'Street Address',
+        streetAddressTooltip: 'streetAddress tooltip',
+        addressLine: 'City State ZIP Code',
+        addressLineTooltip: 'addressLine tooltip',
+        country: 'United States',
+        countryTooltip: 'country tooltip',
+      },
+      recipientInfo: {
+        name: 'John Doe',
+        nameTooltip: 'name tooltip',
+        title: 'Software Engineer',
+        titleTooltip: 'title tooltip',
+        streetAddress: 'Street Address',
+        streetAddressTooltip: 'streetAddress tooltip',
+        addressLine: 'City State ZIP Code',
+        addressLineTooltip: 'addressLine tooltip',
+      },
+      date: 'May 2nd, 2022',  // optional, there's default value for this
+      dateTooltip: 'Date tooltip',
+      salutation: 'Dear John Doe,',
+      salutationTooltip: 'salutation tooltip',
+      contactInfo: {
+        phone: '+1 (855) 558-7771',
+        phoneTooltip: 'phone tooltip',
+        email: 'john.doe@mail.com',
+        emailTooltip: 'email tooltip',
+      },
+      senderInfo: {
+        name: 'Katherine Kane',
+        nameTooltip: 'name tooltip',
+        title: 'CEO at H-TECH',
+        titleTooltip: 'title tooltip',
+      },
+      footer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Magna etiam tempor orci eu.',
+      footerTooltip: 'footer tooltip',
+    };
+  }
+  Init();
+</script>
+```
+
+##### Audio Configuration
+The audio configuration allows to add a single tooltip and goes in the steps.json file as follows:
+```
+{
+  "type": "audio",
+  "template": "autumn.mp3",
+  "tooltip": "Fake audio"
+}
+```
+
 ##### Webpages Configuration
 ```
 <script data-config>
@@ -77,7 +146,7 @@ Each template type will have a specific configuration for some static content li
 </script>
 ```
 
-***Note:*** Do not add html or body tags in a webpage template cause they won't be parsed correctly.
+***Note:*** Do not add html or body tags in a webpage template cause they won't be parsed correctly. Also, the html and body tags selectors in styles will be replaced by class selectors: .html and .body respectively.
 
 #### Letter Configuration
 ```
@@ -129,6 +198,11 @@ We call workflows to the set (steps) of templates that needs to be evaluated by 
         {
           "type": "sms",
           "template": "design.html"
+        },
+        {
+          "type": "webpage",
+          "template": "amazonProductPage.html",
+          "mobileTemplate": "amazonProductPageMobile.html"
         },
         {
           "type": "letter",

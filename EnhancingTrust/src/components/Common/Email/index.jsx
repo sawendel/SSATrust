@@ -38,7 +38,7 @@ const Email = (props) => {
               <i className="et-dots et-email__menu-top__dots" />
             </div>
             <div className="px-lg-7 px-md-5 px-3 pt-3">
-              <EmailHeader config={config} />
+              <EmailHeader config={config} showTooltips={props.showTooltips} />
               <TemplateRenderer {...props} setOptions={setConfig} />
             </div>
           </div>

@@ -1,6 +1,7 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react';
+import Tooltip from '../Tooltip';
 
-const AudioPlayer = ({ audioScr }) => {
+const AudioPlayer = ({ audioScr, showTooltips, tooltip }) => {
 
   const music = useRef(new Audio(audioScr))
   const seekbar = useRef()
@@ -57,16 +58,18 @@ const AudioPlayer = ({ audioScr }) => {
   return (
     <div className="d-flex justify-content-center pt-6">
       <div className="et-audioPlayer">
-        <div className="et-musicBox">
-          <div className="et-musicBar px-3 pt-13 pb-20">
-            <span className="et-currentTime px-2">{currentTimeDisplay}</span>
-            <input type="range" step="1" ref={seekbar} value={Math.floor(music.current.currentTime)} onChange={onSrub} min="0"  max={Math.floor(duration)} ></input>
-            <span className="et-duration px-2">{durationDisplay}</span>
+        <Tooltip text={tooltip} show={showTooltips}>
+          <div className="et-musicBox">
+            <div className="et-musicBar px-3 pt-13 pb-20">
+              <span className="et-currentTime px-2">{currentTimeDisplay}</span>
+              <input type="range" step="1" ref={seekbar} value={Math.floor(music.current.currentTime)} onChange={onSrub} min="0"  max={Math.floor(duration)} ></input>
+              <span className="et-duration px-2">{durationDisplay}</span>
+            </div>
+            <span className="et-audioPlay px-11 py-19" onClick={handlePlay}>
+              <i >{isPlaying ? <i className='et-pause' /> : <i className='et-play' />}</i>
+            </span>
           </div>
-          <span className="et-audioPlay px-11 py-19" onClick={handlePlay}>
-            <i >{isPlaying ? <i className='et-pause' /> : <i className='et-play' />}</i>
-          </span>
-        </div>
+        </Tooltip>
       </div>
     </div>
   );
