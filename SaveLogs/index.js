@@ -19,9 +19,6 @@ exports.handler = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false;
     const db = await connectToDatabase();
 
-    var today = new Date();
-    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-
     var body = JSON.parse(event.body);
     const inputLog = {
         userId: body.userId,
@@ -29,7 +26,7 @@ exports.handler = async (event, context) => {
         workflowId: body.workflowId,
         templateName: body.templateName,
         templateType: body.templateType,
-        date: date
+        date: new Date()
     };
     const result = await db.collection("savedLogs").insertOne(inputLog);
     const response = {
