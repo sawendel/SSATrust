@@ -53,7 +53,7 @@ const Webpage = ({ showTooltips, ...props }) => {
             </Col>
           </Row>
         </div>
-        <TemplateRenderer showTooltips={showTooltips} {...props} setOptions={setConfig} />
+        <TemplateRenderer options={config} showTooltips={showTooltips} {...props} setOptions={setConfig} />
       </div>
     </div>
   )

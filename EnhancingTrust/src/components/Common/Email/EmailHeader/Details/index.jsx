@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Tooltip from '../../../Tooltip';
 
-const EmailHeaderDetails = ({ config, date, showTooltips }) => {
+const EmailHeaderDetails = ({ logEvent, config, date, showTooltips }) => {
   const details = [
     { label: 'From', value: `${config?.fromName} | ${config?.fromEmail}`, tooltipText: config?.fromTooltip },
     { label: 'Reply to', value: config?.replyTo, tooltipText: config?.replyToTooltip },

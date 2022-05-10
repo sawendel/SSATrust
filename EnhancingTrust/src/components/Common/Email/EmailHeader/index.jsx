@@ -4,8 +4,9 @@ import { Row, Col, Button } from 'react-bootstrap';
 import moment from 'moment';
 import Details from './Details';
 import Tooltip from '../../Tooltip';
+import { events } from '../../../../constants';
 
-const EmailHeader = ({ config, showTooltips }) => {
+const EmailHeader = ({ logEvent, config, showTooltips }) => {
   const [displayDetails, setDisplayDetails] = useState(false);
   const [displayTooltips, setDisplayTooltips] = useState(false);
   const currentDate = moment().subtract(2, 'days').format('MMMM Do, H:MM');
@@ -25,9 +26,15 @@ const EmailHeader = ({ config, showTooltips }) => {
 
   const buildDetails = (isForMobile = false) => (
     <div className={`et-email-header__details ${isForMobile ? 'd-block d-sm-none' : 'd-none d-sm-block'} ${!displayDetails ? 'et-email-header__details--hidden' : ''}`}>
-      <Details config={config} date={currentDate} showTooltips={displayTooltips} />
+      <Details logEvent={logEvent} config={config} date={currentDate} showTooltips={displayTooltips} />
     </div>
   );
+
+  const onToggleDetails = () => {
+    const event = displayDetails ? events.EMAIL_DETAILS_COLLAPSED : events.EMAIL_DETAILS_EXPANDED;
+    setDisplayDetails(!displayDetails);
+    logEvent(event);
+  };
 
   return config ? (
     <div className="et-email-header">
@@ -52,7 +59,7 @@ const EmailHeader = ({ config, showTooltips }) => {
                   <Button
                     variant="link"
                     className={`et-email-header__expander ${displayDetails ? 'et-email-header__expander--active' : ''}`}
-                    onClick={() => setDisplayDetails(!displayDetails)}
+                    onClick={onToggleDetails}
                   >
                     <i className="et-caret-down" />
                   </Button>
@@ -63,12 +70,20 @@ const EmailHeader = ({ config, showTooltips }) => {
           </Row>
         </Col>
         <Col lg={6} xs={4}>
-          <div className="d-flex justify-content-end et-email-header__actions">
+          <div className="d-flex justify-content-end align-items-center et-email-header__actions">
             <small className="d-none d-lg-block text-lynch">{dateElement()}</small>
-            <i className="et-response" />
-            <i className="d-none d-lg-block et-reply-all" />
-            <i className="d-none d-lg-block et-forward" />
-            <i className="et-dots" />
+            <Button variant="link" className="et-email__icon-btn" onClick={() => logEvent(events.EMAIL_REPLY)}>
+              <i className="et-response" />
+            </Button>
+            <Button variant="link" className="d-none d-lg-block et-email__icon-btn" onClick={() => logEvent(events.EMAIL_REPLY_ALL)}>
+              <i className="et-reply-all" />
+            </Button>
+            <Button variant="link" className="d-none d-lg-block et-email__icon-btn" onClick={() => logEvent(events.EMAIL_FORWARD)}>
+              <i className="et-forward" />
+            </Button>
+            <Button variant="link" className="et-email__icon-btn" onClick={() => logEvent(events.EMAIL_DOT_MENU)}>
+              <i className="et-dots" />
+            </Button>
           </div>
         </Col>
       </Row>

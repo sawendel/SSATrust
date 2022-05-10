@@ -2,8 +2,16 @@ import { useMemo, useEffect, useState } from 'react';
 import parse, { domToReact, attributesToProps } from 'html-react-parser';
 import { ajax } from 'rxjs/ajax';
 import Tooltip from 'rc-tooltip';
+import { events } from '../../../constants';
 
-const TemplateRenderer = ({ templateUrl, mobileTemplate, showTooltips = false, setOptions = () => {} }) => {
+const TemplateRenderer = ({
+  templateUrl,
+  mobileTemplate,
+  showTooltips = false,
+  options,
+  logEvent,
+  setOptions = () => {} },
+) => {
   const [html, setHtml] = useState('');
   const [opt, setOpt] = useState();
   const template = useMemo(() => window.innerWidth < 768 && mobileTemplate
@@ -23,14 +31,11 @@ const TemplateRenderer = ({ templateUrl, mobileTemplate, showTooltips = false, s
     });
   }, [template]);
 
-  const onLinkClick = (e) => {
+  const eventHandler = (e, event) => {
     e.preventDefault();
     e.stopPropagation();
-  };
 
-  const onSubmitClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    logEvent(event);
   };
 
   const replace = (domNode) => {
@@ -71,11 +76,24 @@ const TemplateRenderer = ({ templateUrl, mobileTemplate, showTooltips = false, s
       return <></>
     }
 
+    if (domNode.type === 'tag' && domNode.name === 'button') {
+      const props = attributesToProps(domNode.attribs);
+      return (
+        <button {...props} onClick={(e) => eventHandler(e, events.BUTTON_CLICKED)}>
+          {domToReact(domNode.children)}
+        </button>
+      )
+    }
+
     if (domNode.type === 'tag' && domNode.name === 'a') {
       const props = attributesToProps(domNode.attribs);
       const { href } = domNode.attribs;
+      let updatedHref = href;
+      if (href && options?.url && !href.startsWith('http')) {
+        updatedHref = `${options.url.replace(/\/$/, '')}/${href.replace(/^\//, '')}`;
+      }
       return (
-        <a {...props} href={href} onClick={onLinkClick} title={href}>
+        <a {...props} href={updatedHref} onClick={(e) => eventHandler(e, events.LINK_CLICKED)} title={updatedHref}>
             {domToReact(domNode.children)}
         </a>
       )
@@ -84,7 +102,7 @@ const TemplateRenderer = ({ templateUrl, mobileTemplate, showTooltips = false, s
     if (domNode.type === 'tag' && domNode.name === 'form') {
       const props = attributesToProps(domNode.attribs);
       return (
-        <form {...props} onSubmit={onSubmitClick}>
+        <form {...props} onSubmit={(e) => eventHandler(e, events.FORM_SUBMITTED)}>
           {domToReact(domNode.children)}
         </form>
       )

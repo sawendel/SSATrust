@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ModeResults, ModeTypes, Modes } from '../../constants';
+import { ModeResults, ModeTypes, Modes, events } from '../../constants';
 import { useQuery } from '../../hooks';
 import steps from '../../config/steps.json';
 import Email from '../Common/Email';
@@ -10,6 +10,7 @@ import Letter from '../Common/Letter';
 import Sms from '../Common/Sms';
 import Webpage from '../Common/Webpage';
 import screenfull from 'screenfull';
+import { logger } from '../../services';
 
 const ModeWrapper = () => {
   const { id } = useParams();
@@ -25,26 +26,34 @@ const ModeWrapper = () => {
   const isEducational = workflow.mode === Modes.EDUCATIONAL;
 
   useEffect(() => {
-    if (screenfull.isEnabled) {
-      screenfull.request();
-    }
-    return () => {
-      screenfull.exit().then();
+    if (query.get('fullscreen') !== 'false') {
+      if (screenfull.isEnabled) {
+        screenfull.request();
+      }
+      return () => {
+        screenfull.exit().then();
+      }
     }
   }, []);
+
+  const logEvent = (event) => {
+    logger.logEvent(query.get('uid'), id, event, currentStep.template, currentStep.type);
+  };
 
   const stepElement = useMemo(() => {
     switch (currentStep.type) {
       case ModeTypes.EMAIL:
-        return <Email showTooltips={displayTooltips} templateUrl={`/emails/${currentStep.template}`} />;
+        return <Email logEvent={logEvent} type={currentStep.type} showTooltips={displayTooltips} templateUrl={`/emails/${currentStep.template}`} />;
       case ModeTypes.SMS:
-        return <Sms showTooltips={displayTooltips} templateUrl={`/sms/${currentStep.template}`} />;
+        return <Sms logEvent={logEvent} type={currentStep.type} showTooltips={displayTooltips} templateUrl={`/sms/${currentStep.template}`} />;
       case ModeTypes.LETTER:
-        return <Letter showTooltips={displayTooltips} templateUrl={`/letters/${currentStep.template}`} />;
+        return <Letter logEvent={logEvent} type={currentStep.type} showTooltips={displayTooltips} templateUrl={`/letters/${currentStep.template}`} />;
       case ModeTypes.AUDIO:
-        return <Audio audioScr={`/audios/${currentStep.template}`} tooltip={currentStep.tooltip} showTooltips={displayTooltips} />;
+        return <Audio logEvent={logEvent} type={currentStep.type} audioScr={`/audios/${currentStep.template}`} tooltip={currentStep.tooltip} showTooltips={displayTooltips} />;
       case ModeTypes.WEBPAGE:
           return <Webpage
+            logEvent={logEvent}
+            type={currentStep.type}
             showTooltips={displayTooltips}
             mobileTemplate={currentStep.mobileTemplate && `/webpages/${currentStep.mobileTemplate}`}
             templateUrl={`/webpages/${currentStep.template}`}
@@ -64,6 +73,10 @@ const ModeWrapper = () => {
   }
 
   const onNext = () => {
+    if (!isEducational || !displayTooltips) {
+      logEvent(selected === ModeResults.REAL ? events.MARKED_REAL : events.MARKED_SCAM)
+    }
+
     if (isEducational && !displayTooltips) {
       setDisplayTooltips(true);
       return;
@@ -92,7 +105,7 @@ const ModeWrapper = () => {
           <Col>
             <Row className="align-items-center">
               <Col md="auto" sm={12}>
-                <p className="et-mode-wrapper__qn me-4 my-md-0 my-3">Is the following <strong>{currentStep.type}</strong> {ModeResults.REAL} or {ModeResults.FAKE}?</p>
+                <p className="et-mode-wrapper__qn me-4 my-md-0 my-3">Is the following <strong>{currentStep.type}</strong> {ModeResults.REAL} or {ModeResults.SCAM}?</p>
               </Col>
               {!displayTooltips && (
                 <Col>
@@ -112,10 +125,10 @@ const ModeWrapper = () => {
                       <Button
                         className="w-100 w-md-auto et-mode-wrapper__result-btn et-mode-wrapper__result-btn-danger px-4"
                         variant="outline-white"
-                        active={ModeResults.FAKE === selected}
-                        onClick={(e) => onResultClick(e, ModeResults.FAKE)}
+                        active={ModeResults.SCAM === selected}
+                        onClick={(e) => onResultClick(e, ModeResults.SCAM)}
                       >
-                        {ModeResults.FAKE}
+                        {ModeResults.SCAM}
                         <i className="et-close" />
                       </Button>
                     </Col>

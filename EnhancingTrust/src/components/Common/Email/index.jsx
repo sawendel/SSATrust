@@ -1,44 +1,58 @@
 import { useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import TemplateRenderer from '../TemplateRenderer';
 import EmailHeader from './EmailHeader';
+import { events } from '../../../constants';
 
 const Email = (props) => {
   const [config, setConfig] = useState();
+  const { logEvent } = props;
 
   return (
     <Container fluid className="p-0">
       <Row className="et-email gx-0">
         <Col xs="auto" className="d-md-flex d-none">
           <div className="et-email__menu-side bg-light px-3">
-            <i className="py-3 et-tray" />
-            <i className="py-3 et-star" />
-            <i className="py-3 et-pen" />
-            <i className="py-3 et-info-octa" />
+            <Button variant="link" className="py-3 et-email__icon-btn" onClick={() => logEvent(events.EMAIL_INBOX)}>
+              <i className="et-tray" />
+            </Button>
+            <Button variant="link" className="py-3 et-email__icon-btn" onClick={() => logEvent(events.EMAIL_FAVORITES)}>
+              <i className="et-star" />
+            </Button>
+            <Button variant="link" className="py-3 et-email__icon-btn" onClick={() => logEvent(events.EMAIL_DRAFTS)}>
+              <i className="et-pen" />
+            </Button>
+            <Button variant="link" className="py-3 et-email__icon-btn" onClick={() => logEvent(events.EMAIL_SPAM)}>
+              <i className="et-info-octa" />
+            </Button>
           </div>
         </Col>
         <Col>
           <div>
             <div className="et-email__menu-top px-lg-7 px-md-5 px-3 py-3 justify-content-between">
               <div className="d-flex">
-                <i className="et-email__menu-top__item et-arrow-left" />
-                <div className="et-email__menu-top__item">
+                <Button variant="link" className="et-email__menu-top__item et-email__icon-btn" onClick={() => logEvent(events.EMAIL_BACK)}>
+                  <i className="et-arrow-left" />
+                </Button>
+                <Button variant="link" className="et-email__menu-top__item et-email__icon-btn" onClick={() => logEvent(events.EMAIL_ARCHIVE)}>
                   <i className="et-archive" />
                   <span className="d-sm-block d-none">Archive</span>
-                </div>
-                <div className="et-email__menu-top__item">
+                </Button>
+                <Button variant="link" className="et-email__menu-top__item et-email__icon-btn" onClick={() => logEvent(events.EMAIL_REPORT_SPAM)}>
                   <i className="et-forbiden" />
                   <span className="d-sm-block d-none">Report Spam</span>
-                </div>
-                <div className="et-email__menu-top__item">
+                </Button>
+                <Button variant="link" className="et-email__menu-top__item et-email__icon-btn" onClick={() => logEvent(events.EMAIL_DELETE)}>
                   <i className="et-trash" />
                   <span className="d-sm-block d-none">Delete</span>
-                </div>
+                </Button>
               </div>
-              <i className="et-dots et-email__menu-top__dots" />
+              <Button variant="link" className="et-email__menu-top__dots et-email__icon-btn" onClick={() => logEvent(events.EMAIL_DOT_MENU)}>
+                <i className="et-dots" />
+              </Button>
             </div>
             <div className="px-lg-7 px-md-5 px-3 pt-3">
-              <EmailHeader config={config} showTooltips={props.showTooltips} />
+              <EmailHeader logEvent={props.logEvent} config={config} showTooltips={props.showTooltips} />
               <TemplateRenderer {...props} setOptions={setConfig} />
             </div>
           </div>

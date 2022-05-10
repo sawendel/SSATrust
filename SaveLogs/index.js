@@ -31,6 +31,11 @@ exports.handler = async (event, context) => {
     const result = await db.collection("savedLogs").insertOne(inputLog);
     const response = {
         statusCode: 200,
+        headers: { 
+            'Access-Control-Allow-Origin' : '*',
+            'Access-Control-Allow-Methods':'*',
+            'Access-Control-Allow-Headers':'*',
+        },
         body: JSON.stringify(result),
     };
     return response;
