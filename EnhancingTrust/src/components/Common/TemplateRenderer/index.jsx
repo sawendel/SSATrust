@@ -31,9 +31,11 @@ const TemplateRenderer = ({
     });
   }, [template]);
 
-  const eventHandler = (e, event) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const eventHandler = (e, event, attribs) => {
+    if (typeof attribs?.['data-default'] === 'undefined') {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
     logEvent(event);
   };
@@ -79,7 +81,7 @@ const TemplateRenderer = ({
     if (domNode.type === 'tag' && domNode.name === 'button') {
       const props = attributesToProps(domNode.attribs);
       return (
-        <button {...props} onClick={(e) => eventHandler(e, events.BUTTON_CLICKED)}>
+        <button {...props} onClick={(e) => eventHandler(e, events.BUTTON_CLICKED, domNode.attribs)}>
           {domToReact(domNode.children)}
         </button>
       )
