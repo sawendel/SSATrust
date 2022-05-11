@@ -18,6 +18,14 @@ export const events = Object.freeze({
   EMAIL_FAVORITES: 'email_favorites',
   EMAIL_DRAFTS: 'email_drafts',
   EMAIL_SPAM: 'email_spam',
+  BROWSER_BACK_CLICKED: 'browser_back_clicked',
+  BROWSER_NEXT_CLICKED: 'browser_next_clicked',
+  BROWSER_REFRESH_CLICKED: 'browser_refresh_clicked',
+  BROWSER_HOME_CLICKED: 'browser_home_clicked',
+  BROWSER_MARK_FAVORITE_CLICKED: 'browser_mark_favorite_clicked',
+  BROWSER_DOTS_CLICKED: 'browser_dots_clicked',
+  BROWSER_NEW_TAB_CLICKED: 'browser_new_tab_clicked',
+  BROWSER_CLOSE_TAB_CLICKED: 'browser_close_tab_clicked',
 });
 
 export default events;
