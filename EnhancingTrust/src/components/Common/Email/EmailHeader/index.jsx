@@ -4,7 +4,7 @@ import { Row, Col, Button } from 'react-bootstrap';
 import moment from 'moment';
 import Details from './Details';
 import Tooltip from '../../Tooltip';
-import { events } from '../../../../constants';
+import { Events } from '../../../../constants';
 
 const EmailHeader = ({ logEvent, config, showTooltips }) => {
   const [displayDetails, setDisplayDetails] = useState(false);
@@ -31,7 +31,7 @@ const EmailHeader = ({ logEvent, config, showTooltips }) => {
   );
 
   const onToggleDetails = () => {
-    const event = displayDetails ? events.EMAIL_DETAILS_COLLAPSED : events.EMAIL_DETAILS_EXPANDED;
+    const event = displayDetails ? Events.EMAIL_DETAILS_COLLAPSED : Events.EMAIL_DETAILS_EXPANDED;
     setDisplayDetails(!displayDetails);
     logEvent(event);
   };
@@ -72,16 +72,16 @@ const EmailHeader = ({ logEvent, config, showTooltips }) => {
         <Col lg={6} xs={4}>
           <div className="d-flex justify-content-end align-items-center et-email-header__actions">
             <small className="d-none d-lg-block text-lynch">{dateElement()}</small>
-            <Button variant="link" className="et-email__icon-btn" onClick={() => logEvent(events.EMAIL_REPLY)}>
+            <Button variant="link" className="et-email__icon-btn" onClick={() => logEvent(Events.EMAIL_REPLY)}>
               <i className="et-response" />
             </Button>
-            <Button variant="link" className="d-none d-lg-block et-email__icon-btn" onClick={() => logEvent(events.EMAIL_REPLY_ALL)}>
+            <Button variant="link" className="d-none d-lg-block et-email__icon-btn" onClick={() => logEvent(Events.EMAIL_REPLY_ALL)}>
               <i className="et-reply-all" />
             </Button>
-            <Button variant="link" className="d-none d-lg-block et-email__icon-btn" onClick={() => logEvent(events.EMAIL_FORWARD)}>
+            <Button variant="link" className="d-none d-lg-block et-email__icon-btn" onClick={() => logEvent(Events.EMAIL_FORWARD)}>
               <i className="et-forward" />
             </Button>
-            <Button variant="link" className="et-email__icon-btn" onClick={() => logEvent(events.EMAIL_DOT_MENU)}>
+            <Button variant="link" className="et-email__icon-btn" onClick={() => logEvent(Events.EMAIL_DOT_MENU)}>
               <i className="et-dots" />
             </Button>
           </div>

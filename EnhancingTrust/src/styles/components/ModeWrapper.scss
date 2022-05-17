@@ -20,22 +20,17 @@
     justify-content: center;
     align-items: center;
     text-transform: uppercase;
+    font-weight: bold;
 
     i {
       margin-left: .7rem;
     }
 
-    &-success {
-      &:hover,
-      &.active {
-        color: $success;
-      }
-    }
-
+    &-success,
     &-danger {
       &:hover,
       &.active {
-        color: $danger;
+        color: $black;
       }
     }
   }

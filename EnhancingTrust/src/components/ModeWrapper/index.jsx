@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ModeResults, ModeTypes, Modes, events } from '../../constants';
+import { ModeResults, ModeTypes, Modes, Events, QueryParams } from '../../constants';
 import { useQuery } from '../../hooks';
 import steps from '../../config/steps.json';
 import Email from '../Common/Email';
@@ -23,10 +23,11 @@ const ModeWrapper = () => {
   const [displayTooltips, setDisplayTooltips] = useState(false);
   const currentStep = workflowSteps[stepIndex];
   const isLastStep = stepIndex === workflowSteps?.length - 1;
+  const isFirstStep = stepIndex === 0;
   const isEducational = workflow.mode === Modes.EDUCATIONAL;
 
   useEffect(() => {
-    if (query.get('fullscreen') !== 'false') {
+    if (query.get(QueryParams.FULLSCREEN) !== 'false') {
       if (screenfull.isEnabled) {
         screenfull.request();
       }
@@ -37,7 +38,7 @@ const ModeWrapper = () => {
   }, []);
 
   const logEvent = (event) => {
-    logger.logEvent(query.get('uid'), id, event, currentStep.template, currentStep.type);
+    logger.logEvent(query.get(QueryParams.UID), id, event, currentStep.template, currentStep.type);
   };
 
   const stepElement = useMemo(() => {
@@ -74,7 +75,7 @@ const ModeWrapper = () => {
 
   const onNext = () => {
     if (!isEducational || !displayTooltips) {
-      logEvent(selected === ModeResults.REAL ? events.MARKED_REAL : events.MARKED_SCAM)
+      logEvent(selected === ModeResults.REAL ? Events.MARKED_REAL : Events.MARKED_SCAM)
     }
 
     if (isEducational && !displayTooltips) {
@@ -90,22 +91,32 @@ const ModeWrapper = () => {
       return;
     }
 
-    const redirect = query.get('redirectUrl');
+    const redirect = query.get(QueryParams.REDIRECT_URL);
     if (redirect) {
       window.location.href = redirect;
     } else {
       navigate('/', { replace: true });
     }
   };
+
+  const getDisplayText = () => {
+    if (displayTooltips) {
+      return <>Thank you. This communication was {currentStep.result}. Please see below for why</>;
+    } else if (isFirstStep) {
+      return <>Is the following <strong>{currentStep.type}</strong> {ModeResults.REAL} or {ModeResults.SCAM}?</>;
+    } else {
+      return <>Thank you. Now, is this <strong>{currentStep.type}</strong> {ModeResults.REAL} or {ModeResults.SCAM}?</>;
+    }
+  };
  
   return (
     <>
-      <Container fluid className="et-mode-wrapper bg-info">
+      <Container fluid className={`et-mode-wrapper ${displayTooltips ? 'bg-prussian' : 'bg-black'}`}>
         <Row className="align-items-center">
           <Col>
             <Row className="align-items-center">
               <Col md="auto" sm={12}>
-                <p className="et-mode-wrapper__qn me-4 my-md-0 my-3">Is the following <strong>{currentStep.type}</strong> {ModeResults.REAL} or {ModeResults.SCAM}?</p>
+                <h5 className="et-mode-wrapper__qn me-4 my-md-0 my-3">{getDisplayText()}</h5>
               </Col>
               {!displayTooltips && (
                 <Col>
@@ -113,7 +124,7 @@ const ModeWrapper = () => {
                     <Col xs={6} md="auto">
                       <Button
                         className="w-100 w-md-auto et-mode-wrapper__result-btn et-mode-wrapper__result-btn-success px-4 me-4"
-                        variant="outline-white"
+                        variant="outline-success"
                         active={ModeResults.REAL === selected}
                         onClick={(e) => onResultClick(e, ModeResults.REAL)}
                       >
@@ -124,7 +135,7 @@ const ModeWrapper = () => {
                     <Col xs={6} md="auto">
                       <Button
                         className="w-100 w-md-auto et-mode-wrapper__result-btn et-mode-wrapper__result-btn-danger px-4"
-                        variant="outline-white"
+                        variant="outline-danger"
                         active={ModeResults.SCAM === selected}
                         onClick={(e) => onResultClick(e, ModeResults.SCAM)}
                       >
@@ -143,7 +154,7 @@ const ModeWrapper = () => {
               className={`${!selected ? 'invisible d-md-block d-none' : ''} px-5 py-3 rounded-0 w-100`}
               onClick={onNext}
             >
-              <span className="pe-2 pb-1">{isLastStep ? 'Complete' : 'Next'}</span>
+              <span className="pe-2 pb-1">{displayTooltips ? 'Next' : 'Send'}</span>
               <i className="et-caret-right" />
             </Button>
           </Col>

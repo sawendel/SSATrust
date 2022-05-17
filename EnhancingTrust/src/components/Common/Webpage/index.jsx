@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Row, Col, Image } from 'react-bootstrap';
 import TemplateRenderer from '../TemplateRenderer';
 import Tooltip from '../Tooltip';
-import { events } from '../../../constants';
+import { Events } from '../../../constants';
 
 const Webpage = ({ showTooltips, ...props }) => {
   const [config, setConfig] = useState();
@@ -17,11 +17,11 @@ const Webpage = ({ showTooltips, ...props }) => {
           <div className="et-webpage__tabbar-tab p-2">
             {config?.tabIcon && <img alt="Tab favicon" src={config?.tabIcon} width="16" height="16" />}
             <small className="text-truncate" title={config?.tabName}>{config?.tabName}</small>
-            <Button variant="link" className="et-event__btn" onClick={() => props.logEvent(events.BROWSER_CLOSE_TAB_CLICKED)}>
+            <Button variant="link" className="et-event__btn" onClick={() => props.logEvent(Events.BROWSER_CLOSE_TAB_CLICKED)}>
               <small><i className="et-close" /></small>
             </Button>
           </div>
-          <Button variant="link" className="et-event__btn" onClick={() => props.logEvent(events.BROWSER_NEW_TAB_CLICKED)}>
+          <Button variant="link" className="et-event__btn" onClick={() => props.logEvent(Events.BROWSER_NEW_TAB_CLICKED)}>
             <small><i className="et-plus" /></small>
           </Button>
         </div>
@@ -29,16 +29,16 @@ const Webpage = ({ showTooltips, ...props }) => {
           <Row className="align-items-center">
             <Col xs="auto" className="d-none d-lg-block">
               <div className="et-webpage__toolbar-actions">
-                <Button variant="link" className="et-event__btn" onClick={() => props.logEvent(events.BROWSER_BACK_CLICKED)}>
+                <Button variant="link" className="et-event__btn" onClick={() => props.logEvent(Events.BROWSER_BACK_CLICKED)}>
                   <small><i className="et-prev" /></small>
                 </Button>
-                <Button variant="link" className="et-event__btn" onClick={() => props.logEvent(events.BROWSER_NEXT_CLICKED)}>
+                <Button variant="link" className="et-event__btn" onClick={() => props.logEvent(Events.BROWSER_NEXT_CLICKED)}>
                   <small><i className="et-next text-sylver" /></small>
                 </Button>
-                <Button variant="link" className="et-event__btn" onClick={() => props.logEvent(events.BROWSER_REFRESH_CLICKED)}>
+                <Button variant="link" className="et-event__btn" onClick={() => props.logEvent(Events.BROWSER_REFRESH_CLICKED)}>
                   <small><i className="et-refresh" /></small>
                 </Button>
-                <Button variant="link" className="et-event__btn" onClick={() => props.logEvent(events.BROWSER_HOME_CLICKED)}>
+                <Button variant="link" className="et-event__btn" onClick={() => props.logEvent(Events.BROWSER_HOME_CLICKED)}>
                   <small><i className="et-home" /></small>
                 </Button>
               </div>
@@ -49,7 +49,7 @@ const Webpage = ({ showTooltips, ...props }) => {
                 <Tooltip show={showTooltips} text={config?.urlTooltip} placement="bottom">
                   <small className="text-truncate">{config?.url}</small>
                 </Tooltip>
-                <Button variant="link" className="et-event__btn ms-auto d-none d-lg-block" onClick={() => props.logEvent(events.BROWSER_MARK_FAVORITE_CLICKED)}>
+                <Button variant="link" className="et-event__btn ms-auto d-none d-lg-block" onClick={() => props.logEvent(Events.BROWSER_MARK_FAVORITE_CLICKED)}>
                   <small><i className="et-star" /></small>
                 </Button>
               </div>
@@ -63,7 +63,7 @@ const Webpage = ({ showTooltips, ...props }) => {
                     roundedCircle
                   />
                 </div>
-                <Button variant="link" className="mt-1 et-event__btn" onClick={() => props.logEvent(events.BROWSER_DOTS_CLICKED)}>
+                <Button variant="link" className="mt-1 et-event__btn" onClick={() => props.logEvent(Events.BROWSER_DOTS_CLICKED)}>
                   <small><i className="et-dots" /></small>
                 </Button>
               </div>

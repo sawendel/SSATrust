@@ -31,3 +31,30 @@
     font-size: 1rem;
   }
 }
+
+#overlay-root > div {
+  z-index: 99999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba($black, .7);
+  color: $white;
+
+  .overlay {
+    &__wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    &__warning {
+      font-size: 3rem;
+    }
+  }
+}

@@ -2,7 +2,8 @@ import { useMemo, useEffect, useState } from 'react';
 import parse, { domToReact, attributesToProps } from 'html-react-parser';
 import { ajax } from 'rxjs/ajax';
 import Tooltip from 'rc-tooltip';
-import { events } from '../../../constants';
+import { Events } from '../../../constants';
+import LinkEventOverlay from '../LinkEventOverlay';
 
 const TemplateRenderer = ({
   templateUrl,
@@ -14,6 +15,7 @@ const TemplateRenderer = ({
 ) => {
   const [html, setHtml] = useState('');
   const [opt, setOpt] = useState();
+  const [showLinkCatch, setShowLinkCatch] = useState(false);
   const template = useMemo(() => window.innerWidth < 768 && mobileTemplate
     ? mobileTemplate : templateUrl, [mobileTemplate, templateUrl]);
 
@@ -39,6 +41,11 @@ const TemplateRenderer = ({
 
     logEvent(event);
   };
+
+  const onLinkClick = (...params) => {
+    setShowLinkCatch(true);
+    eventHandler(...params);
+  }
 
   const replace = (domNode) => {
     if (domNode.type === 'style' && domNode.children?.[0]?.data) {
@@ -81,7 +88,7 @@ const TemplateRenderer = ({
     if (domNode.type === 'tag' && domNode.name === 'button') {
       const props = attributesToProps(domNode.attribs);
       return (
-        <button {...props} onClick={(e) => eventHandler(e, events.BUTTON_CLICKED, domNode.attribs)}>
+        <button {...props} onClick={(e) => eventHandler(e, Events.BUTTON_CLICKED, domNode.attribs)}>
           {domToReact(domNode.children)}
         </button>
       )
@@ -95,7 +102,7 @@ const TemplateRenderer = ({
         updatedHref = `${options.url.replace(/\/$/, '')}/${href.replace(/^\//, '')}`;
       }
       return (
-        <a {...props} href={updatedHref} onClick={(e) => eventHandler(e, events.LINK_CLICKED)} title={updatedHref}>
+        <a {...props} href={updatedHref} onClick={(e) => onLinkClick(e, Events.LINK_CLICKED)} title={updatedHref}>
             {domToReact(domNode.children)}
         </a>
       )
@@ -104,7 +111,7 @@ const TemplateRenderer = ({
     if (domNode.type === 'tag' && domNode.name === 'form') {
       const props = attributesToProps(domNode.attribs);
       return (
-        <form {...props} onSubmit={(e) => eventHandler(e, events.FORM_SUBMITTED)}>
+        <form {...props} onSubmit={(e) => eventHandler(e, Events.FORM_SUBMITTED)}>
           {domToReact(domNode.children)}
         </form>
       )
@@ -112,9 +119,21 @@ const TemplateRenderer = ({
   }
 
   return (
-    <div className="et-template">
-      {parse(html, { replace })}
-    </div>
+    <>
+      {showLinkCatch && (
+        <LinkEventOverlay>
+          <div className="overlay__wrapper" onClick={() => setShowLinkCatch(false)} role="button" tabIndex={0}>
+            <div className="pb-4">
+              <i className="overlay__warning et-warning" />
+            </div>
+            <h5 className="p1">All links have been disabled in this study.</h5>
+          </div>
+        </LinkEventOverlay>
+      )}
+      <div className="et-template">
+        {parse(html, { replace })}
+      </div>
+    </>
   )
 };
 

@@ -6,50 +6,61 @@
       "steps": [
         {
           "type": "webpage",
-          "template": "irs.html"
+          "template": "irs.html",
+          "result": "real"
         },
         {
           "type": "webpage",
-          "template": "fedGov.html"
+          "template": "fedGov.html",
+          "result": "scam"
         },
         {
           "type": "webpage",
-          "template": "appleID.html"
+          "template": "appleID.html",
+          "result": "real"
         },
         {
           "type": "webpage",
           "template": "walmart.html",
-          "mobileTemplate": "walmartMobile.html"
+          "mobileTemplate": "walmartMobile.html",
+          "result": "real"
         },
         {
           "type": "webpage",
-          "template": "ssaFb.html"
+          "template": "ssaFb.html",
+          "result": "scam"
         },
         {
           "type": "webpage",
           "template": "amazonProductPage.html",
-          "mobileTemplate": "amazonProductPageMobile.html"
+          "mobileTemplate": "amazonProductPageMobile.html",
+          "result": "real"
         },
         {
           "type": "webpage",
-          "template": "ssa.html"
+          "template": "ssa.html",
+          "result": "real"
         },
         {
           "type": "email",
-          "template": "design.html"
+          "template": "design.html",
+          "result": "scam"
         },
         {
           "type": "letter",
-          "template": "design.html"
+          "template": "design.html",
+          "result": "scam"
         },
         {
           "type": "sms",
-          "template": "design.html"
+          "template": "design.html",
+          "result": "scam"
         },
         {
           "type": "audio",
           "template": "autumn.mp3",
-          "tooltip": "Fake audio"
+          "tooltip": "Fake audio",
+          "result": "real"
         }
       ]
     }

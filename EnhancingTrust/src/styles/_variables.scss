@@ -13,11 +13,11 @@ $font-family-sans-serif: Roboto, "et-icons", "Helvetica Neue", system-ui,
 $btn-border-radius: 10px;
 
 $light: #eceff1;
-$danger: #c5050c;
+$danger: #FF6678;
 $secondary: #005779;
 $primary: #0f65ef;
 $info: #0479a8;
-$success: #005a5f;
+$success: #05D7A0;
 $warning: #ba5701;
 $blue: #03269e;
 $light-gray: #78909c;
@@ -32,9 +32,12 @@ $lynch: #607d8b;
 $mischka: #dee1e6;
 $sylver: #babcbe;
 $fiord: #455A64;
+$prussian: #00354A;
 
 $theme-colors: (
   "white": $white,
+  "black": $black,
+  "prussian": $prussian,
   "primary": $primary,
   "secondary": $secondary,
   "success": $success,

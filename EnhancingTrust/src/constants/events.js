@@ -1,4 +1,4 @@
-export const events = Object.freeze({
+export const Events = Object.freeze({
   LINK_CLICKED: 'link_clicked',
   BUTTON_CLICKED: 'button_clicked',
   EMAIL_DETAILS_EXPANDED: 'email_details_expanded',
@@ -28,4 +28,4 @@ export const events = Object.freeze({
   BROWSER_CLOSE_TAB_CLICKED: 'browser_close_tab_clicked',
 });
 
-export default events;
+export default Events;
