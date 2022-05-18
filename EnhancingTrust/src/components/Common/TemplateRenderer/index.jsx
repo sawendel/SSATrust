@@ -2,8 +2,8 @@ import { useMemo, useEffect, useState } from 'react';
 import parse, { domToReact, attributesToProps } from 'html-react-parser';
 import { ajax } from 'rxjs/ajax';
 import Tooltip from 'rc-tooltip';
+import { toast } from 'react-toastify';
 import { Events } from '../../../constants';
-import LinkEventOverlay from '../LinkEventOverlay';
 
 const TemplateRenderer = ({
   templateUrl,
@@ -15,7 +15,6 @@ const TemplateRenderer = ({
 ) => {
   const [html, setHtml] = useState('');
   const [opt, setOpt] = useState();
-  const [showLinkCatch, setShowLinkCatch] = useState(false);
   const template = useMemo(() => window.innerWidth < 768 && mobileTemplate
     ? mobileTemplate : templateUrl, [mobileTemplate, templateUrl]);
 
@@ -43,8 +42,9 @@ const TemplateRenderer = ({
   };
 
   const onLinkClick = (...params) => {
-    setShowLinkCatch(true);
     eventHandler(...params);
+    toast.info("All links have been disabled in this study");
+    toast.clearWaitingQueue();
   }
 
   const replace = (domNode) => {
@@ -119,21 +119,9 @@ const TemplateRenderer = ({
   }
 
   return (
-    <>
-      {showLinkCatch && (
-        <LinkEventOverlay>
-          <div className="overlay__wrapper" onClick={() => setShowLinkCatch(false)} role="button" tabIndex={0}>
-            <div className="pb-4">
-              <i className="overlay__warning et-warning" />
-            </div>
-            <h5 className="p1">All links have been disabled in this study.</h5>
-          </div>
-        </LinkEventOverlay>
-      )}
-      <div className="et-template">
-        {parse(html, { replace })}
-      </div>
-    </>
+    <div className="et-template">
+      {parse(html, { replace })}
+    </div>
   )
 };
 

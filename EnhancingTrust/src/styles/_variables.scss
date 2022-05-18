@@ -34,6 +34,10 @@ $sylver: #babcbe;
 $fiord: #455A64;
 $prussian: #00354A;
 
+:root {
+  --toastify-color-info: $prussian;
+}
+
 $theme-colors: (
   "white": $white,
   "black": $black,

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ToastContainer } from 'react-toastify';
 import {
   BrowserRouter,
   Routes,
@@ -9,14 +10,28 @@ import ModeWrapper from './components/ModeWrapper';
 import Layout from './components/Common/Layout';
 
 const App = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Layout id={1} />}>
-        <Route path="/" index exact element={<HomePage id={1} />} />
-        <Route path="/workflow/:id" element={<ModeWrapper />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>
+  <>
+    <ToastContainer
+      position="top-center"
+      theme="colored"
+      limit={1}
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      pauseOnHover
+    />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout id={1} />}>
+          <Route path="/" index exact element={<HomePage id={1} />} />
+          <Route path="/workflow/:id" element={<ModeWrapper />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </>
 );
 
 export default App;
