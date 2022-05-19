@@ -250,3 +250,32 @@ The collection data format is as follows:
     created: ISODate("2022-05-19T20:46:28.419Z")
 }
 ```
+
+## Real/Scam Top Bar Component
+`src/components/ModeWrapper/index.jsx`
+This component is the main section of the pages. It contains the bar with the user options for Real/Scam (find the texts in `/EnhancingTrust/src/constants/modeResults.js`), the templates.
+
+This component is mainly important cause it has the conditions to add templates according to its type. If a new type, this file must be revisited.
+
+```
+switch (currentStep.type) {
+  case ModeTypes.EMAIL:
+    return <Email logEvent={logEvent} type={currentStep.type} showTooltips={displayTooltips} templateUrl={`/emails/${currentStep.template}`} />;
+  case ModeTypes.SMS:
+    return <Sms logEvent={logEvent} type={currentStep.type} showTooltips={displayTooltips} templateUrl={`/sms/${currentStep.template}`} />;
+  case ModeTypes.LETTER:
+    return <Letter logEvent={logEvent} type={currentStep.type} showTooltips={displayTooltips} templateUrl={`/letters/${currentStep.template}`} />;
+  case ModeTypes.AUDIO:
+    return <Audio logEvent={logEvent} type={currentStep.type} audioScr={`/audios/${currentStep.template}`} tooltip={currentStep.tooltip} showTooltips={displayTooltips} />;
+  case ModeTypes.WEBPAGE:
+      return <Webpage
+        logEvent={logEvent}
+        type={currentStep.type}
+        showTooltips={displayTooltips}
+        mobileTemplate={currentStep.mobileTemplate && `/webpages/${currentStep.mobileTemplate}`}
+        templateUrl={`/webpages/${currentStep.template}`}
+      />;
+  default:
+    throw new Error('Template not recognized');
+}
+```
