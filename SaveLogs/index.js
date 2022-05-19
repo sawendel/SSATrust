@@ -1,23 +1,27 @@
 
 const MongoClient = require("mongodb").MongoClient;
-const MONGODB_URI = "mongodb+srv://" + process.env.adminmbd + ":" + process.env.passwordmbd + "@ssatrust.rrthf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+
 let cachedDb = null;
 
 async function connectToDatabase() {
     if (cachedDb) {
-
         return cachedDb;
     }
 
+    const MONGODB_URI = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:27017/${process.env.DB_NAME}?retryWrites=true&w=majority`;
     const client = await MongoClient.connect(MONGODB_URI);
-    const db = await client.db('EnhancingTrust');
+    const db = await client.db(process.env.DB_NAME);
     cachedDb = db;
     return db
 }
 
+async function processEvent(event) {
+    
+}
+
 exports.handler = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false;
-    const db = await connectToDatabase();
+    const db = await connectToDatabase();   
 
     var body = JSON.parse(event.body);
     const inputLog = {
@@ -26,9 +30,9 @@ exports.handler = async (event, context) => {
         workflowId: body.workflowId,
         templateName: body.templateName,
         templateType: body.templateType,
-        date: new Date()
+        created: new Date()
     };
-    const result = await db.collection("savedLogs").insertOne(inputLog);
+    const result = await db.collection(process.env.DB_COLLECTION).insertOne(inputLog);
     const response = {
         statusCode: 200,
         headers: { 
