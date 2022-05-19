@@ -4,6 +4,7 @@ import { ajax } from 'rxjs/ajax';
 import Tooltip from 'rc-tooltip';
 import { toast } from 'react-toastify';
 import { Events } from '../../../constants';
+import Overlay from '../Overlay';
 
 const TemplateRenderer = ({
   templateUrl,
@@ -13,6 +14,7 @@ const TemplateRenderer = ({
   logEvent,
   setOptions = () => {} },
 ) => {
+  const [showOverlay, setShowOverlay] = useState(false);
   const [html, setHtml] = useState('');
   const [opt, setOpt] = useState();
   const template = useMemo(() => window.innerWidth < 768 && mobileTemplate
@@ -43,7 +45,10 @@ const TemplateRenderer = ({
 
   const onLinkClick = (...params) => {
     eventHandler(...params);
-    toast.info("All links have been disabled in this study");
+    toast.info("All links have been disabled in this study", {
+      onClose: () => setShowOverlay(false),
+      onOpen: () => setShowOverlay(true),
+    });
     toast.clearWaitingQueue();
   }
 
@@ -119,9 +124,12 @@ const TemplateRenderer = ({
   }
 
   return (
-    <div className="et-template">
-      {parse(html, { replace })}
-    </div>
+    <>
+      {showOverlay && <Overlay onClick={() => toast.dismiss()} />}
+      <div className="et-template">
+        {parse(html, { replace })}
+      </div>
+    </>
   )
 };
 

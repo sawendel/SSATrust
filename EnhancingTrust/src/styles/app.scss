@@ -40,3 +40,14 @@
 .Toastify__toast-container {
   z-index: 99999;
 }
+
+.et-overlay {
+  cursor: pointer;
+  z-index: 99998;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgba($black, .6);
+}
