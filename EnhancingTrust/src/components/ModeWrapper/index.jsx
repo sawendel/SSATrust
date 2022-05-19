@@ -37,8 +37,8 @@ const ModeWrapper = () => {
     }
   }, []);
 
-  const logEvent = (event) => {
-    logger.logEvent(query.get(QueryParams.UID), id, event, currentStep.template, currentStep.type);
+  const logEvent = (event, metadata) => {
+    logger.logEvent(query.get(QueryParams.UID), id, event, currentStep.template, currentStep.type, metadata);
   };
 
   const stepElement = useMemo(() => {
@@ -103,9 +103,9 @@ const ModeWrapper = () => {
     if (displayTooltips) {
       return <>Thank you. This communication was {currentStep.result}. Please see below for why</>;
     } else if (isFirstStep) {
-      return <>Is the following <strong>{currentStep.type}</strong> {ModeResults.REAL} or {ModeResults.SCAM}?</>;
+      return <>Is the following <strong>{currentStep.type}</strong> {ModeResults.REAL} or a {ModeResults.SCAM}?</>;
     } else {
-      return <>Thank you. Now, is this <strong>{currentStep.type}</strong> {ModeResults.REAL} or {ModeResults.SCAM}?</>;
+      return <>Thank you. Now, is this <strong>{currentStep.type}</strong> {ModeResults.REAL} or a {ModeResults.SCAM}?</>;
     }
   };
  

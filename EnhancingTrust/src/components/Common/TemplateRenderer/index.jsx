@@ -32,13 +32,13 @@ const TemplateRenderer = ({
     });
   }, [template]);
 
-  const eventHandler = (e, event, attribs) => {
+  const eventHandler = (e, event, attribs, metadata) => {
     if (typeof attribs?.['data-default'] === 'undefined') {
       e.preventDefault();
       e.stopPropagation();
     }
 
-    logEvent(event);
+    logEvent(event, metadata);
   };
 
   const onLinkClick = (...params) => {
@@ -102,7 +102,7 @@ const TemplateRenderer = ({
         updatedHref = `${options.url.replace(/\/$/, '')}/${href.replace(/^\//, '')}`;
       }
       return (
-        <a {...props} href={updatedHref} onClick={(e) => onLinkClick(e, Events.LINK_CLICKED)} title={updatedHref}>
+        <a {...props} href={updatedHref} onClick={(e) => onLinkClick(e, Events.LINK_CLICKED, undefined, updatedHref)} title={updatedHref}>
             {domToReact(domNode.children)}
         </a>
       )

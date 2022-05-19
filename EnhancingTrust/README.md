@@ -223,3 +223,30 @@ We call workflows to the set (steps) of templates that needs to be evaluated by 
 ```
 
 Make sure every workflow has a unique ID. This ID is used and passed in the URL to know what workflow to run. For example, the URL to run the workflow above would be `/workflow/1`.
+
+## Logs
+All events are logged in an EC2 instance using mongodb. All events being logged can be found in a file called events.js `(/EnhancingTrust/src/constants/events.js)`.
+
+The web app sends the request to an API Gateway called [EnhancingTrustApi](https://us-east-2.console.aws.amazon.com/apigateway/home?region=us-east-2#/apis/k1sx4sgipa/resources/4o70o26322). The request is then redirected to a lambda function called [saveLogs](https://us-east-2.console.aws.amazon.com/lambda/home?region=us-east-2#/functions/saveLogs?tab=code) (can be found in Github with the same name).
+
+The connection string is using the Lambda Environment Variables to add the values.
+![image info](./readmeFiles/envvars.png)
+
+The EC2 instance that contains the mongodb is called [EnhancingTrust](https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#InstanceDetails:instanceId=i-0411b7071af21e247)
+![ec2 instance](./readmeFiles/ec2.png)
+
+After connecting to the instance, just type `mongosh` to connect to the database. The database is called `EnhancingTrust` and the db collection is called `logs`.
+
+The collection data format is as follows:
+```
+{
+    _id: ObjectId("6286aca4f3dcaca2dfd827b7"),
+    userId: '6e154340-cb7a-49cf-a39a-70fcfb27c773',
+    eventType: 'link_clicked',
+    metadata: 'https://www.usa-federal.gov/',
+    workflowId: '1',
+    templateName: 'fedGov.html',
+    templateType: 'webpage',
+    created: ISODate("2022-05-19T20:46:28.419Z")
+}
+```
