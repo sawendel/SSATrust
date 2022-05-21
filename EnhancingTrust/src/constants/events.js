@@ -3,6 +3,7 @@ export const Events = Object.freeze({
   BUTTON_CLICKED: 'button_clicked',
   EMAIL_DETAILS_EXPANDED: 'email_details_expanded',
   EMAIL_DETAILS_COLLAPSED: 'email_details_collapsed',
+  PAGE_SKIPPED: 'PAGE_SKIPPED',
   MARKED_SCAM: 'marked_scam',
   MARKED_REAL: 'marked_real',
   FORM_SUBMITTED: 'form_submitted',

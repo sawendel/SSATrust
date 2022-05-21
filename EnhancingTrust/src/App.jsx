@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, Zoom } from 'react-toastify';
 import {
   BrowserRouter,
   Routes,
@@ -14,6 +14,7 @@ const App = () => (
     <ToastContainer
       position="top-center"
       theme="colored"
+      transition={Zoom}
       limit={1}
       autoClose={5000}
       hideProgressBar={false}

@@ -18,6 +18,7 @@ const ModeWrapper = () => {
   const navigate = useNavigate();
   const workflow = useMemo(() => steps.workflows.find((x) => x.id === id), [id]);
   const workflowSteps = useMemo(() => workflow?.steps, [workflow]);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [selected, setSelected] = useState();
   const [displayTooltips, setDisplayTooltips] = useState(false);
@@ -27,11 +28,16 @@ const ModeWrapper = () => {
   const isEducational = workflow.mode === Modes.EDUCATIONAL;
 
   useEffect(() => {
+    function onScreenChange() {
+      setIsFullscreen(screenfull.isFullscreen);
+    };
+    screenfull.on('change', onScreenChange);
     if (query.get(QueryParams.FULLSCREEN) !== 'false') {
       if (screenfull.isEnabled) {
         screenfull.request();
       }
       return () => {
+        screenfull.off('change', onScreenChange);
         screenfull.exit().then();
       }
     }
@@ -73,7 +79,36 @@ const ModeWrapper = () => {
     e.currentTarget.blur();
   }
 
+  const getNextButtonText = () => {
+    if (displayTooltips) {
+      return 'Next';
+    }
+    if (!selected) {
+      return 'Skip';
+    }
+    return 'Send';
+  }
+
+  const redirect = () => {
+    const redirect = query.get(QueryParams.REDIRECT_URL);
+    if (redirect) {
+      window.location.href = redirect;
+    } else {
+      navigate('/', { replace: true });
+    }
+  };
+
   const onNext = () => {
+    if (!displayTooltips && !selected) {
+      logEvent(Events.PAGE_SKIPPED);
+
+      if (isLastStep) {
+        redirect();
+      }
+      setStepIndex(stepIndex + 1);
+      return;
+    }
+
     if (!isEducational || !displayTooltips) {
       logEvent(selected === ModeResults.REAL ? Events.MARKED_REAL : Events.MARKED_SCAM)
     }
@@ -91,12 +126,7 @@ const ModeWrapper = () => {
       return;
     }
 
-    const redirect = query.get(QueryParams.REDIRECT_URL);
-    if (redirect) {
-      window.location.href = redirect;
-    } else {
-      navigate('/', { replace: true });
-    }
+    redirect();
   };
 
   const getDisplayText = () => {
@@ -115,15 +145,15 @@ const ModeWrapper = () => {
         <Row className="align-items-center">
           <Col>
             <Row className="align-items-center">
-              <Col md="auto" sm={12}>
-                <h5 className="et-mode-wrapper__qn me-4 my-md-0 my-3">{getDisplayText()}</h5>
+              <Col lg="auto" md={12}>
+                <h5 className="et-mode-wrapper__qn me-4 my-lg-0 my-3">{getDisplayText()}</h5>
               </Col>
               {!displayTooltips && (
                 <Col>
-                  <Row className="mb-md-0 mb-3">
-                    <Col xs={6} md="auto">
+                  <Row className="mb-lg-0 mb-3">
+                    <Col xs={6} lg="auto">
                       <Button
-                        className="w-100 w-md-auto et-mode-wrapper__result-btn et-mode-wrapper__result-btn-success px-4 me-4"
+                        className="w-100 w-lg-auto et-mode-wrapper__result-btn et-mode-wrapper__result-btn-success px-4 me-4"
                         variant="outline-success"
                         active={ModeResults.REAL === selected}
                         onClick={(e) => onResultClick(e, ModeResults.REAL)}
@@ -132,9 +162,9 @@ const ModeWrapper = () => {
                         <i className="et-check" />
                       </Button>
                     </Col>
-                    <Col xs={6} md="auto">
+                    <Col xs={6} lg="auto">
                       <Button
-                        className="w-100 w-md-auto et-mode-wrapper__result-btn et-mode-wrapper__result-btn-danger px-4"
+                        className="w-100 w-lg-auto et-mode-wrapper__result-btn et-mode-wrapper__result-btn-danger px-4"
                         variant="outline-danger"
                         active={ModeResults.SCAM === selected}
                         onClick={(e) => onResultClick(e, ModeResults.SCAM)}
@@ -148,13 +178,24 @@ const ModeWrapper = () => {
               )}
             </Row>
           </Col>
-          <Col md="auto" sm="12" className="p-0">
+          {isFullscreen && (
+            <Col lg="auto" md="12" className="">
+              <Button
+                className="et-mode-wrapper__exit-full mb-3 mb-lg-0 w-100"
+                variant="outline-white"
+                onClick={() => screenfull.exit().then()}
+              >
+                Exit full-screen mode
+              </Button>
+            </Col>
+          )}
+          <Col lg="auto" md="12" className="p-0">
             <Button
               variant="secondary"
-              className={`${!selected ? 'invisible d-md-block d-none' : ''} px-5 py-3 rounded-0 w-100`}
+              className="px-xsl-5 px-lg-2 py-3 rounded-0 w-100"
               onClick={onNext}
             >
-              <span className="pe-2 pb-1">{displayTooltips ? 'Next' : 'Send'}</span>
+              <span className="pe-2 pb-1">{getNextButtonText()}</span>
               <i className="et-caret-right" />
             </Button>
           </Col>

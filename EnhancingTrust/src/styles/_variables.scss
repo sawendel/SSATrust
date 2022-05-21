@@ -115,3 +115,13 @@ $et-caret-down: "\e91d";
 $et-lock: "\e91e";
 $et-play: "\ea1c";
 $et-pause: "\ea1d";
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xsl: 1071px,
+  xl: 1200px,
+  xxl: 1400px
+)

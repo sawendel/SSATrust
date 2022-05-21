@@ -15,6 +15,10 @@
     }
   }
 
+  &__exit-full:hover {
+    @extend .btn-outline-secondary, :hover;
+  }
+
   &__result-btn {
     display: flex;
     justify-content: center;
