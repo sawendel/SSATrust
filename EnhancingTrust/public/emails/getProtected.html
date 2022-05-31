@@ -1,0 +1,42 @@
+   <a onclick="return clickCaptureOverlayOn()" href="https://www.ssa.gov">
+<span data-tooltip="The seal looks official and even links to SSA.Gov"><img border="0" alt="SSA" src="/emails/miscImages/SSALogo_SidebySide.jpg" width="349" height="144">	</span>
+</a>
+
+<p class="text-paragraph">Dear <span id="nametofill">James</span>:</p>
+
+<p class="text-paragraph">As recently mandated in the S.A.F.E. Act of 2020,
+the Social Security Administration has developed a new security feature that 
+helps you as a taxpayer to secure and protect your personal information.</p>
+
+<p class="text-paragraph">The new <span data-tooltip="The message doesn't have spelling mistakes or requests for money. BUT, that doesn't mean it isn't a scam -- it's just not an obvious one!">feature helps you monitor use of your Social Security number and alert you of unauthorized use - similar to a credit report. </span>The service is freely provided.</p>
+
+<p class="text-paragraph">To register, click <a onclick="return clickCaptureOverlayOn()" href="http://www.ssa.security">here to get started</a>.  <span data-tooltip="Hover over the website they want you to go to<br/> -- it's fake!"></span></p>
+
+<p class="text-paragraph">Please do not reply to this email, as we are unable to respond to messages sent to this address.</p>
+
+
+<script data-config>
+  const Init = function () {
+    return {
+      subject: 'Get Protected',
+      // subjectTooltip: "",
+      fromEmail: 'NO-REPLY@ssa.gov',
+      fromName: '',
+      fromTooltip: "The 'From' address can be faked.",
+      replyTo: 'reply@ssa.security',
+      replyToTooltip: "To know for sure: open the headers. The Reply-To Address Isn't A .Gov domain",
+      to: 'youremail@gmail.com',
+      // toTooltip: "",
+      mailedBy: 'flivver.dreamhost.com',
+      // mailedByTooltip: '',
+    };
+  }
+  Init();
+</script>
+
+<!--    
+"Month": "Feb",
+"Day": "27",
+"Year":"2021",
+"Hour": "1:41pm",	
+-->

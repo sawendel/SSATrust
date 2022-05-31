@@ -1,0 +1,57 @@
+{
+  "workflows": [
+    {
+      "id": "1",
+      "mode": "educational",
+      "steps": [
+        {
+          "type": "webpage",
+          "template": "fedGov.html"
+        },
+        {
+          "type": "webpage",
+          "template": "appleID.html"
+        },
+        {
+          "type": "webpage",
+          "template": "irs.html"
+        },
+        {
+          "type": "webpage",
+          "template": "walmart.html",
+          "mobileTemplate": "walmartMobile.html"
+        },
+        {
+          "type": "webpage",
+          "template": "ssaFb.html"
+        },
+        {
+          "type": "webpage",
+          "template": "amazonProductPage.html",
+          "mobileTemplate": "amazonProductPageMobile.html"
+        },
+        {
+          "type": "webpage",
+          "template": "ssa.html"
+        },
+        {
+          "type": "email",
+          "template": "design.html"
+        },
+        {
+          "type": "letter",
+          "template": "design.html"
+        },
+        {
+          "type": "sms",
+          "template": "design.html"
+        },
+        {
+          "type": "audio",
+          "template": "autumn.mp3",
+          "tooltip": "Fake audio"
+        }
+      ]
+    }
+  ]
+}

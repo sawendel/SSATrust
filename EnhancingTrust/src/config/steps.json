@@ -63,6 +63,146 @@
           "result": "real"
         }
       ]
-    }
+    },
+ 	{
+      "id": "Design",
+      "mode": "educational",
+      "steps": [
+        {
+          "type": "email",
+          "template": "design.html"
+        }
+	  ]
+	},
+ 	{
+      "id": "TestNow",
+      "mode": "educational",
+      "steps": [
+        {
+          "type": "email",
+          "template": "mcafee.html",
+          "result": "real"
+        }
+	  ]
+	},
+	{
+      "id": "Training",
+      "mode": "educational",
+      "steps": [
+        {
+          "type": "email",
+          "template": "protectYourself.html",
+          "result": "real"
+        },
+        {
+          "type": "webpage",
+          "template": "amazonHP.html",
+          "result": "real"
+        },
+        {
+          "type": "email",
+          "template": "irs.html",
+          "result": "scam"
+        },
+        {
+          "type": "webpage",
+          "template": "IRS_YourAccount.html",
+          "result": "real"
+        },
+        {
+          "type": "webpage",
+          "template": "appleID.html",
+          "result": "real"
+        },
+        {
+          "type": "webpage",
+          "template": "amazonProductPage.html",
+          "mobileTemplate": "amazonProductPageMobile.html",
+          "result": "scam"
+        },
+        {
+          "type": "email",
+          "template": "mcafee.html",
+          "result": "real"
+        },
+        {
+          "type": "email",
+          "template": "getProtected.html",
+          "result": "scam"
+        }
+	  ]
+	},
+	{
+      "id": "Test",
+      "mode": "test",
+      "steps": [
+        {
+          "type": "email",
+          "template": "redcross_covidRelief.html"
+        },
+        {
+          "type": "webpage",
+          "template": "ssa.html"
+        },
+        {
+          "type": "webpage",
+          "template": "mySocialSecurity.html"
+        },
+        {
+          "type": "email",
+          "template": "amazon_maskDelivery.html"
+        },
+        {
+          "type": "webpage",
+          "template": "ssaFb.html"
+        },
+        {
+          "type": "email",
+          "template": "ssa_optOut.html"
+        },
+        {
+          "type": "email",
+          "template": "ssa_replacementCard.html"
+        },
+        {
+          "type": "webpage",
+          "template": "walmart.html",
+          "mobileTemplate": "walmartMobile.html"
+        }
+      ]
+    },
+	{
+      "id": "Demos",
+      "mode": "training",
+      "steps": [
+	    {
+          "type": "email",
+          "template": "design.html"
+        },
+        {
+          "type": "letter",
+          "template": "design.html"
+        },
+        {
+          "type": "sms",
+          "template": "design.html"
+        },
+        {
+          "type": "audio",
+          "template": "autumn.mp3",
+          "tooltip": "Fake audio"
+        }
+      ]
+    },
+	{
+      "id": "Unused",
+      "mode": "test",
+      "steps": [
+        {
+          "type": "webpage",
+          "template": "fedGov.html"
+        }
+      ]
+	}
   ]
 }

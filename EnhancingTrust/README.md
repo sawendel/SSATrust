@@ -1,22 +1,57 @@
 # Getting Started
 
+SSA Trust provides users with a series of communications, in which they can determine whether the communications are real or a scam.
+It uses Node server for development, and the Create React framework to deploy its content. 
+
+The content is divided into a SEQUENCE of pages, and the CONTENT of the pages.  
+The sequence of pages is specified using the config/steps.json file.
+The pages themselves are composed of three components: a survey banner, a communication-medium wrapper, and the communication itself.
+The banner asks people if they think the message is real or fake, and allows them to navigate the sequence.
+The wrapper is either Email, Web, SMS, Letter or Audio. 
+The communication itself is specified in an HTML file of your chosing.  
+Below are more instructions on how to operate the system. 
+
+## Step 0: Setup your server for development (done once)
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). In order to run this project, first install all dependencies by running the command:
 ```
 npm install
 ```
 
-Then, just run the start command to run the project locally:
+## Step 1: Create your Content
+
+For each communication, decide first what type it will be: Email, Web, SMS, Letter or Audio.  
+In the "public/" folder, choose the cooresponding subfolder: emails, webpages, sms, letters, audios.
+In that subfolder, create a new HTML file (or duplicate an existing one) with the name of your communication.
+Craft the file as if it were only the body of the HTML: no body or HTML tags, no external CSS or JS files.  See the detailed instructions below.
+
+## Step 2: Setup the Sequence
+
+Edit the config/steps.json file to set the sequence of pages. You can multiple sequences, as long as they have a unique name. 
+
+## Step 3: Start the Server
+
+To run the start command locally:
 ```
 npm start
 ```
 
-## Templates
+## Step 4: Go to the sequence of your choice
+And go in a web browser to http://localhost:3000/
+To go to a particular workflow, use http://localhost:3000/workflow/[Workflowname] 
+
+Alternatively, you may want to use Amazon services, and access it via a public URL.
+
+If there is a problem in the code, you'll likely just see a blank screen. Install the React Tools to figure out what's going on:
+https://reactjs.org/blog/2015/09/02/new-react-developer-tools.html#installation
+
+
+## Detailed Instruction Templates
 In this project we describe templates as the HTML content for sms, emails, letters, webpages, audios and any other asset utilized for the users to test if it is real or fake.
 
 ### Adding Templates
 To add a new template, you must create an HTML file in `/public` folder and in the corresponding folder type (emails, sms...). The HTML can be in any structure you want.
 
-You must know that `link` tags will be omitted when injected in the page for the reason that adding a style this way will affect the rest of the page. If you want to add styles, then use a `style` tag. The render engine will prepend a CSS class to avoid collisions between the styles of the rest of the page.
+Please note that `link` tags will be omitted when injected in the page for the reason that adding a style this way will affect the rest of the page. If you want to add styles, then use a `style` tag. The render engine will prepend a CSS class to avoid collisions between the styles of the rest of the page.
 
 Each template type will have a specific configuration for some static content like the email subject, sender and others. This configuration will go in the HTML file in a `script` tag with attribute `data-config`. Any other script tag will be ignored. The configuration should go as follows:
 ```
