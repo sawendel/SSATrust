@@ -36,11 +36,12 @@ npm start
 ```
 
 ## Step 4: Go to the sequence of your choice
-And go in a web browser to http://localhost:3000/
+For local testing, go in a web browser to http://localhost:3000/
 To go to a particular workflow, use http://localhost:3000/workflow/[Workflowname] 
 
 Alternatively, you may want to use Amazon services, and access it via a public URL.
-
+The current public URL is: http://enhancing-trust.s3-website.us-east-2.amazonaws.com/	
+	
 If there is a problem in the code, you'll likely just see a blank screen. Install the React Tools to figure out what's going on:
 https://reactjs.org/blog/2015/09/02/new-react-developer-tools.html#installation
 
@@ -259,12 +260,43 @@ We call workflows to the set (steps) of templates that needs to be evaluated by 
 
 Make sure every workflow has a unique ID. This ID is used and passed in the URL to know what workflow to run. For example, the URL to run the workflow above would be `/workflow/1`.
 
-## Logs
+## Logs: Short
+
+The Logs are stored in a MongoDB on an EC Instance in Amazon, accessible through the MongoDB interface. 
+EC Instance: ec2-18-188-207-77.us-east-2.compute.amazonaws.com
+AWS Region: Ohio
+
+To Extract Via EC2:
+mongodump --ssl \
+    --host="ec2-18-188-207-77.us-east-2.compute.amazonaws.com:27017" \
+    --collection=logs \
+    --db=EnhancingTrust \
+    --out=sample-output-file \
+    --numParallelCollections 4  \
+    --username=loggerUser \
+    --password=<PASSWORD> \
+    --sslCAFile rds-combined-ca-bundle.pem
+
+To Extract Via the Mongo Interface:
+mongodump --uri mongodb+srv://adminEnhancingTrust:<PASSWORD>@ssatrust.rrthf.mongodb.net/EnhancingTrust.logs 
+
+OR
+mongosh "mongodb+srv://ssatrust.rrthf.mongodb.net/EnhancingTrust" --apiVersion 1 --username adminEnhancingTrust
+mongodb+srv://adminEnhancingTrust:<password>@ssatrust.rrthf.mongodb.net/?retryWrites=true&w=majority
+
+	
+To Filter within the GUI:
+{date :{$gte:ISODate("2022-05-02"),$lt:ISODate("2022-05-31")}}
+
+
+
+## Logs: Detailed
 All events are logged in an EC2 instance using mongodb. All events being logged can be found in a file called events.js `(/EnhancingTrust/src/constants/events.js)`.
 
-The web app sends the request to an API Gateway called [EnhancingTrustApi](https://us-east-2.console.aws.amazon.com/apigateway/home?region=us-east-2#/apis/k1sx4sgipa/resources/4o70o26322). The request is then redirected to a lambda function called [saveLogs](https://us-east-2.console.aws.amazon.com/lambda/home?region=us-east-2#/functions/saveLogs?tab=code) (can be found in Github with the same name).
+The web app sends the request to an API Gateway called [EnhancingTrustApi](https://us-east-2.console.aws.amazon.com/apigateway/home?region=us-east-2#/apis/k1sx4sgipa/resources/4o70o26322). 
+The request is then redirected to a lambda function called [saveLogs](https://us-east-2.console.aws.amazon.com/lambda/home?region=us-east-2#/functions/saveLogs?tab=code) (can be found in Github with the same name).
 
-The connection string is using the Lambda Environment Variables to add the values.
+The connection string is in the Lambda Environment Variables.
 ![image info](./readmeFiles/envvars.png)
 
 The EC2 instance that contains the mongodb is called [EnhancingTrust](https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#InstanceDetails:instanceId=i-0411b7071af21e247)
