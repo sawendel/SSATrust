@@ -4,7 +4,7 @@ import Tooltip from '../../../Tooltip';
 
 const EmailHeaderDetails = ({ logEvent, config, date, showTooltips }) => {
   const details = [
-    { label: 'From', value: `${config?.fromName} | ${config?.fromEmail}`, tooltipText: config?.fromTooltip },
+    { label: 'From', value: `${config?.fromName}` === '' ? `${config?.fromEmail}` : `${config?.fromName} | ${config?.fromEmail}`, tooltipText: config?.fromTooltip },
     { label: 'Reply to', value: config?.replyTo, tooltipText: config?.replyToTooltip },
     { label: 'To', value: config?.to, tooltipText: config?.toTooltip },
     { label: 'Date', value: date },

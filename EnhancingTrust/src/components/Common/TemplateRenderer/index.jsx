@@ -12,7 +12,7 @@ const TemplateRenderer = ({
   showTooltips = false,
   options,
   logEvent,
-  setOptions = () => {} },
+  setOptions = () => { } },
 ) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [html, setHtml] = useState('');
@@ -108,7 +108,7 @@ const TemplateRenderer = ({
       }
       return (
         <a {...props} href={updatedHref} onClick={(e) => onLinkClick(e, Events.LINK_CLICKED, undefined, updatedHref)} title={updatedHref}>
-            {domToReact(domNode.children)}
+          {domToReact(domNode.children)}
         </a>
       )
     }
