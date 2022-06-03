@@ -1,18 +1,20 @@
 # Getting Started
 
 SSA Trust provides users with a series of communications, in which they can determine whether the communications are real or a scam.
-It uses Node server for development, and the Create React framework to deploy its content. 
+It uses Node server for development, and the Create React framework to deploy its content.
 
 The content is divided into a SEQUENCE of pages, and the CONTENT of the pages.  
 The sequence of pages is specified using the config/steps.json file.
 The pages themselves are composed of three components: a survey banner, a communication-medium wrapper, and the communication itself.
 The banner asks people if they think the message is real or fake, and allows them to navigate the sequence.
-The wrapper is either Email, Web, SMS, Letter or Audio. 
+The wrapper is either Email, Web, SMS, Letter or Audio.
 The communication itself is specified in an HTML file of your chosing.  
-Below are more instructions on how to operate the system. 
+Below are more instructions on how to operate the system.
 
 ## Step 0: Setup your server for development (done once)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). In order to run this project, first install all dependencies by running the command:
+
 ```
 npm install
 ```
@@ -22,38 +24,42 @@ npm install
 For each communication, decide first what type it will be: Email, Web, SMS, Letter or Audio.  
 In the "public/" folder, choose the cooresponding subfolder: emails, webpages, sms, letters, audios.
 In that subfolder, create a new HTML file (or duplicate an existing one) with the name of your communication.
-Craft the file as if it were only the body of the HTML: no body or HTML tags, no external CSS or JS files.  See the detailed instructions below.
+Craft the file as if it were only the body of the HTML: no body or HTML tags, no external CSS or JS files. See the detailed instructions below.
 
 ## Step 2: Setup the Sequence
 
-Edit the config/steps.json file to set the sequence of pages. You can multiple sequences, as long as they have a unique name. 
+Edit the config/steps.json file to set the sequence of pages. You can multiple sequences, as long as they have a unique name.
 
 ## Step 3: Start the Server
 
 To run the start command locally:
+
 ```
 npm start
 ```
 
 ## Step 4: Go to the sequence of your choice
+
 And go in a web browser to http://localhost:3000/
-To go to a particular workflow, use http://localhost:3000/workflow/[Workflowname] 
+To go to a particular workflow, use http://localhost:3000/workflow/[Workflowname]
 
 Alternatively, you may want to use Amazon services, and access it via a public URL.
 
 If there is a problem in the code, you'll likely just see a blank screen. Install the React Tools to figure out what's going on:
 https://reactjs.org/blog/2015/09/02/new-react-developer-tools.html#installation
 
-
 ## Detailed Instruction Templates
+
 In this project we describe templates as the HTML content for sms, emails, letters, webpages, audios and any other asset utilized for the users to test if it is real or fake.
 
 ### Adding Templates
+
 To add a new template, you must create an HTML file in `/public` folder and in the corresponding folder type (emails, sms...). The HTML can be in any structure you want.
 
 Please note that `link` tags will be omitted when injected in the page for the reason that adding a style this way will affect the rest of the page. If you want to add styles, then use a `style` tag. The render engine will prepend a CSS class to avoid collisions between the styles of the rest of the page.
 
 Each template type will have a specific configuration for some static content like the email subject, sender and others. This configuration will go in the HTML file in a `script` tag with attribute `data-config`. Any other script tag will be ignored. The configuration should go as follows:
+
 ```
 <script data-config>
   const Init = function () {
@@ -68,7 +74,9 @@ Each template type will have a specific configuration for some static content li
   Init();
 </script>
 ```
+
 ##### Email Configuration
+
 ```
 <script data-config>
   const Init = function () {
@@ -76,7 +84,7 @@ Each template type will have a specific configuration for some static content li
       subject: 'Email Subject',
       subjectTooltip: 'subject tooltip',
       fromEmail: 'myemail@email.com',
-      fromName: 'Rudiney',
+      fromName: 'Rudiney', //-the name is not required, you can skip it, and it will take the email as the  FromName
       fromTooltip: 'from tooltip',
       replyTo: 'senderemail@email.com',
       replyToTooltip: 'Reply to tooltip',
@@ -84,6 +92,7 @@ Each template type will have a specific configuration for some static content li
       toTooltip: 'to tooltip',
       mailedBy: 'mail3.ssa.gov',
       mailedByTooltip: 'mailed by tooltip',
+      date: 'May 28th, 12:05 (4 days ago)' //-The date has this format, you can add what you need, you can skip it, in this case it will take the current date and 2 days will be subtracted.
     };
   }
   Init();
@@ -91,6 +100,7 @@ Each template type will have a specific configuration for some static content li
 ```
 
 ##### SMS Configuration
+
 ```
 <script data-config>
   const Init = function() {
@@ -104,6 +114,7 @@ Each template type will have a specific configuration for some static content li
 ```
 
 ##### Letter Configuration
+
 ```
 <script data-config>
   const Init = function () {
@@ -157,7 +168,9 @@ Each template type will have a specific configuration for some static content li
 ```
 
 ##### Audio Configuration
+
 The audio configuration allows to add a single tooltip and goes in the steps.json file as follows:
+
 ```
 {
   "type": "audio",
@@ -167,6 +180,7 @@ The audio configuration allows to add a single tooltip and goes in the steps.jso
 ```
 
 ##### Webpages Configuration
+
 ```
 <script data-config>
   const Init = function() {
@@ -181,9 +195,10 @@ The audio configuration allows to add a single tooltip and goes in the steps.jso
 </script>
 ```
 
-***Note:*** Do not add html or body tags in a webpage template cause they won't be parsed correctly. Also, the html and body tags selectors in styles will be replaced by class selectors: .html and .body respectively.
+**_Note:_** Do not add html or body tags in a webpage template cause they won't be parsed correctly. Also, the html and body tags selectors in styles will be replaced by class selectors: .html and .body respectively.
 
 #### Letter Configuration
+
 ```
 <script data-config>
   const Init = function () {
@@ -218,9 +233,8 @@ The audio configuration allows to add a single tooltip and goes in the steps.jso
 </script>
 ```
 
-
-
 ## Workflows
+
 We call workflows to the set (steps) of templates that needs to be evaluated by the user. Workflows are configured in `/src/config/steps.json`. In this file you define the mode (educational/test) and the steps to follow when clicking the next button.
 
 ```
@@ -260,6 +274,7 @@ We call workflows to the set (steps) of templates that needs to be evaluated by 
 Make sure every workflow has a unique ID. This ID is used and passed in the URL to know what workflow to run. For example, the URL to run the workflow above would be `/workflow/1`.
 
 ## Logs
+
 All events are logged in an EC2 instance using mongodb. All events being logged can be found in a file called events.js `(/EnhancingTrust/src/constants/events.js)`.
 
 The web app sends the request to an API Gateway called [EnhancingTrustApi](https://us-east-2.console.aws.amazon.com/apigateway/home?region=us-east-2#/apis/k1sx4sgipa/resources/4o70o26322). The request is then redirected to a lambda function called [saveLogs](https://us-east-2.console.aws.amazon.com/lambda/home?region=us-east-2#/functions/saveLogs?tab=code) (can be found in Github with the same name).
@@ -273,6 +288,7 @@ The EC2 instance that contains the mongodb is called [EnhancingTrust](https://us
 After connecting to the instance, just type `mongosh` to connect to the database. The database is called `EnhancingTrust` and the db collection is called `logs`.
 
 The collection data format is as follows:
+
 ```
 {
     _id: ObjectId("6286aca4f3dcaca2dfd827b7"),
@@ -287,6 +303,7 @@ The collection data format is as follows:
 ```
 
 ## Real/Scam Top Bar Component
+
 `src/components/ModeWrapper/index.jsx`
 This component is the main section of the pages. It contains the bar with the user options for Real/Scam (find the texts in `/EnhancingTrust/src/constants/modeResults.js`), the templates.
 
@@ -316,5 +333,6 @@ switch (currentStep.type) {
 ```
 
 ## Hosting
+
 This web app is hosted in a static AWS S3 bucket called enhancing-trust. Just run the command `npm run build` and it will generate a folder called `build`. Copy this folder content into the bucket to deploy the application.
 [S3 Bucket](https://s3.console.aws.amazon.com/s3/buckets/enhancing-trust?region=us-east-2&tab=objects)
