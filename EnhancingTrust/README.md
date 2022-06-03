@@ -345,6 +345,7 @@ This web app is hosted in a static AWS S3 bucket called enhancing-trust. Just ru
 - You should be able to see the logged Logs, something similar to this
   ![Mongo Logs](./readmeFiles/CSV2.png)
 - Select the `Export Collection` option in the `Collection` tab.
+  <br />
   ![Collection](./readmeFiles/CSV3.png)
 - You can Filter the data (I will add ways to filter the data) or you can download the entire collection.
   ![Filter Data](./readmeFiles/CSV4.png)
