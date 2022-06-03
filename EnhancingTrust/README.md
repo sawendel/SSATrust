@@ -336,3 +336,19 @@ switch (currentStep.type) {
 
 This web app is hosted in a static AWS S3 bucket called enhancing-trust. Just run the command `npm run build` and it will generate a folder called `build`. Copy this folder content into the bucket to deploy the application.
 [S3 Bucket](https://s3.console.aws.amazon.com/s3/buckets/enhancing-trust?region=us-east-2&tab=objects)
+
+## Download CSV
+
+- Download [Mongo Compass](https://www.mongodb.com/try/download/compass)
+- Once installed these options will appear, you must add the connection to mongo `mongodb+srv://adminEnhancingTrust:gf$ggh$^342F@ssatrust.rrthf.mongodb.net/test`
+  ![Mongo Connection](./readmeFiles/CSV1.png)
+- You should be able to see the logged Logs, something similar to this
+  ![Mongo Logs](./readmeFiles/CSV2.png)
+- Select the `Export Collection` option in the `Collection` tab.
+  ![Collection](./readmeFiles/CSV3.png)
+- You can Filter the data (I will add ways to filter the data) or you can download the entire collection.
+  ![Filter Data](./readmeFiles/CSV4.png)
+- Select which tables you want to see in the CSV
+  ![Select tables](./readmeFiles/CSV5.png)
+- Finally, select the file format, and press the `Export` button.
+  ![Select tables](./readmeFiles/CSV6.png)
