@@ -34,7 +34,7 @@
 @include media-breakpoint-up(lg) {
   .rc-tooltip-inner {
     font-size: 1rem;
-    width: 12.5rem;
+    max-width: 12.5rem;
   }
 }
 
