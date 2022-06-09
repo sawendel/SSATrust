@@ -337,7 +337,7 @@ switch (currentStep.type) {
 This web app is hosted in a static AWS S3 bucket called enhancing-trust. Just run the command `npm run build` and it will generate a folder called `build`. Copy this folder content into the bucket to deploy the application.
 [S3 Bucket](https://s3.console.aws.amazon.com/s3/buckets/enhancing-trust?region=us-east-2&tab=objects)
 
-## Download CSV
+## View and download CSV
 
 - Download [Mongo Compass](https://www.mongodb.com/try/download/compass)
 - Once installed these options will appear, you must add the connection to mongo `mongodb://loggerUser:gf$ggh$^342F@ec2-18-188-207-77.us-east-2.compute.amazonaws.com:27017/EnhancingTrust?retryWrites=true&w=majority`
