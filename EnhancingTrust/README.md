@@ -340,7 +340,7 @@ This web app is hosted in a static AWS S3 bucket called enhancing-trust. Just ru
 ## Download CSV
 
 - Download [Mongo Compass](https://www.mongodb.com/try/download/compass)
-- Once installed these options will appear, you must add the connection to mongo `mongodb+srv://adminEnhancingTrust:gf$ggh$^342F@ssatrust.rrthf.mongodb.net/test`
+- Once installed these options will appear, you must add the connection to mongo `mongodb://loggerUser:gf$ggh$^342F@ec2-18-188-207-77.us-east-2.compute.amazonaws.com:27017/EnhancingTrust?retryWrites=true&w=majority`
   ![Mongo Connection](./readmeFiles/CSV1.png)
 - You should be able to see the logged Logs, something similar to this
   ![Mongo Logs](./readmeFiles/CSV2.png)
