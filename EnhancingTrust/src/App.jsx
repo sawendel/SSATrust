@@ -22,7 +22,7 @@ const App = () => (
       closeOnClick
       rtl={false}
       pauseOnFocusLoss
-      pauseOnHover
+      pauseOnHover={false}
     />
     <BrowserRouter>
       <Routes>
