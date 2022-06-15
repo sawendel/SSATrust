@@ -77,7 +77,7 @@ const TemplateRenderer = ({
       const Tag = domNode.name;
       return (
         <>
-          <Tooltip placement="top" visible overlay={<><i className="et-warning" /> {domNode.attribs?.['data-tooltip']}</>}>
+          <Tooltip placement="top" visible overlay={<> <i className="et-warning" />  <span dangerouslySetInnerHTML={{ __html: '<span>' + domNode.attribs?.['data-tooltip'] + '</span> ' }} /> </>}>
             <Tag {...props}>
               {domToReact(domNode.children)}
             </Tag>
