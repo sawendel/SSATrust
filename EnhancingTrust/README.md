@@ -48,6 +48,18 @@ The current public URL is: http://enhancing-trust.s3-website.us-east-2.amazonaws
 If there is a problem in the code, you'll likely just see a blank screen. Install the React Tools to figure out what's going on:
 https://reactjs.org/blog/2015/09/02/new-react-developer-tools.html#installation
 
+## Step 5: Add Query Params if Needed
+
+The query params available are (see EnhancingTrust/src/constants/queryParams.js)
+  UID: 'uid',
+  FULLSCREEN: 'fullscreen',
+  REDIRECT_URL: 'redirectUrl',
+  'title'
+
+http://localhost:3000/workflow/TestNow?title=ATest&uid=steve1&redirectUrl=https://www.google.com?uid=TESTS
+https://enhancing-trust.web.app/?title=test&redirectUrl=https://www.google.com/
+
+
 ## Detailed Instruction Templates
 
 In this project we describe templates as the HTML content for sms, emails, letters, webpages, audios and any other asset utilized for the users to test if it is real or fake.

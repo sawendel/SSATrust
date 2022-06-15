@@ -1,0 +1,22 @@
+/*----------------------------------------------------------------------------------
+/* SSA Localized Strings JSON Package (English text)
+/*
+/* Externalizes all JavaScript-generated strings within FlexWeb inside a JSON
+/* object. Used by ssa.localize.js for i18n support.
+/*
+/* Author: Craig Cecil, Lockheed Martin, 2010
+/*----------------------------------------------------------------------------------*/
+
+/* ALL ENGLISH TEXT FOR FLEXWEB IS CONTAINED DIRECTLY IN THE JAVASCRIPT FILES */
+
+var ssaLocalizedStrings = 
+{		
+		/*
+		 * 3/22/2011, Faisel Maniar: DO NOT REMOVE THE FOLLOWING LINE.
+		 * The YUI menu button does not display the english text properly 
+		 * if we use .localize() for i18n support.  In order for it to display the english text properly, 
+		 * we have to add the below text.  Otherwise, the menu will not say "text size" on the page when 
+		 * the user is using the english language.
+		 */
+		"Text Size": "Text Size"
+}

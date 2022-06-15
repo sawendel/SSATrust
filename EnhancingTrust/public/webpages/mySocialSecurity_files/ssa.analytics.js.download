@@ -1,0 +1,77 @@
+if (typeof SSA == "undefined" || !SSA) { var SSA = {}; }
+var _gaq = _gaq || [];
+
+(function() {
+  SSA.Analytics = {
+    thisFileName: "ssa.analytics.js",
+    analyticsFileName: "ga.js",
+    init: function() {
+      var gaID = document.documentElement.getAttribute("data-analytics-trackingid");
+      var hostname = document.location.hostname;
+      hostname = hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/)[1];
+      hostname = hostname.toLowerCase();
+
+      if(gaID) {
+        _gaq.push(['_setAccount', gaID]);
+      } else {
+        _gaq.push(['_setAccount', 'UA-25977386-2']);
+      }
+
+      _gaq.push(['_setDomainName', hostname]);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_gat._anonymizeIp']);
+
+      var pageID = document.documentElement.getAttribute("id");
+			var applicationID, pageDescription;
+			var metaTags = document.getElementsByTagName("meta");
+
+			for(var i = 0; i < metaTags.length; i++) {
+			  if(!applicationID && metaTags[i].name == "application-name") {
+				  applicationID = metaTags[i].content;
+				} else if(!pageDescription && metaTags[i].name == "description") {
+				  pageDescription = metaTags[i].content;
+				}
+			}
+
+      if(applicationID && pageDescription) {
+        _gaq.push(['_trackPageview', applicationID + "/" + pageDescription]);
+      } else if(pageID) {
+			  _gaq.push(['_trackPageview', pageID]);
+			} else {
+        _gaq.push(['_trackPageview']);
+      }
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        var filePath = SSA.Analytics.getJavaScriptFilePath();
+        if(filePath) {
+          ga.src = filePath + SSA.Analytics.analyticsFileName;
+        }
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    },
+
+    getJavaScriptFilePath: function() {
+      var scriptFiles = document.getElementsByTagName("script");
+      var filePath = "";
+      var found = false;
+      for(var i = 0; !found && i < scriptFiles.length; i++) {
+        var fileNameIndex = scriptFiles[i].src.indexOf(SSA.Analytics.thisFileName);
+        if(fileNameIndex != -1) {
+          filePath = scriptFiles[i].src.substring(0, fileNameIndex);
+          found = true;
+        }
+      }
+
+      return filePath;
+    }
+  };
+})();
+
+if(typeof YAHOO != "undefined" && YAHOO) {
+  YAHOO.util.Event.addListener(window,'load',SSA.Analytics.init);
+} else {
+  if(typeof $ != "undefined" && $) {
+    $(document).ready(SSA.Analytics.init);
+  }
+}
