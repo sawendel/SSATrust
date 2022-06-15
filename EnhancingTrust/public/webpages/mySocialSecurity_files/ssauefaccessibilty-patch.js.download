@@ -1,0 +1,61 @@
+/*
+* SSA UEF 2.0 Accessibility Patch File
+*
+* Purpose: This code is used to patch existing accessibility issues in UEF 2.0 applications.
+*          Be sure to load this file after all other UEF 2.0 JS files have been loaded.
+*
+* @module SSA.uef.accessibility-patch.js
+*
+* Notes: Load this file AFTER all SSA FlexWeb files have been loaded.
+*
+* Authors: Craig Cecil, 2020
+*
+*/
+
+// use an anonymous function so that nothing is added to the global namespace
+(function() {
+
+    SSA.accessibilityPatch = {
+
+        /**
+	     * @method init: Call various accessibility patching functions
+         * @public
+	     */
+        init: function() {
+            // CALL VARIOUS ACCESSIBILITY PATCHING FUNCTIONS
+            SSA.accessibilityPatch.fixRadioButtons();
+            SSA.accessibilityPatch.fixCheckboxes();
+        },
+
+        /**
+	     * @method fixRadioButtons: This function will add role='radio' to the LABEL element for each radio button on the page.
+         * @public
+	     */
+        fixRadioButtons: function() {
+            // let's find all radio button labels on the page
+            var radioButtons = document.querySelectorAll('input[type=radio]+label');
+            // for each label, add role='radio'
+            Array.prototype.forEach.call(radioButtons, function(el, i){
+                el.setAttribute('role', 'radio');
+            });
+        },
+
+        /**
+	     * @method fixCheckboxes: This function will add role='checkbox' to the LABEL element for each checkbox on the page.
+         * @public
+	     */
+        fixCheckboxes: function() {
+            // let's find all checkbox labels on the page
+            var checkboxes = document.querySelectorAll('input[type=checkbox]+label');
+            // for each label, add role='checkbox'
+            Array.prototype.forEach.call(checkboxes, function(el, i){
+                el.setAttribute('role', 'checkbox');
+            });
+        },
+
+        // ADD ADDITIONAL FIXES BELOW, AS NEEDED
+    };
+})();  // end the anonymous function
+
+// attach events
+$(document).ready(SSA.accessibilityPatch.init);

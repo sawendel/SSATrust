@@ -91,6 +91,7 @@ const ModeWrapper = () => {
 
   const redirect = () => {
     const redirect = query.get(QueryParams.REDIRECT_URL);
+    const userId = query.get(QueryParams.UID);  // SW: include this in the URL string if needed
     if (redirect) {
       window.location.href = redirect;
     } else {
