@@ -117,7 +117,7 @@ const TemplateRenderer = ({
       const props = attributesToProps(domNode.attribs);
       return (
         <form {...props} onSubmit={(e) => eventHandler(e, Events.FORM_SUBMITTED)}>
-          {domToReact(domNode.children)}
+          {domToReact(domNode.children, {replace})}
         </form>
       )
     }
