@@ -21,7 +21,7 @@ const HomePage = (props) => {
             <h1>Welcome to the Educational Test</h1>
           }
           <h5 className="pt-3">This is a study to teach you how could you getting scammed.</h5>
-          <p className="py-20">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna al  iqua. Ut enim ad minim veniam. Lorem ipsum dolor sit amet</p>
+          <p className="py-20">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna al  iqua. Ut enim ad minim veniam.</p>
         </div>
         <button className="et-homePage__content__button" onClick={() => navigate(`/workflow/${props.id}?${query.toString()}`)}>Get Started</button>
       </div>
