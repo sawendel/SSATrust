@@ -6,7 +6,7 @@
       "steps": [
         {
           "type": "webpage",
-          "template": "irs.html",
+          "template": "IRS_YourAccount.html",
           "result": "real"
         },
         {
