@@ -31,15 +31,19 @@ const ModeWrapper = () => {
     function onScreenChange() {
       setIsFullscreen(screenfull.isFullscreen);
     };
-    screenfull.on('change', onScreenChange);
-    if (query.get(QueryParams.FULLSCREEN) !== 'false') {
-      if (screenfull.isEnabled) {
-        screenfull.request();
+    try {
+      screenfull.on('change', onScreenChange);
+      if (query.get(QueryParams.FULLSCREEN) !== 'false') {
+        if (screenfull.isEnabled) {
+          screenfull.request();
+        }
+        return () => {
+          screenfull.off('change', onScreenChange);
+          screenfull.exit().then();
+        }
       }
-      return () => {
-        screenfull.off('change', onScreenChange);
-        screenfull.exit().then();
-      }
+    } catch (e) {
+      console.error(e);
     }
   }, []);
 
