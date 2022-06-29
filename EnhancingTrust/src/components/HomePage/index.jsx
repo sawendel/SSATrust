@@ -8,7 +8,7 @@ const HomePage = (props) => {
   return (
     <div className="et-homePage">
       <div className="et-homePage__header">
-        <span className="pt-3 pt-md-20 pt-lg-13">Prevent to getting
+        <span className="pt-3 pt-md-20 pt-lg-13">Prevent getting
           <br /> {/*line break */}
           scammed</span>
       </div>
