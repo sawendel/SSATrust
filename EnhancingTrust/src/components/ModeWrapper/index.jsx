@@ -27,21 +27,21 @@ const ModeWrapper = () => {
   const isFirstStep = stepIndex === 0;
   const isEducational = workflow.mode === Modes.EDUCATIONAL;
 
-  useEffect(() => {
-    function onScreenChange() {
-      setIsFullscreen(screenfull.isFullscreen);
-    };
-    screenfull.on('change', onScreenChange);
-    if (query.get(QueryParams.FULLSCREEN) !== 'false') {
-      if (screenfull.isEnabled) {
-        screenfull.request();
-      }
-      return () => {
-        screenfull.off('change', onScreenChange);
-        screenfull.exit().then();
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   function onScreenChange() {
+  //     setIsFullscreen(screenfull.isFullscreen);
+  //   };
+  //   screenfull.on('change', onScreenChange);
+  //   if (query.get(QueryParams.FULLSCREEN) !== 'false') {
+  //     if (screenfull.isEnabled) {
+  //       screenfull.request();
+  //     }
+  //     return () => {
+  //       screenfull.off('change', onScreenChange);
+  //       screenfull.exit().then();
+  //     }
+  //   }
+  // }, []);
 
   const logEvent = (event, metadata) => {
     logger.logEvent(query.get(QueryParams.UID), id, event, currentStep.template, currentStep.type, metadata);
