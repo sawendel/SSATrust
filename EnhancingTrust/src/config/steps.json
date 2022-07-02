@@ -17,7 +17,7 @@
         {
           "type": "email",
           "template": "irs.html",
-          "result": "scam"
+          "result": "a scam"
         },
         {
           "type": "webpage",
@@ -33,7 +33,7 @@
           "type": "webpage",
           "template": "amazonProductPage.html",
           "mobileTemplate": "amazonProductPageMobile.html",
-          "result": "scam"
+          "result": "a scam"
         },
         {
           "type": "email",
@@ -43,7 +43,7 @@
         {
           "type": "email",
           "template": "getProtected.html",
-          "result": "scam"
+          "result": "a scam"
         }
 	  ]
 	},
