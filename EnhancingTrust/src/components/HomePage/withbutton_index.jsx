@@ -26,6 +26,9 @@ const HomePage = (props) => {
 		  The current study, conducted by researchers Cliff Robb, Steve Wendel and Marti DeLiema, investigates how to help people recognize legiimate communications versus scams. 
 		  More information about the current study can be found on the University of Wisconsin Website, at <a href="https://cfsrdrc.wisc.edu/project/wi22-10">https://cfsrdrc.wisc.edu/project/wi22-10</a></p>
         </div>
+		<!--
+        <button className="et-homePage__content__button" onClick={() => navigate(`/workflow/${props.id}?${query.toString()}`)}>Get Started</button>
+		-->
       </div>
     </div >
   );

@@ -151,7 +151,7 @@ const ModeWrapper = () => {
           <Col>
             <Row className="align-items-center">
               <Col lg="auto" md={12}>
-                <h5 className="et-mode-wrapper__qn me-4 my-lg-0 my-3">{getDisplayText()}</h5>
+                <h5 className="et-mode-wrapper__qn me-4 my-lg-0 my-3 py-4">{getDisplayText()}</h5> 
               </Col>
               {!displayTooltips && (
                 <Col>
@@ -194,16 +194,18 @@ const ModeWrapper = () => {
               </Button>
             </Col>
           )}
+		  {  (displayTooltips || selected) && (  
           <Col lg="auto" md="12" className="p-0">
             <Button
               variant="secondary"
-              className="px-xsl-5 px-lg-2 py-3 rounded-0 w-100"
+              className="px-xsl-5 px-lg-2 py-4 rounded-0 w-100"
               onClick={onNext}
             >
               <span className="pe-2 pb-1">{getNextButtonText()}</span>
               <i className="et-caret-right" />
             </Button>
           </Col>
+          )}
         </Row>
       </Container>
       {stepElement}

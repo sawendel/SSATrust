@@ -44,6 +44,8 @@ To go to a particular workflow, use http://localhost:3000/workflow/[Workflowname
 
 Alternatively, you may want to use Amazon services, and access it via a public URL.
 The current public URL is: http://enhancing-trust.s3-website.us-east-2.amazonaws.com/	
+To update to the server go to: enhancing-trust.s3.amazonaws.com
+
 	
 If there is a problem in the code, you'll likely just see a blank screen. Install the React Tools to figure out what's going on:
 https://reactjs.org/blog/2015/09/02/new-react-developer-tools.html#installation
