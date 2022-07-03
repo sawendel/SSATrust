@@ -45,6 +45,8 @@ To go to a particular workflow, use http://localhost:3000/workflow/[Workflowname
 Alternatively, you may want to use Amazon services, and access it via a public URL.
 The current public URL is: http://enhancing-trust.s3-website.us-east-2.amazonaws.com/	
 To update to the server go to: enhancing-trust.s3.amazonaws.com
+https://www.trustresearchstudy.com/Workflow/Training
+https://www.trustresearchstudy.com/Workflow/Test
 
 	
 If there is a problem in the code, you'll likely just see a blank screen. Install the React Tools to figure out what's going on:
@@ -385,7 +387,7 @@ This web app is hosted in a static AWS S3 bucket called enhancing-trust. Just ru
 ## View Logs and download CSV
 
 - Download [Mongo Compass](https://www.mongodb.com/try/download/compass)
-- Once installed these options will appear, you must add the connection to mongo `mongodb://loggerUser:gf$ggh$^342F@ec2-18-188-207-77.us-east-2.compute.amazonaws.com:27017/EnhancingTrust?retryWrites=true&w=majority`
+- Once installed these options will appear, you must add the connection to mongo `mongodb://loggerUser:<Password>@ec2-18-188-207-77.us-east-2.compute.amazonaws.com:27017/EnhancingTrust?retryWrites=true&w=majority`
   ![Mongo Connection](./readmeFiles/CSV1.png)
 - You should be able to see the logged Logs, something similar to this
   ![Mongo Logs](./readmeFiles/CSV2.png)
