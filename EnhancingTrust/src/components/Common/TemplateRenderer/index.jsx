@@ -92,8 +92,9 @@ const TemplateRenderer = ({
 
     if (domNode.type === 'tag' && domNode.name === 'button') {
       const props = attributesToProps(domNode.attribs);
+      const logData = domNode.attribs['aria-label'] || domNode.attribs.name || domNode.children[domNode.children.length - 1].data.trim();
       return (
-        <button {...props} onClick={(e) => eventHandler(e, Events.BUTTON_CLICKED, domNode.attribs)}>
+        <button {...props} onClick={(e) => eventHandler(e, Events.BUTTON_CLICKED, domNode.attribs, logData)}>
           {domToReact(domNode.children)}
         </button>
       )
