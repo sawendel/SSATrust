@@ -1,0 +1,8 @@
+{
+  "name": "generateLogCSVReport",
+  "version": "1.0.0",
+  "dependencies": {
+      "mongodb": "latest",
+      "json2csv": "latest"
+  }
+}
