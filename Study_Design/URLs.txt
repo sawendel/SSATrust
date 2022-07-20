@@ -1,0 +1,43 @@
+https://us-east-2.console.aws.amazon.com/ec2/v2/connect/ec2-user/i-0411b7071af21e247
+
+
+Survey Part 1: "Entry Point"
+https://uwmadison.co1.qualtrics.com/jfe/form/SV_8eto4s5h10mQ3Yi?PROLIFIC_PID=TestUserA
+[ NO RANDOMZIATION VERSION: https://uwmadison.co1.qualtrics.com/jfe/form/SV_cBiw9nHNbpX9hGK?PROLIFIC_PID=TestUserA]
+[ Simple SW Test: https://uwmadison.co1.qualtrics.com/jfe/form/SV_8JlL6uPH0rOIgNE?PROLIFIC_PID=TestUserSWSimple]
+
+PROFLIC ONLY:
+https://uwmadison.co1.qualtrics.com/jfe/form/SV_8eto4s5h10mQ3Yi?PROLIFIC_PID={{%PROLIFIC_PID%}}&STUDY_ID={{%STUDY_ID%}}&SESSION_ID={{%SESSION_ID%}}
+
+PROFLIC OR BBB:
+https://uwmadison.co1.qualtrics.com/jfe/form/SV_e5nAU1KLYRCdEDY?PROLIFIC_PID=SteveBB4
+https://uwmadison.co1.qualtrics.com/jfe/form/SV_e5nAU1KLYRCdEDY?BID={RandomId}
+https://uwmadison.co1.qualtrics.com/jfe/form/SV_e5nAU1KLYRCdEDY?BID=BSteve1
+
+Which, in the training path, goes to:
+https://www.trustresearchstudy.com/Workflow/Training?uid=${q://QID42/ChoiceTextEntryValue}&redirectUrl=https://uwmadison.co1.qualtrics.com/jfe/form/SV_8exElRrgQBxouZU?PID=${q://QID42/ChoiceTextEntryValue}
+
+
+
+Which then goes to "After Training"
+https://uwmadison.co1.qualtrics.com/jfe/form/SV_8exElRrgQBxouZU?PID=${e://Field/PID}
+
+Which then goes to the following page for the test:
+https://www.trustresearchstudy.com/Workflow/Test?uid=${e://Field/PID}&redirectUrl=https://uwmadison.co1.qualtrics.com/jfe/form/SV_419xeBnZMxSlGCO?PID=${e://Field/PID}
+
+Which then goes to "Final Section"
+https://uwmadison.co1.qualtrics.com/jfe/form/SV_419xeBnZMxSlGCO
+
+Which then goes to 
+https://app.prolific.co/submissions/complete?cc=6FBBD718
+
+
+
+
+
+
+
+
+<script> 
+Qualtrics.SurveyEngine.setEmbeddedData("surveyArm", "arm1_control");
+</script>

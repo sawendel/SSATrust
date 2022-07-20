@@ -90,9 +90,9 @@ def analyzeExperiment_ContinuousVar(dta, varName):
 def analyzeExperiment_BinaryVar(dta, varName):
 
     order_value_control_group = dta.loc[dta.surveyArm == "arm1_control", varName]
-    order_value_arm2_group = dta.loc[dta.surveyArm == "arm2_written_techniques", varName]
-    order_value_arm3_group = dta.loc[dta.surveyArm == "arm3_existingssa", varName]
-    order_value_arm4_group = dta.loc[dta.surveyArm == "arm4_interactive_training", varName]
+    order_value_arm2_group = dta.loc[dta.surveyArm == "arm2_generalinfo", varName]
+    order_value_arm3_group = dta.loc[dta.surveyArm == "arm3_tips", varName]
+    order_value_arm4_group = dta.loc[dta.surveyArm == "arm4_interactive", varName]
 
     # Arm 1
     arm1Successes = sum(order_value_control_group.isin([True, 1]))
@@ -155,12 +155,10 @@ def analyzeExperiment_BinaryVar(dta, varName):
 
     return results
 
-def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=True):
+def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  primaryOnly=True):
 
     if primaryOnly:
         dta = dta[dta.IsPrimaryWave].copy()
-
-    dataDir  = "C:/Dev/src/ssascams/data/"
 
     ''' Analyze the answers'''
     writer = pd.ExcelWriter(dataDir + 'RESULTS_' + outputFileName + '.xlsx', engine='xlsxwriter')
@@ -208,8 +206,8 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
     # RQ1* Robustness check on result: is the experiment randomized correctly?
     ##############
     # NumCorrect Regression
-    resultTables = ols('numCorrect ~ C(surveyArm) + daysFromTrainingToTest + trustScore + lIncomeAmount + '
-                     'C(employment3) + educYears + marriedI + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
+    resultTables = ols('numCorrect ~ C(surveyArm) + daysFromTrainingToTest + GovtConfScore + TrustInSSAScore + TrustInInternetScore + OnlineShoppingScore + LonelyScore + lIncomeAmount + '
+                     'C(employment3) + educYears +  ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r1_reg", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r1_reg", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
@@ -217,16 +215,17 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
     # RQ2: Communication Type
     # ###############
     row1 = analyzeExperiment_ContinuousVar(dta, "numEmailsCorrect")
-    row2 = analyzeExperiment_ContinuousVar(dta, "numSMSesCorrect")
-    row3 = analyzeExperiment_ContinuousVar(dta, "numLettersCorrect")
-    pd.DataFrame([row1, row2, row3]).to_excel(writer, sheet_name="r2", startrow=1, header=True, index=True)
+    row2 = analyzeExperiment_ContinuousVar(dta, "numWebsitesCorrect")
+    row3 = analyzeExperiment_ContinuousVar(dta, "numSMSesCorrect")
+    row4 = analyzeExperiment_ContinuousVar(dta, "numLettersCorrect")
+    pd.DataFrame([row1, row2, row3, row4]).to_excel(writer, sheet_name="r2", startrow=1, header=True, index=True)
 
     ##############
     # RQ2* Robustness check on Emails result: is the experiment randomized correctly?
     ##############
     # NumEmailsCorrect Regression
-    resultTables = ols('numEmailsCorrect ~ C(surveyArm) + daysFromTrainingToTest + trustScore + lIncomeAmount + '
-                     'C(employment3) + educYears + marriedI + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
+    resultTables = ols('numEmailsCorrect ~ C(surveyArm) + daysFromTrainingToTest + GovtConfScore + TrustInSSAScore + TrustInInternetScore + OnlineShoppingScore + LonelyScore + lIncomeAmount + '
+                     'C(employment3) + educYears + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r2_reg", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r2_reg", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
@@ -244,8 +243,8 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
     # ###############
     # RQ4: Rainloop
     # ###############
-    if surveyVersion == '6':
-        resultTables = ols('NumHeadersOpened ~ C(surveyArm)', data=dta).fit().summary().tables
+    if surveyVersion == '2' or surveyVersion == '3':
+        resultTables = ols('NumWithHeadersOpened ~ C(surveyArm)', data=dta).fit().summary().tables
         pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r4_HeadersOpened", startrow=1, header=False, index=False)
         pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r4_HeadersOpened",startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
@@ -262,12 +261,12 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
     # pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="reg_numFakeLabeledReal_WRace", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
     # Remove race - many variables, small counts - likely over specifying
-    resultTables = ols('numFakeLabeledReal ~ C(surveyArm) + daysFromTrainingToTest + trustScore + lIncomeAmount + '
-                       'C(employment3) + educYears + marriedI + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
+    resultTables = ols('numFakeLabeledReal ~ C(surveyArm) + daysFromTrainingToTest + GovtConfScore + TrustInSSAScore + TrustInInternetScore + OnlineShoppingScore + LonelyScore + lIncomeAmount + '
+                       'C(employment3) + educYears + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r5a_numFakeLabeledReal", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r5a_numFakeLabeledReal", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
-    resultTables = ols('numLabeledReal ~ C(surveyArm) + trustScore + lIncomeAmount + C(employment3) + educYears + marriedI + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
+    resultTables = ols('numLabeledReal ~ C(surveyArm) + GovtConfScore + TrustInSSAScore + TrustInInternetScore + OnlineShoppingScore + LonelyScore + lIncomeAmount + C(employment3) + educYears + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="reg_numLabeledReal", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="reg_numLabeledReal", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
@@ -276,36 +275,47 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
     # R5b: What determines lack of trust?
     ########################
     # Ie, false positive
-    resultTables = ols('numRealLabeledFake ~ C(surveyArm) + daysFromTrainingToTest + trustScore + lIncomeAmount + '
-                       'C(employment3) + educYears + marriedI + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
+    resultTables = ols('numRealLabeledFake ~ C(surveyArm) + daysFromTrainingToTest + GovtConfScore + TrustInSSAScore + TrustInInternetScore + OnlineShoppingScore + LonelyScore + lIncomeAmount + '
+                       'C(employment3) + educYears + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r5b_numRealLabeledFake", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r5b_numRealLabeledFake", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
-    resultTables = ols('numLabeledFake ~ C(surveyArm) + daysFromTrainingToTest + trustScore + lIncomeAmount + '
-                       'C(employment3) + educYears + marriedI + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
+    resultTables = ols('numLabeledFake ~ C(surveyArm) + daysFromTrainingToTest + GovtConfScore + TrustInSSAScore + TrustInInternetScore + OnlineShoppingScore + LonelyScore + lIncomeAmount + '
+                       'C(employment3) + educYears + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="reg_numLabeledFake", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="reg_numLabeledFake", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
     # ###############
     # RQ6: Impostor Type
     # ###############
-    row1 = analyzeExperiment_ContinuousVar(dta, "numCorrect_SSA")
-    row2 = analyzeExperiment_ContinuousVar(dta, "numCorrect_Other")
-    row3 = analyzeExperiment_ContinuousVar(dta, "numEmailsCorrect_SSA")
-    row4 = analyzeExperiment_ContinuousVar(dta, "numEmailsCorrect_Other")
-    pd.DataFrame([row1, row2, row3, row4]).to_excel(writer, sheet_name="r6", startrow=1, header=True, index=True)
+    row1 = analyzeExperiment_ContinuousVar(dta, "numCorrect_Govt")
+    row2 = analyzeExperiment_ContinuousVar(dta, "numCorrect_Biz")
+    row3 = analyzeExperiment_ContinuousVar(dta, "numEmailsCorrect_Govt")
+    row4 = analyzeExperiment_ContinuousVar(dta, "numEmailsCorrect_Biz")
+    row5 = analyzeExperiment_ContinuousVar(dta, "numWebsitesCorrect_Govt")
+    row6 = analyzeExperiment_ContinuousVar(dta, "numWebsitesCorrect_Biz")
+    pd.DataFrame([row1, row2, row3, row4, row5, row6]).to_excel(writer, sheet_name="r6", startrow=1, header=True, index=True)
 
     # ###############
     # RQ7: Likelihood of being tricked
     # ###############
     dta['isTrickedByFraud'] = dta.numFakeLabeledReal > 0
-    dta['isTrickedByAnySSAEmail'] = dta.numEmailsCorrect_SSA < max(dta.numEmailsCorrect_SSA)
-    dta['isTrickedByAnyNonSSAEmail'] = dta.numEmailsCorrect_Other < max(dta.numEmailsCorrect_Other)
+
+    dta['isTrickedByAnyGovt'] = dta.numCorrect_Govt < max(dta.numCorrect_Govt)
+    dta['isTrickedByAnyBiz'] = dta.numCorrect_Biz < max(dta.numCorrect_Biz)
+
+    dta['isTrickedByAnyGovtEmail'] = dta.numEmailsCorrect_Govt < max(dta.numEmailsCorrect_Govt)
+    dta['isTrickedByAnyBizEmail'] = dta.numEmailsCorrect_Biz < max(dta.numEmailsCorrect_Biz)
+
+    dta['isTrickedByAnyGovtWeb'] = dta.numWebsitesCorrect_Govt < max(dta.numWebsitesCorrect_Govt)
+    dta['isTrickedByAnyBizWeb'] = dta.numWebsitesCorrect_Biz < max(dta.numWebsitesCorrect_Biz)
 
     row1 = analyzeExperiment_BinaryVar(dta, "isTrickedByFraud")
-    row2 = analyzeExperiment_BinaryVar(dta, "isTrickedByAnySSAEmail")
-    row3 = analyzeExperiment_BinaryVar(dta, "isTrickedByAnyNonSSAEmail")
-    pd.DataFrame([row1, row2, row3]).to_excel(writer, sheet_name="r7", startrow=1, header=True, index=True)
+    row2 = analyzeExperiment_BinaryVar(dta, "isTrickedByAnyGovt")
+    row3 = analyzeExperiment_BinaryVar(dta, "isTrickedByAnyBiz")
+    row4 = analyzeExperiment_BinaryVar(dta, "isTrickedByAnyGovtEmail")
+    row5 = analyzeExperiment_BinaryVar(dta, "isTrickedByAnyBizEmail")
+    pd.DataFrame([row1, row2, row3, row4, row5]).to_excel(writer, sheet_name="r7", startrow=1, header=True, index=True)
 
     # ###############
     # RQ8: Every Email
@@ -323,7 +333,7 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
     # Correlations
     ################
 
-    indepVars = ['surveyArm', 'daysFromTrainingToTest', 'Wave', 'trustScore', 'incomeAmount', 'race5', 'employment3', 'educYears', 'marriedI', 'ageYears','Gender',
+    indepVars = ['surveyArm', 'daysFromTrainingToTest', 'Wave', 'GovtConfScore', 'TrustInSSAScore', 'TrustInInternetScore', 'OnlineShoppingScore', 'LonelyScore', 'incomeAmount', 'race5', 'employment3', 'educYears', 'ageYears','Gender',
                  'previousFraudYN', 'lose_moneyYN', 'duration_p1', 'duration_p1_Quantile', 'duration_p2', 'duration_p2_Quantile', 'Employment']
 
     depVars = ['numCorrect', 'numFakeLabeledReal', 'numRealLabeledFake']
@@ -345,7 +355,7 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
     import seaborn as sns
     sns.set_theme(style="ticks")
 
-    toPlot = dta[['numCorrect', 'surveyArm', 'daysFromTrainingToTest', 'Wave', 'trustScore', 'lose_moneyYN', 'duration_p2_Quantile']]
+    toPlot = dta[['numCorrect', 'surveyArm', 'daysFromTrainingToTest', 'Wave', 'GovtConfScore', 'TrustInSSAScore', 'TrustInInternetScore', 'OnlineShoppingScore', 'LonelyScore', 'lose_moneyYN', 'duration_p2_Quantile']]
     sns.pairplot(toPlot, hue="surveyArm")
 
     # ##############
@@ -353,7 +363,7 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
     # ##############
 
     # Sanity Check regression
-    resultTables = ols('lIncomeAmount ~ageYears + ageYearsSq + educYears + marriedI +  genderI', data=dta).fit().summary().tables
+    resultTables = ols('lIncomeAmount ~ageYears + ageYearsSq + educYears + genderI', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="reg_Sanity", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="reg_Sanity", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
@@ -372,7 +382,7 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
         # worksheet = writer.book.add_worksheet("numCorrect_ByArmAndWave")
         # worksheet.write(startRow, 1, 'Wave ' + str(wave))
         # startRow = startRow + 2
-        resultTables = ols('numCorrect ~ C(surveyArm) + lIncomeAmount + ageYears + ageYearsSq + educYears + marriedI +  genderI', data=dta.loc[dta.Wave==wave]).fit().summary().tables
+        resultTables = ols('numCorrect ~ C(surveyArm) + lIncomeAmount + ageYears + ageYearsSq + educYears +  genderI', data=dta.loc[dta.Wave==wave]).fit().summary().tables
         pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="numCorrect_ByArmInWave", startrow=startRow, header=False, index=False)
         startRow = startRow + len(resultTables[0]) + 2
         pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="numCorrect_ByArmInWave", startrow=startRow, header=False, index=False)
@@ -383,7 +393,7 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
         # worksheet = writer.book.add_worksheet("numEmailsCorrect_ByArmAndWave")
         # worksheet.write(startRow, 1, 'Wave ' + str(wave))
         # startRow = startRow + 2
-        resultTables = ols('numEmailsCorrect ~ C(surveyArm) + lIncomeAmount + ageYears + ageYearsSq + educYears + marriedI +  genderI', data=dta.loc[dta.Wave == wave]).fit().summary().tables
+        resultTables = ols('numEmailsCorrect ~ C(surveyArm) + lIncomeAmount + ageYears + ageYearsSq + educYears +  genderI', data=dta.loc[dta.Wave == wave]).fit().summary().tables
         pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="numEmailsCorrect_ByArmInWave", startrow=startRow, header=False, index=False)
         startRow = startRow + len(resultTables[0]) + 2
         pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="numEmailsCorrect_ByArmInWave", startrow=startRow, header=False, index=False)
@@ -398,18 +408,21 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="numSMSesCorrect_ByArm", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="numSMSesCorrect_ByArm", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
-    if (surveyVersion in ['5D', '5P']):
-        resultTables = ols('NumHeadersOpened ~ C(surveyArm)', data=dta).fit().summary().tables
+    resultTables = ols('numLabeledFake ~ C(surveyArm)', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="numLabeledFake_ByArm", startrow=1, header=False,
+                                           index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="numLabeledFake_ByArm",
+                                           startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+
+    if (surveyVersion in ['2', '3']):
+        resultTables = ols('NumWithHeadersOpened ~ C(surveyArm)', data=dta).fit().summary().tables
         pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="NumHeadersOpened_ByArm", startrow=1, header=False, index=False)
         pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="NumHeadersOpened_ByArm", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
-        resultTables = ols('NumEmailsActedUpon ~ C(surveyArm)', data=dta).fit().summary().tables
-        pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="NumEmailsActedUpon_ByArm", startrow=1, header=False, index=False)
-        pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="NumEmailsActedUpon_ByArm", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+        resultTables = ols('NumWithLinksClicked ~ C(surveyArm)', data=dta).fit().summary().tables
+        pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="NumWithLinksClicked_ByArm", startrow=1, header=False, index=False)
+        pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="NumWithLinksClicked_ByArm", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
-        resultTables = ols('numLabeledFake ~ C(surveyArm)', data=dta).fit().summary().tables
-        pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="numLabeledFake_ByArm", startrow=1, header=False, index=False)
-        pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="numLabeledFake_ByArm", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
     resultTables = ols('numFakeLabeledFake ~ C(surveyArm)', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="numFakeLabeledFake_ByArm", startrow=1, header=False, index=False)
@@ -424,13 +437,13 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion, primaryOnly=
     # Is there an effect of wave: Additional Exporation
     ##############
     # NumCorrect Regression
-    resultTables = ols('numCorrect ~ C(surveyArm)*Wave + daysFromTrainingToTest + trustScore + lIncomeAmount + '
-                     'C(employment3) + educYears + marriedI + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
+    resultTables = ols('numCorrect ~ C(surveyArm)*Wave + daysFromTrainingToTest + GovtConfScore + TrustInSSAScore + TrustInInternetScore + OnlineShoppingScore + LonelyScore + lIncomeAmount + '
+                     'C(employment3) + educYears +  ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="reg_CorrectWithWaveAndDays", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="reg_CorrectWithWaveAndDays", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
-    resultTables = ols('numCorrect ~ C(surveyArm)*Wave + trustScore + lIncomeAmount + '
-                     'C(employment3) + educYears + marriedI + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
+    resultTables = ols('numCorrect ~ C(surveyArm)*Wave + GovtConfScore + TrustInSSAScore + TrustInInternetScore + OnlineShoppingScore + LonelyScore + lIncomeAmount + '
+                     'C(employment3) + educYears + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="reg_CorrectWithWave", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="reg_CorrectWithWave", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 

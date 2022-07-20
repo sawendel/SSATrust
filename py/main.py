@@ -1,45 +1,45 @@
 import pandas as pd
 import numpy as np
-from DataProcessor import *
+from InputProcessor import *
 from ResultsAnalyzer import *
 import random
 
 debugging = False
-trainingQuestions = {'ProtectYourself':'Real',
-                    'AmazonHP':'Real',
-                    'email_IRS': 'Scam',
-                    'web_IRS': 'Real',
-                    'apple':'Real',
-                     'amazon_Product':'Scam',
-                     'email_mcafee':'Real',
-                     'GetProtected':'Scam',
-                     }
+
+dataDir = "C:/Users/steve/Google Drive/Dev/src/SSATrust/SSATrust/data/"
 
 def doIt(surveyVersion):
 
-    testQuestions = getTestQuestions(surveyVersion)
+    (dta,priorPids) = readData(surveyVersion, dataDir)
+    dta.to_csv(dataDir + "SSA_v" + str(surveyVersion) +"_Combined.csv")
 
-    (dta,priorPids) = readData(surveyVersion)
-
-    dta = cleanData(dta, priorPids, surveyVersion, testQuestions)
+    dta = cleanData(dta, priorPids, surveyVersion, dataDir)
+    dta.to_csv(dataDir + "SSA_v" + str(surveyVersion) +"_WithCleanFlag.csv")
+    dta = dta[dta.cleanStatus == "Keep"].copy()
 
     dta = processDemographics(dta)
 
-    dta = markCorrectAnswers(dta, testQuestions)
+    dta = processTrust(dta)
 
-    scoringVars = ['numCorrect', 'numEmailsCorrect', 'numLettersCorrect', 'numSMSesCorrect', 'numFakeLabeledReal', 'numRealLabeledFake',
-                           'numRealLabeledReal', 'numFakeLabeledFake', 'numLabeledReal', 'numLabeledFake', 'numNoAnswer']
+    dta = markCorrectAnswers(dta, surveyVersion)
+    dta.to_csv(dataDir + "SSA_v" + str(surveyVersion) +"_Processed.csv")
 
-    if (surveyVersion in ['5D', '5P']):
-        scoringVars = scoringVars + ['NumHeadersOpened']
+    scoringVars = ['numCorrect', 'numCorrect_Govt', 'numCorrect_Biz',
+                   'numEmailsCorrect', 'numWebsitesCorrect',
+                   # 'numLettersCorrect', 'numSMSesCorrect',
+                   'numFakeLabeledReal', 'numRealLabeledFake',
+                    'numRealLabeledReal', 'numFakeLabeledFake', 'numLabeledReal', 'numLabeledFake', 'numNoAnswer']
 
-    analyzeResults(dta, outputFileName = surveyVersion, scoringVars = scoringVars, surveyVersion = surveyVersion,
+    if (surveyVersion in ['2', '3']):
+        scoringVars = scoringVars + ['NumWithHeadersOpened','NumWithLinksClicked']
+
+    analyzeResults(dta, outputFileName = surveyVersion, scoringVars = scoringVars, surveyVersion = surveyVersion, dataDir = dataDir,
                    primaryOnly= True)
 
 
 
 # Default "Main"
 if __name__ == '__main__':
-    doIt("1")
+    doIt("3")
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

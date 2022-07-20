@@ -1,6 +1,25 @@
 {
   "workflows": [
 	{
+      "id": "SWTest",
+      "mode": "test",
+      "steps": [
+        {
+          "type": "letter",
+          "template": "protectYourself.html"
+        },
+		{
+          "type": "webpage",
+          "template": "walmart.html",
+          "mobileTemplate": "walmartMobile.html"
+		},
+        {
+          "type": "email",
+          "template": "resolvePayment.html"
+        }
+		]
+	},
+	{
       "id": "Training",
       "mode": "educational",
       "steps": [
@@ -79,10 +98,96 @@
           "type": "email",
           "template": "ssa_replacementCard.html"
         },
-        {
+			{
           "type": "webpage",
           "template": "walmart.html",
           "mobileTemplate": "walmartMobile.html"
+        }
+      ]
+    },
+	{
+      "id": "TrainingW",
+      "mode": "educational",
+      "steps": [
+        {
+          "type": "email",
+          "template": "protectYourself.html",
+          "result": "real"
+        },
+        {
+          "type": "email",
+          "template": "irs.html",
+          "result": "a scam"
+        },
+		{
+          "type": "webpage",
+          "template": "walmart.html",
+          "mobileTemplate": "walmartMobile.html",
+          "result": "real"
+        },
+        {
+          "type": "webpage",
+          "template": "IRS_YourAccount.html",
+          "result": "real"
+        },
+        {
+          "type": "webpage",
+          "template": "appleID.html",
+          "result": "real"
+        },
+        {
+          "type": "webpage",
+          "template": "amazonProductPage.html",
+          "mobileTemplate": "amazonProductPageMobile.html",
+          "result": "a scam"
+        },
+        {
+          "type": "email",
+          "template": "mcafee.html",
+          "result": "real"
+        },
+        {
+          "type": "email",
+          "template": "getProtected.html",
+          "result": "a scam"
+        }
+	  ]
+	},
+	{
+      "id": "TestW",
+      "mode": "test",
+      "steps": [
+        {
+          "type": "email",
+          "template": "redcross_covidRelief.html"
+        },
+        {
+          "type": "webpage",
+          "template": "ssa.html"
+        },
+        {
+          "type": "webpage",
+          "template": "mySocialSecurity.html"
+        },
+        {
+          "type": "email",
+          "template": "amazon_maskDelivery.html"
+        },
+        {
+          "type": "webpage",
+          "template": "ssaFb.html"
+        },
+        {
+          "type": "email",
+          "template": "ssa_optOut.html"
+        },
+        {
+          "type": "email",
+          "template": "ssa_replacementCard.html"
+        },
+        {
+          "type": "webpage",
+          "template": "amazonHP.html"
         }
       ]
     }
