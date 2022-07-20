@@ -92,16 +92,11 @@ const TemplateRenderer = ({
 
     if (domNode.type === 'tag' && domNode.name === 'button') {
       const props = attributesToProps(domNode.attribs);
-      //const logData = domNode.attribs['aria-label'] || domNode.attribs.name || domNode.children[domNode.children.length - 1].data.trim();
-      //return (
-      //<button {...props} onClick={(e) => eventHandler(e, Events.BUTTON_CLICKED, domNode.attribs, logData)}>
-      //   {domToReact(domNode.children)}
-      // </button>
-      //)
+      const logData = domNode.attribs['aria-label'] || domNode.attribs.name || typeof domNode.children[domNode.children.length - 1].data;
       return (
-        <button {...props} onClick={(e) => eventHandler(e, Events.BUTTON_CLICKED, domNode.attribs)}>
-          {domToReact(domNode.children)}
-        </button>
+      <button {...props} onClick={(e) => eventHandler(e, Events.BUTTON_CLICKED, domNode.attribs, logData)}>
+        {domToReact(domNode.children)}
+      </button>
       )
     }
 
