@@ -1,6 +1,17 @@
 {
   "workflows": [
 	{
+      "id": "ProblemWithMetaData",
+      "mode": "training",
+      "steps": [
+          {
+          "type": "webpage",
+          "template": "IRS_YourAccount.html",
+          "result": "real"
+        }
+	]
+	},
+	{
       "id": "SWTest",
       "mode": "test",
       "steps": [
