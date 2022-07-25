@@ -103,6 +103,8 @@ def analyzeExperiment_BinaryVar(dta, varName):
     # Effect of Arm 2
     arm2Successes = sum(order_value_arm2_group.isin([True, 1]))
     arm2Count = sum(order_value_arm2_group.isin([True, False, 1, 0]))
+    if arm2Count == 0:
+        arm2Count = 1
     arm2PercentSuccess = arm2Successes/arm2Count
     zstat, pval2 = proportions_ztest(count=[arm1Successes,arm2Successes], nobs=[arm1Count,arm2Count], alternative='two-sided')
     arm2sign = pToSign(pval2)
@@ -111,6 +113,8 @@ def analyzeExperiment_BinaryVar(dta, varName):
     # Effect of Arm 3
     arm3Successes = sum(order_value_arm3_group.isin([True, 1]))
     arm3Count = sum(order_value_arm3_group.isin([True, False, 1, 0]))
+    if arm3Count == 0:
+        arm3Count = 1
     arm3PercentSuccess = arm3Successes/arm3Count
     zstat, pval3 = proportions_ztest(count=[arm1Successes,arm3Successes], nobs=[arm1Count,arm3Count], alternative='two-sided')
     arm3sign = pToSign(pval3)

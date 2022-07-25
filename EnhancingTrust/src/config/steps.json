@@ -17,7 +17,11 @@
       "steps": [
         {
           "type": "letter",
-          "template": "protectYourself.html"
+          "template": "medicareReview.html"
+        },
+        {
+          "type": "letter",
+          "template": "benefitsSuspension.html"
         },
 		{
           "type": "webpage",
@@ -109,7 +113,7 @@
           "type": "email",
           "template": "ssa_replacementCard.html"
         },
-			{
+		{
           "type": "webpage",
           "template": "walmart.html",
           "mobileTemplate": "walmartMobile.html"
@@ -201,6 +205,53 @@
           "template": "amazonHP.html"
         }
       ]
-    }
+    },
+	{
+      "id": "TestWE",
+      "mode": "test",
+      "steps": [
+		{
+          "type": "webpage",
+          "template": "walmart.html",
+          "mobileTemplate": "walmartMobile.html"
+        },
+        {
+          "type": "email",
+          "template": "redcross_covidRelief.html"
+        },
+        {
+          "type": "webpage",
+          "template": "ssa.html"
+        },
+        {
+          "type": "webpage",
+          "template": "mySocialSecurity.html"
+        },
+        {
+          "type": "email",
+          "template": "amazon_maskDelivery.html"
+        },
+        {
+          "type": "webpage",
+          "template": "ssaFb.html"
+        },
+        {
+          "type": "email",
+          "template": "ssa_optOut.html"
+        },
+        {
+          "type": "email",
+          "template": "ssa_replacementCard.html"
+        },
+		{
+          "type": "letter",
+          "template": "medicareReview.html"
+        },
+        {
+          "type": "letter",
+          "template": "benefitsSuspension.html"
+        }
+      ]
+    }	
   ]
 }

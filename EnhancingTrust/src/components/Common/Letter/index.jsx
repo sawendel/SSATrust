@@ -15,57 +15,18 @@ const Letter = (props) => {
             <Tooltip show={props.showTooltips} text={config?.companyInfo?.logoTooltip}>
               <img alt="company logo" src={config?.companyInfo?.logo} />
             </Tooltip>
-            <Tooltip show={props.showTooltips} text={config?.companyInfo?.nameTooltip} placement="right">
-              <span className='p-2 px-md-2 pt-md-4'>{config?.companyInfo?.name}</span>
-            </Tooltip>
-          </div>
-          <div className='et-letter__header__slogan p-2 px-md-2 pt-md-4'>
-            <Tooltip show={props.showTooltips} text={config?.companyInfo?.sloganTooltip}>
-              <span>{config?.companyInfo?.slogan}</span>
+            <Tooltip show={props.showTooltips} text={config?.companyInfo?.sloganTooltip} placement="right">
+              <span className='p-2 px-md-2 pt-md-4'>{config?.companyInfo?.slogan}</span>
             </Tooltip>
           </div>
         </div>
 
         <div className='et-letter__header__separator pt-2'></div>
 
-        <div className='et-letter__header__down py-md-3'>
-          <div className='et-letter__header__companyName py-2 px-1'>
-            <span className='et-letter__header__title'>{config?.companyInfo?.name}</span>
-            <Tooltip show={props.showTooltips} text={config?.companyInfo?.streetAddressTooltip}>
-              <span>{config?.companyInfo?.streetAddress}</span>
-            </Tooltip>
-            <Tooltip show={props.showTooltips} text={config?.companyInfo?.addressLineTooltip}>
-              <span>{config?.companyInfo?.addressLine}</span>
-            </Tooltip>
-            <Tooltip show={props.showTooltips} text={config?.companyInfo?.countryTooltip}>
-              <span>{config?.companyInfo?.country}</span>
-            </Tooltip>
-          </div>
-          <div className='et-letter__header__recipientName py-2 px-1'>
-            <Tooltip show={props.showTooltips} text={config?.recipientInfo?.nameTooltip}>
-              <span className='et-letter__header__title'>{config?.recipientInfo?.name}</span>
-            </Tooltip>
-            <Tooltip show={props.showTooltips} text={config?.recipientInfo?.titleTooltip}>
-              <span>{config?.recipientInfo?.title}</span>
-            </Tooltip>
-            <Tooltip show={props.showTooltips} text={config?.recipientInfo?.streetAddressTooltip}>
-              <span>{config?.recipientInfo?.streetAddress}</span>
-            </Tooltip>
-            <Tooltip show={props.showTooltips} text={config?.recipientInfo?.addressLineTooltip}>
-              <span>{config?.recipientInfo?.addressLine}</span>
-            </Tooltip>
-          </div>
+        <div className='et-letter__header__down py-md-1'>
         </div>
 
         <div className='et-letter__content px-1'>
-          <div className='et-letter__content__date py-md-3 py-lg-0'>
-            <Tooltip show={props.showTooltips} text={config?.salutationTooltip}>
-              <span>{config?.salutation}</span>
-            </Tooltip>
-            <Tooltip show={props.showTooltips} text={config?.dateTooltip}>
-              <span>{config?.date || date}</span>
-            </Tooltip>
-          </div>
           <div className='et-letter__content__text py-2'>
             <TemplateRenderer {...props} setOptions={setConfig} />
           </div>
@@ -76,15 +37,6 @@ const Letter = (props) => {
               </Tooltip>
               <Tooltip show={props.showTooltips} text={config?.senderInfo?.titleTooltip} placement="bottom">
                 <span>{config?.senderInfo?.title}</span>
-              </Tooltip>
-            </div>
-            <div className='et-letter__contact'>
-              <span>Contact info:</span>
-              <Tooltip show={props.showTooltips} text={config?.contactInfo?.phoneTooltip}>
-                <span>Phone: {config?.contactInfo?.phone}</span>
-              </Tooltip>
-              <Tooltip show={props.showTooltips} text={config?.contactInfo?.emailTooltip} placement="bottom">
-                <span>Mail: {config?.contactInfo?.email}</span>
               </Tooltip>
             </div>
           </div>

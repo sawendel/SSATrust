@@ -5,13 +5,9 @@
       :root{
         --blue1 :#002a5c;
         --grey1 :#263238;
-		}
-		.boxed {
-		  border: 2px solid black ;
-		  width:200px; 
-		  max-width:200px; 
-		  display: inline-block;
-		}
+        
+
+    }
       .screen *,
       .component-wrapper * {
         box-sizing: border-box;
@@ -27,12 +23,13 @@
       
       .letter{
           width: 612px;
-          height: 700px;
+          height: 900px;
           padding: 40px 30px;
           margin: auto;
           box-sizing: border-box;
           box-shadow: 0px 0px 6px rgb(144 164 174 / 50%);
           position: relative;
+          
       }
       .letter *{
         font-family: 'Roboto Slab', sans-serif;
@@ -49,7 +46,10 @@
         border-bottom: 1px solid var(--blue1);
         width: 100%;
         font-size: 14px;
+        
       }
+      
+      
 
       .header-info{
         display: flex;
@@ -135,6 +135,8 @@
         margin: 0;
       }
 
+      
+
       /*FOR THE TOOLTIPS*/
       .message-overlay{
             border-radius: 8px;
@@ -217,6 +219,7 @@
           bottom: 110%;
         }
 
+
         /*For the body overlays*/
         .overlay-inline{
             z-index: 1;
@@ -244,8 +247,9 @@
             display: inline-block;
             color: white;
             font-family: 'Roboto';
+            
+
         }
-		
         .overlay-inline::after{
             content: " ";
             position: absolute;
@@ -256,7 +260,6 @@
             border-style: solid;
             border-color: #455a64 transparent transparent transparent;
         }
-		
         .body-overlay-image{
             width: 20px;
             height: 20px;
@@ -276,62 +279,101 @@
 </style>
 
             <div class="recipient">
-                <div class="recipient-content"><br>
-                  <p id="office-name">Benefits Suspensions Unit</p>
-                  <p id="office-specific-name">Arlington County</p>
-                  <p id="office-in-building-address">Public Judgment Records</p>
-                  <p id="office-street-address"></p>
-                  <p id="letter-date">Date: May 07, 2021</p>
+                <div class="recipient-content">
+                  <p id="office-name">Social Security Administration</p>
+                  <p id="office-specific-name">Office of Quality Review</p>
+                  <p id="office-in-building-address"></p>
+                  <p id="office-street-address">1300 D St SW</p>
+                  <p id="office-city-state-zip">Washington, DC 20024</p>  
+                  <p id="letter-date">Date: April 22, 2021</p>
                 </div>
             </div>
+			
             <div class="sender">
-                <div class="message-overlay overlay-sender overlay" style="display: none;">
+                <div class="message-overlay overlay-sender overlay">
                     <img class="overlay-image" src="./images/letter-alert-triangle.svg">
                     <div id="overlay-sender" class="overlay-text">
                         Body with just explanation user name
                     </div>
                 </div>
-              <p id="recipient-name"></p>
-              <p id="recipient-street-address"></p>
-              <p id="recipient-city-state-zip">,  </p>
+              <p>&nbsp;</p>
+              <p id="recipient-name">Your Name</p>
+              <p id="recipient-street-address">15432 YourAddress Str</p>
+              <p id="recipient-city-state-zip">YourCity, ST Zip</p>
             </div>
 
+          <div class="letter-body">
 
 
-  <p class="body-title center-text"><font size="+2"><br/>NOTICE OF INTENT TO LEVY SOCIAL SECURITY BENEFITS</font></p>
+<p class="body-paragraph">
+The Social Security Administration is contacting a few people who have applied for extra help with Medicare prescription drug plan costs. We are doing a quality review to make sure we made the correct decision on these applications. We picked your name by chance, NOT for any other reason. To make sure we made the correct decision on your application, we would like to telephone you. For general information about Social Security or to verify that this is an official communication, you can call our national toll-free number at 1-800-772-1213.
+<p class="body-subtitle">IMPORTANT INFORMATION</p>
+<p class="body-paragraph">You do not have to give us the requested information. If you do provide the information and your subsidy level is correct, we will not have to contact you to review your eligibility for at least a year. However, if the information is incorrect or you do not provide the information, we may contact you to review your eligibility within the next few months.
+Such a review of your eligibility could result in your subsidy level increasing, decreasing, or stopping.</p>
 
-<p class="body-paragraph">&nbsp;</p>
-<div class="boxed">
-&nbsp;&nbsp;  AMOUNT DUE: $9,976</br>
-&nbsp;&nbsp;  DUE BY: 05/31/2021
+<p class="body-paragraph">We would also like to remind you that if you (and your spouse if married and living together) have a change in your income, resources, or household size you should report this information to Social Security.</p>
+
+<p class="body-subtitle">WHAT WILL HAPPEN WHEN WE CALL</p>
+<p class="body-paragraph">We will identify ourselves by name as shown at the bottom of this letter. We will ask you some questions about the information given on the application for help with Medicare prescription drug plan costs.</p>
+
+<p class="body-subtitle">HOW YOU CAN GET READY FOR YOUR CALL</p>
+<p class="body-paragraph">We have enclosed a page that shows the kinds of information you should have ready. We have checked the things we would like to talk about. If you do not have all of the information that we are requesting, we can help you get the information you do not have. If you would like to have a friend or relative help you, please tell that person to be there when we call.</p>
+
+<p class="body-subtitle">PLEASE RETURN THE ENCLOSED FORM</p>
+<p class="body-paragraph"><b>We have enclosed an acknowledgment form for you to complete, sign and mail back to us in the envelope we have provided. You do not need to put a stamp on the envelope. This form is to let us know you received the letter and whether or not you will be available when we plan to call you.</b></p>
+
+<p class="body-paragraph">If you have any questions, please call us at our office between 8:00 a.m. and 4:00 p.m., Monday through Friday. Our toll-free number is 1-800-772-1213. Thank you for your help..</p>
+
+<div class="request-sender">
+  <p class="body-paragraph">Sincerely,</p>
+  <p class="body-paragraph">Jane Donety</p>
+  <p class="body-paragraph">Social Insurance Specialist</p>
+  <p class="body-paragraph">Falls Clurch, VA 22041-315</p>
 </div>
-<p class="body-paragraph">&nbsp;</p>
 
-Dear <span id="nametofill">YourName<br/><br/></span>
-
-<p class="body-paragraph">This notice has been issued against your household, because of a lein filing due to the tax
-liability that has not been paid. This letter serves as a final judgemental notice. </p>
-
-<p class="body-paragraph">The Federal Tax Authorities can now take enforcement action such as seizing Social Security benefits
-and garnishing wages and bank accounts to satisfy the outstanding debt owed. If no action is taken by
-05/31/2021, the Federal Tax Authorities may permanently revoke benefits, suspend licenses, and levy any 
-federal tax refund gained this year. </p>
-
-<p class="body-paragraph">Your debt must be resolved in full to remove the lien. To avoid enforcement, CALL 1(800)236-2480 
-within fifteen (15) days of receiving this notice.  Failure to respond in time will cause 
-an additional penalty to accumulate and lead to default judgement.</p>
-
-<p id="form-id" class="body-paragraph right-text">Form HA-L76 (03-2010)</p>
 
 <script data-config>
   const Init = function () {
     return {
       companyInfo: {
-        logo: '/letters/img/cleardot.gif',
-        slogan: 'IMMEDIATE ACTION REQUIRED'
+        logo: '/letters/img/SSA.svg',
+       // name: 'Social Security Administration',
+        slogan: 'Social Security Administration',
+        //streetAddress: '1300 D St SW',
+        //addressLine: 'Washington, DC 20024',
+        //country: 'United States',
       },
+      //recipientInfo: {
+      //  name: 'Your Name',
+        // nameTooltip: 'name tooltip',
+        // title: 'Software Engineer',
+        // titleTooltip: 'title tooltip',
+      //  streetAddress: '15432 YourAddress Str',
+        // streetAddressTooltip: 'streetAddress tooltip',
+      //  addressLine: 'YourCity, ST Zip',
+        // addressLineTooltip: 'addressLine tooltip',
+      //},
+      //date: 'May 2nd, 2022',  // optional, there's default value for this
+      // dateTooltip: 'Date tooltip',
+      // salutation: 'Dear John Doe,',
+      // salutationTooltip: 'salutation tooltip',
+      //contactInfo: {
+      //  phone: '+1 (855) 558-7771',
+      //  phoneTooltip: 'phone tooltip',
+      //  email: 'john.doe@mail.com',
+      //  emailTooltip: 'email tooltip',
+      //},
+      //senderInfo: {
+      //  name: 'Katherine Kane',
+      //  nameTooltip: 'name tooltip',
+      //  title: 'CEO at H-TECH',
+      //  titleTooltip: 'title tooltip',
+      //},
+      // footer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Magna etiam tempor orci eu.',
+      // footerTooltip: 'footer tooltip',
     };
   }
   Init();
 </script>
+
 
