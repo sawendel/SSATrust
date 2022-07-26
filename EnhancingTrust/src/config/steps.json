@@ -15,6 +15,11 @@
       "id": "SWTest",
       "mode": "test",
       "steps": [
+		{
+          "type": "webpage",
+          "template": "walmartRev.html",
+          "mobileTemplate": "walmartMobileRev.html"
+		},
         {
           "type": "letter",
           "template": "medicareReview.html"
@@ -23,11 +28,6 @@
           "type": "letter",
           "template": "benefitsSuspension.html"
         },
-		{
-          "type": "webpage",
-          "template": "walmart.html",
-          "mobileTemplate": "walmartMobile.html"
-		},
         {
           "type": "email",
           "template": "resolvePayment.html"
