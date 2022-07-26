@@ -256,11 +256,6 @@
       "id": "TestWERC",
       "mode": "test",
       "steps": [
-		{
-          "type": "webpage",
-          "template": "walmart.html",
-          "mobileTemplate": "walmartMobile.html"
-        },
         {
           "type": "email",
           "template": "redcross_covidRelief.html"
@@ -284,6 +279,11 @@
         {
           "type": "email",
           "template": "ssa_optOut.html"
+        },
+		{
+          "type": "webpage",
+          "template": "walmart.html",
+          "mobileTemplate": "walmartMobile.html"
         },
 		{
           "type": "letter",
