@@ -30,7 +30,7 @@ def doIt(surveyVersion):
                    'numFakeLabeledReal', 'numRealLabeledFake',
                     'numRealLabeledReal', 'numFakeLabeledFake', 'numLabeledReal', 'numLabeledFake', 'numNoAnswer']
 
-    if (surveyVersion in ['2', '3', '4']):
+    if (surveyVersion in ['2', '3', '4', '5', '6', '7']):
         scoringVars = scoringVars + ['NumWithHeadersOpened','NumWithLinksClicked']
 
     analyzeResults(dta, outputFileName = surveyVersion, scoringVars = scoringVars, surveyVersion = surveyVersion, dataDir = dataDir,
@@ -40,6 +40,6 @@ def doIt(surveyVersion):
 
 # Default "Main"
 if __name__ == '__main__':
-    doIt("5")
+    doIt("6")
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

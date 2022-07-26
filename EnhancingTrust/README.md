@@ -63,6 +63,10 @@ The query params available are (see EnhancingTrust/src/constants/queryParams.js)
 http://localhost:3000/workflow/TestNow?title=ATest&uid=steve1&redirectUrl=https://www.google.com?uid=TESTS
 https://enhancing-trust.web.app/?title=test&redirectUrl=https://www.google.com/
 
+## Step 6: Pull the data
+
+https://k1sx4sgipa.execute-api.us-east-2.amazonaws.com/prod/logs?startDate=06-01-2022&endDate=07-08-2022
+https://k1sx4sgipa.execute-api.us-east-2.amazonaws.com/prod/logs?startDate=07-24-2022&endDate=07-25-2022
 
 ## Detailed Instruction Templates
 
@@ -295,7 +299,13 @@ The Logs are stored in a MongoDB on an EC Instance in Amazon, accessible through
 EC Instance: ec2-18-188-207-77.us-east-2.compute.amazonaws.com
 AWS Region: Ohio
 
+
 To Extract Via EC2:
+
+mongoexport --collection=logs --db=EnhancingTrust --type=csv --out=testout3.csv --fields=userId,eventType,metadata,workflowId,templateName,templateType,created
+
+
+
 mongodump --ssl \
     --host="ec2-18-188-207-77.us-east-2.compute.amazonaws.com:27017" \
     --collection=logs \
@@ -315,7 +325,7 @@ mongodb+srv://adminEnhancingTrust:<password>@ssatrust.rrthf.mongodb.net/?retryWr
 
 	
 To Filter within the GUI:
-{date :{$gte:ISODate("2022-05-02"),$lt:ISODate("2022-05-31")}}
+{created :{$gte:ISODate("2022-07-09"),$lt:ISODate("2022-07-10")}}
 
 
 

@@ -34,7 +34,7 @@ def getTrainingQuestions(surveyVersion):
                              'email_mcafee': ('Real','Email', 'Biz', 'mcafee.html'),
                              'GetProtected': ('Scam','Email', 'Govt', 'getProtected.html'),
                         }
-    elif surveyVersion in ('5'):
+    elif surveyVersion in ('5', '6'):
         trainingQuestions = {'ProtectYourself': ('Real', 'Email', 'Govt', 'protectYourself.html'),
                              'AmazonHP': ('Real', 'Web', 'Biz', 'amazonHP.html'),
                              'email_IRS': ('Scam', 'Email', 'Govt', 'irs.html'),
@@ -71,7 +71,7 @@ def getTestQuestions(surveyVersion):
             'replacementCard': ('Real', 'Email', 'Govt', 'ssa_replacementCard.html'),
             'AmazonHP': ('Real', 'Web', 'Biz', 'amazonHP.html')
         }
-    elif surveyVersion in ('5'):
+    elif surveyVersion in ('5', '6'):
         testQuestions = {
                             'WalmartProduct': ('Real', 'Web', 'Biz', 'walmart.html'),
                             'RedCross': ('Scam', 'Email', 'Biz', 'redcross_covidRelief.html'),
@@ -109,6 +109,11 @@ def readData(surveyVersion, dataDir):
               "V5_WalmartEarlyInTest/SSA_Y4_v2_FullApp_AfterTraining_July 24, 2022_21.03.csv",
               "V5_WalmartEarlyInTest/SSA_Y4_v2_FullApp_FinalSection_July 24, 2022_21.04.csv",
               "V5_WalmartEarlyInTest/logs_1658718293889.csv",
+              "V3/SSA Lists_First20_NoPII.csv"),
+        '6': ("V6_WalmartSimplified/SSA_Y4_v2_FullApp_Entry_BorP_TrainingOnly_July 26, 2022_06.50.csv",
+              "V6_WalmartSimplified/SSA_Y4_v2_FullApp_AfterTraining_July 26, 2022_06.51.csv",
+              "V6_WalmartSimplified/SSA_Y4_v2_FullApp_FinalSection_July 26, 2022_06.51.csv",
+              "V6_WalmartSimplified/logs_1658839991300.csv",
               "V3/SSA Lists_First20_NoPII.csv")
     }
 
@@ -121,7 +126,7 @@ def readData(surveyVersion, dataDir):
     if surveyVersion == '1':
         dataFileName = surveyOutputFilesByVersion[surveyVersion][1]
         dta = pd.read_csv(dataDir + dataFileName)
-    if surveyVersion in ('2', '3', '4', '5'):
+    if surveyVersion in ('2', '3', '4', '5', '6'):
         p1File = surveyOutputFilesByVersion[surveyVersion][0]
         dta_p1_BeforeTraining = pd.read_csv(dataDir + p1File)
 
@@ -232,7 +237,7 @@ def cleanData(dta, priorPids, surveyVersion, dataDir):
     dta['duration_p2_Quantile'] = pd.qcut(dta.duration_p2, q=5, labels=False)
     dta['duration_p3_Quantile'] = pd.qcut(dta.duration_p3, q=5, labels=False)
 
-    if surveyVersion in ('2', '3', '4', '5'):
+    if surveyVersion in ('2', '3', '4', '5', '6'):
         dta['daysFromTrainingToTest'] = (dta['StartDate_p3'].astype('datetime64') - dta['StartDate'].astype('datetime64')).dt.days
 
     # dta['duration_p2_Quantile'] = pd.qcut(dta.duration_p2, q=5, labels=False)
@@ -244,10 +249,10 @@ def cleanData(dta, priorPids, surveyVersion, dataDir):
 
     if surveyVersion == '2':
         dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent == 'No'), 'cleanStatus'] = 'No to Consent: First Survey'
-    elif surveyVersion in ('3', '4', '5'):
+    elif surveyVersion in ('3', '4', '5', '6'):
         dta.loc[(dta['cleanStatus'] == "Keep") & ((dta.Consent_Prolific == 'No') | (dta.Consent_BBB == 'No')), 'cleanStatus'] = 'No to Consent: First Survey'
 
-    if surveyVersion in ('2', '3', '4', '5'):
+    if surveyVersion in ('2', '3', '4', '5', '6'):
         # No such - only with time delay. dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent_p2=='No'), 'cleanStatus'] = 'No to Consent: Second Survey'
         # No such - only with time delay.  dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent_p3=='No'), 'cleanStatus'] = 'No to Consent: Third Survey'
 
