@@ -34,7 +34,7 @@ def getTrainingQuestions(surveyVersion):
                              'email_mcafee': ('Real','Email', 'Biz', 'mcafee.html'),
                              'GetProtected': ('Scam','Email', 'Govt', 'getProtected.html'),
                         }
-    elif surveyVersion in ('5', '6'):
+    elif surveyVersion in ('5', '6', '7'):
         trainingQuestions = {'ProtectYourself': ('Real', 'Email', 'Govt', 'protectYourself.html'),
                              'AmazonHP': ('Real', 'Web', 'Biz', 'amazonHP.html'),
                              'email_IRS': ('Scam', 'Email', 'Govt', 'irs.html'),
@@ -84,6 +84,19 @@ def getTestQuestions(surveyVersion):
                             'benefitsSuspension': ('Scam', 'Letter', 'Govt', 'benefitsSuspension.html'),
                             'medicareReview': ('Real', 'Letter', 'Govt', 'medicareReview.html'),
         }
+    elif surveyVersion in ('7'):
+        testQuestions = {
+            'RedCross': ('Scam', 'Email', 'Biz', 'redcross_covidRelief.html'),
+            'SSA_HP': ('Real', 'Web', 'Govt', 'ssa.html'),
+            'mySSA': ('Scam', 'Web', 'Govt', 'mySocialSecurity.html'),
+            'AmazonDeliveryDelay': ('Real', 'Email', 'Biz', 'amazon_maskDelivery.html'),
+            'FB_SSA': ('Scam', 'Web', 'Biz', 'ssaFbClear.html'),
+            'ssa_optout': ('Scam', 'Email', 'Govt', 'ssa_optOut.html'),
+            'WalmartProduct': ('Real', 'Web', 'Biz', 'walmart.html'),
+            'medicareReview': ('Real', 'Letter', 'Govt', 'medicareReview.html'),
+            'replacementCard': ('Real', 'Email', 'Govt', 'ssa_replacementCardClean.html'),
+            'benefitsSuspension': ('Scam', 'Letter', 'Govt', 'benefitsSuspension.html')
+        }
     return testQuestions
 
 
@@ -114,7 +127,13 @@ def readData(surveyVersion, dataDir):
               "V6_WalmartSimplified/SSA_Y4_v2_FullApp_AfterTraining_July 26, 2022_06.51.csv",
               "V6_WalmartSimplified/SSA_Y4_v2_FullApp_FinalSection_July 26, 2022_06.51.csv",
               "V6_WalmartSimplified/logs_1658839991300.csv",
+              "V3/SSA Lists_First20_NoPII.csv"),
+        '7': ("V7_FacebookAndReplacementCard/SSA_Y4_v2_FullApp_Entry_BorP_TrainingOnly_July 26, 2022_12.10.csv",
+              "V7_FacebookAndReplacementCard/SSA_Y4_v2_FullApp_AfterTraining_July 26, 2022_12.10.csv",
+              "V7_FacebookAndReplacementCard/SSA_Y4_v2_FullApp_FinalSection_July 26, 2022_12.11.csv",
+              "V7_FacebookAndReplacementCard/logs_1658859121371.csv",
               "V3/SSA Lists_First20_NoPII.csv")
+
     }
 
     # ###############
@@ -126,7 +145,7 @@ def readData(surveyVersion, dataDir):
     if surveyVersion == '1':
         dataFileName = surveyOutputFilesByVersion[surveyVersion][1]
         dta = pd.read_csv(dataDir + dataFileName)
-    if surveyVersion in ('2', '3', '4', '5', '6'):
+    if surveyVersion in ('2', '3', '4', '5', '6', '7'):
         p1File = surveyOutputFilesByVersion[surveyVersion][0]
         dta_p1_BeforeTraining = pd.read_csv(dataDir + p1File)
 
@@ -237,7 +256,7 @@ def cleanData(dta, priorPids, surveyVersion, dataDir):
     dta['duration_p2_Quantile'] = pd.qcut(dta.duration_p2, q=5, labels=False)
     dta['duration_p3_Quantile'] = pd.qcut(dta.duration_p3, q=5, labels=False)
 
-    if surveyVersion in ('2', '3', '4', '5', '6'):
+    if surveyVersion in ('2', '3', '4', '5', '6', '7'):
         dta['daysFromTrainingToTest'] = (dta['StartDate_p3'].astype('datetime64') - dta['StartDate'].astype('datetime64')).dt.days
 
     # dta['duration_p2_Quantile'] = pd.qcut(dta.duration_p2, q=5, labels=False)
@@ -249,10 +268,10 @@ def cleanData(dta, priorPids, surveyVersion, dataDir):
 
     if surveyVersion == '2':
         dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent == 'No'), 'cleanStatus'] = 'No to Consent: First Survey'
-    elif surveyVersion in ('3', '4', '5', '6'):
+    elif surveyVersion in ('3', '4', '5', '6', '7'):
         dta.loc[(dta['cleanStatus'] == "Keep") & ((dta.Consent_Prolific == 'No') | (dta.Consent_BBB == 'No')), 'cleanStatus'] = 'No to Consent: First Survey'
 
-    if surveyVersion in ('2', '3', '4', '5', '6'):
+    if surveyVersion in ('2', '3', '4', '5', '6', '7'):
         # No such - only with time delay. dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent_p2=='No'), 'cleanStatus'] = 'No to Consent: Second Survey'
         # No such - only with time delay.  dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent_p3=='No'), 'cleanStatus'] = 'No to Consent: Third Survey'
 

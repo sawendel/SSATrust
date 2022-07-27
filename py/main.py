@@ -40,6 +40,6 @@ def doIt(surveyVersion):
 
 # Default "Main"
 if __name__ == '__main__':
-    doIt("6")
+    doIt("7")
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
