@@ -1,8 +1,9 @@
+import { lastValueFrom } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 
 export const logger = {
-  logEvent: (uid, workflowId, eventType, templateName, templateType, metadata) => {
-    ajax({
+  logEvent: async (uid, workflowId, eventType, templateName, templateType, metadata) => {
+    return lastValueFrom(ajax({
       url: 'https://k1sx4sgipa.execute-api.us-east-2.amazonaws.com/prod/logs',
       crossDomain: true,
       method: 'POST',
@@ -14,7 +15,7 @@ export const logger = {
         templateName,
         templateType,
       }
-    }).subscribe();
+    }));
   }
 };
 

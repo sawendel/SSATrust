@@ -48,7 +48,7 @@ const ModeWrapper = () => {
   }, []);
 
   const logEvent = (event, metadata) => {
-    logger.logEvent(query.get(QueryParams.UID), id, event, currentStep.template, currentStep.type, metadata);
+    return logger.logEvent(query.get(QueryParams.UID), id, event, currentStep.template, currentStep.type, metadata);
   };
 
   const stepElement = useMemo(() => {
@@ -105,7 +105,7 @@ const ModeWrapper = () => {
 
   const onNext = () => {
     if (!displayTooltips && !selected) {
-      logEvent(Events.PAGE_SKIPPED);
+      await logEvent(Events.PAGE_SKIPPED);
 
       if (isLastStep) {
         redirect();
@@ -115,7 +115,7 @@ const ModeWrapper = () => {
     }
 
     if (!isEducational || !displayTooltips) {
-      logEvent(selected === ModeResults.REAL ? Events.MARKED_REAL : Events.MARKED_SCAM)
+      await logEvent(selected === ModeResults.REAL ? Events.MARKED_REAL : Events.MARKED_SCAM)
     }
 
     if (isEducational && !displayTooltips) {
