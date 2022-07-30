@@ -382,7 +382,7 @@
         {
           "type": "email",
           "template": "ssa_replacementCardClean.html"
-        }
+        },
 		{
           "type": "letter",
           "template": "medicareReview.html"
@@ -390,9 +390,8 @@
         {
           "type": "letter",
           "template": "benefitsSuspension.html"
-        },
+        }
       ]
     }	
-
   ]
 }
