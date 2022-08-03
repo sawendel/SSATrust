@@ -21,6 +21,7 @@ const ModeWrapper = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [selected, setSelected] = useState();
+  const [clicked, setClicked] = useState(false);
   const [displayTooltips, setDisplayTooltips] = useState(false);
   const currentStep = workflowSteps[stepIndex];
   const isLastStep = stepIndex === workflowSteps?.length - 1;
@@ -104,15 +105,18 @@ const ModeWrapper = () => {
   };
 
   const onNext = () => {
+    setClicked(true);
     if (!displayTooltips && !selected) {
        logEvent(Events.PAGE_SKIPPED);
 
       if (isLastStep) {
         logEvent(Events.PAGE_SKIPPED).then((_) => {
+          setClicked(false);
           redirect();
           return;
         });
       }
+      setClicked(false);
       setStepIndex(stepIndex + 1);
       return;
     }
@@ -120,8 +124,10 @@ const ModeWrapper = () => {
     if (!isEducational || !displayTooltips) {
       if (!isLastStep) {
         logEvent(selected === ModeResults.REAL ? Events.MARKED_REAL : Events.MARKED_SCAM);
+        setClicked(false);
       } else {
         logEvent(selected === ModeResults.REAL ? Events.MARKED_REAL : Events.MARKED_SCAM).then((_) => {
+          setClicked(false);
           redirect();
           return;
         });
@@ -130,18 +136,19 @@ const ModeWrapper = () => {
 
     if (isEducational && !displayTooltips) {
       setDisplayTooltips(true);
+      setClicked(false);
       return;
     }
 
     if (!isLastStep) {
       setSelected(undefined);
+      setClicked(false);
       setStepIndex(stepIndex + 1);
       setDisplayTooltips(false);
       window.scrollTo(0, 0);
       return;
     }
 
-    redirect();
   };
 
   const getDisplayText = () => {
@@ -210,6 +217,7 @@ const ModeWrapper = () => {
               variant="secondary"
               className="px-xsl-5 px-lg-2 py-4 rounded-0 w-100"
               onClick={onNext}
+              disabled={clicked}
             >
               <span className="pe-2 pb-1">{getNextButtonText()}</span>
               <i className="et-caret-right" />
