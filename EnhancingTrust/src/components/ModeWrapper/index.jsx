@@ -105,17 +105,27 @@ const ModeWrapper = () => {
 
   const onNext = () => {
     if (!displayTooltips && !selected) {
-      await logEvent(Events.PAGE_SKIPPED);
+       logEvent(Events.PAGE_SKIPPED);
 
       if (isLastStep) {
-        redirect();
+        logEvent(Events.PAGE_SKIPPED).then((_) => {
+          redirect();
+          return;
+        });
       }
       setStepIndex(stepIndex + 1);
       return;
     }
 
     if (!isEducational || !displayTooltips) {
-      await logEvent(selected === ModeResults.REAL ? Events.MARKED_REAL : Events.MARKED_SCAM)
+      if (!isLastStep) {
+        logEvent(selected === ModeResults.REAL ? Events.MARKED_REAL : Events.MARKED_SCAM);
+      } else {
+        logEvent(selected === ModeResults.REAL ? Events.MARKED_REAL : Events.MARKED_SCAM).then((_) => {
+          redirect();
+          return;
+        });
+      }
     }
 
     if (isEducational && !displayTooltips) {
