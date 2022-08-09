@@ -14,11 +14,10 @@ https://uwmadison.co1.qualtrics.com/jfe/form/SV_e5nAU1KLYRCdEDY?PROLIFIC_PID=Ste
 https://uwmadison.co1.qualtrics.com/jfe/form/SV_e5nAU1KLYRCdEDY?BID={RandomId}
 https://uwmadison.co1.qualtrics.com/jfe/form/SV_e5nAU1KLYRCdEDY?BID=BSteve1
 
-TEST OF WALMART SWITCH: https://uwmadison.co1.qualtrics.com/jfe/form/SV_d6I7kDeEGuSGsom
+VERSION WITH ONLY CONTROL AND TEST OF WALMART SWITCH: https://uwmadison.co1.qualtrics.com/jfe/form/SV_d6I7kDeEGuSGsom
 
 Which, in the training path, goes to:
 https://www.trustresearchstudy.com/Workflow/Training?uid=${q://QID42/ChoiceTextEntryValue}&redirectUrl=https://uwmadison.co1.qualtrics.com/jfe/form/SV_8exElRrgQBxouZU?PID=${q://QID42/ChoiceTextEntryValue}
-
 
 
 Which then goes to "After Training"

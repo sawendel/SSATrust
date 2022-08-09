@@ -64,7 +64,7 @@ http://localhost:3000/workflow/TestNow?title=ATest&uid=steve1&redirectUrl=https:
 https://enhancing-trust.web.app/?title=test&redirectUrl=https://www.google.com/
 
 ## Step 6: Pull the data
-
+# Note - the time zone for Mongo is GMT. So, you'll want to include the 'future' for pulls involving data gathered at night in the US.
 https://k1sx4sgipa.execute-api.us-east-2.amazonaws.com/prod/logs?startDate=06-01-2022&endDate=07-08-2022
 https://k1sx4sgipa.execute-api.us-east-2.amazonaws.com/prod/logs?startDate=07-24-2022&endDate=07-25-2022
 

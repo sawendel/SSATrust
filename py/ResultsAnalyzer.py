@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from statsmodels.formula.api import ols
 from swstats import *
 from scipy.stats import ttest_ind
@@ -159,26 +160,40 @@ def analyzeExperiment_BinaryVar(dta, varName):
 
     return results
 
-def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  primaryOnly=True):
+# #####################
+# Rename key variables to align directly with Study Design
+# #####################
+def renameForAnalysis(dta):
+    dta.rename(columns={# 'GovtConfScore':'PreTrust_Govt',
+    'TrustInSSAScore': 'PreTrust_SSA',
+    'TrustInInternetScore': 'PreTrust_Internet',
+                        }, inplace=True)
+    return dta
 
-    if primaryOnly:
-        dta = dta[dta.IsPrimaryWave].copy()
 
-    ''' Analyze the answers'''
-    writer = pd.ExcelWriter(dataDir + 'RESULTS_' + outputFileName + '.xlsx', engine='xlsxwriter')
-
+def analyzeSummaryStats(dta, writer, scoringVars, primaryOnly):
     # ###############
     # Export summary stats
     # ###############
 
     # demographicVars = ['trustScore', 'TotalIncome', 'incomeAmount', 'Race', 'race5', 'employment3', 'educYears', 'Married', 'marriedI', 'Age', 'ageYears', 'Gender', 'genderI']
-    demographicVars = ['TotalIncome', 'incomeAmount', 'Race', 'race5', 'employment3', 'educYears','ageYears', 'Gender', 'genderI']
-    allSummaryVars = ["percentCorrect", "surveyArm", "Wave"] + scoringVars + demographicVars # , "daysFromTrainingToTest"
+    demographicVars_Numeric = ['incomeAmount', 'educYears','ageYears', 'genderI']
+    vars_Categorical = ['TotalIncome', 'race5', 'employment3', 'Gender', "surveyArm", "Wave",
+                        'fraudExperience_SSA','fraudExperience_Govt','fraudExperience_Biz',
+                        'fraudExperience_YN', 'fraudLoss_YN', 'report_loss', 'CyberTraining']
+    allSummaryVars = ["percentCorrect"] + scoringVars + demographicVars_Numeric + vars_Categorical # , "daysFromTrainingToTest"
 
-    summaryStats = dta[allSummaryVars].describe()
+    summaryStats = dta[allSummaryVars].describe(include = 'all')
 
     summaryStats.to_excel(writer, sheet_name="summary_FullPop", startrow=0, header=True, index=True)
 
+    stuff = None
+    for col in vars_Categorical:
+        if stuff is None:
+            stuff = pd.DataFrame(dta[col].value_counts(dropna=False, normalize=True)).reset_index(drop=False)
+        else:
+            stuff = stuff.append(pd.DataFrame(dta[col].value_counts(dropna=False, normalize=True)).reset_index(drop=False))
+    stuff.to_excel(writer, sheet_name="summary_Cats", startrow=0, header=True, index=True)
 
     grouped = dta[allSummaryVars].groupby(["surveyArm"])
     summaryStats = grouped.describe().unstack().transpose().reset_index()
@@ -197,24 +212,273 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  pri
 
     # summaryStats.to_csv(dataDir + "RESULTS_" + outputFileName + '.csv')
 
+def analyzePriorTrust(dta, writer):
+
+    # Predictive Analysis: Does prior fraud decrease trust?
+    # PreTrustImpostorType ~ β1FraudExperienceImpostorType + β2FraudLossImpostorType + φ Demographics
+    resultTables = ols('PreTrust_SSA ~ fraudExperience_SSA + fraudLoss_YN + fraudLoss_Amount + lIncomeAmount + C(employment3) + educYears +  ageYears + ageYearsSq + genderI +  duration_p2_Quantile', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="p1_ssa_priorfraud", startrow=1, header=False, index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="p1_ssa_priorfraud", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+
+    resultTables = ols('PreTrust_Internet ~ fraudExperience_Biz + fraudLoss_YN + fraudLoss_Amount + lIncomeAmount + C(employment3) + educYears +  ageYears + ageYearsSq + genderI +  duration_p2_Quantile', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="p1_intrnt_priorfraud", startrow=1, header=False, index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="p1_intrnt_priorfraud", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+
+    resultTables = ols('GovtConfScore ~ fraudExperience_Govt + fraudLoss_YN + fraudLoss_Amount + lIncomeAmount + C(employment3) + educYears +  ageYears + ageYearsSq + genderI +  duration_p2_Quantile', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="p1_govconf_priorfraud", startrow=1, header=False, index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="p1_govconf_priorfraud", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+
+    # Predictive Analysis: What predicts trust?  (I.e., What are the characteristics of people predisposed to (dis)trust)?
+    # PreTrustImpostorType ~ β1FraudExperienceImpostorType + β2FraudLossImpostorType + φ Demographics  + GeneralizedTrust + δ OtherPotentialTrustPredictors
+
+    resultTables = ols('PreTrust_SSA ~ GovtConfScore + OnlineShoppingScore + LonelyScore + fraudExperience_SSA + fraudExperience_Govt + '
+                       'fraudLoss_YN + fraudLoss_Amount + lIncomeAmount + C(employment3) + '
+                       'educYears +  ageYears + ageYearsSq + genderI +  '
+                       'duration_p2_Quantile', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="p2_personalchar", startrow=1, header=False, index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="p2_personalchar", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+
+    # Predictions: Low self-control is associated with greater trust in the internet; greater online shopping is associated with greater trust in the internet; more confidence in the future of the US is associated with greater trust in SSA; feeling angry or frustrated with the US government is associated with less trust in SSA.
+
+def getGraphDataByArm(dta, varName, varName_SimpleLabel):
+
+    z_95 = 1.960
+
+    order_value_control_group = dta.loc[dta.surveyArm == "arm1_control", varName]
+    order_value_arm2_group = dta.loc[dta.surveyArm == "arm2_generalinfo", varName]
+    order_value_arm3_group = dta.loc[dta.surveyArm == "arm3_tips", varName]
+    order_value_arm4_group = dta.loc[dta.surveyArm == "arm4_interactive", varName]
+
+    # Arm 1
+    arm1mean = np.mean(order_value_control_group)
+    arm1sd = np.std(order_value_control_group)
+    arm1se = z_95 * arm1sd / (np.sqrt(len(order_value_control_group)))
+
+    # Effect of Arm 2
+    arm2mean = np.mean(order_value_arm2_group)
+    arm2sd = np.std(order_value_arm2_group)
+    arm2se = z_95 * arm2sd / (np.sqrt(len(order_value_arm2_group)))
+
+    # Effect of Arm 3
+    arm3mean = np.mean(order_value_arm3_group)
+    arm3sd = np.std(order_value_arm3_group)
+    arm3se = z_95 * arm3sd / (np.sqrt(len(order_value_arm3_group)))
+
+    # Effect of Arm 4
+    arm4mean = np.mean(order_value_arm4_group)
+    arm4sd = np.std(order_value_arm4_group)
+    arm4se = z_95 * arm4sd / (np.sqrt(len(order_value_arm4_group)))
+
+    arms = ['1: Control', '2: General Info', '3: Tips', '4: Interactive']
+    x_pos = np.arange(len(arms))
+    theMeans = [arm1mean, arm2mean, arm3mean, arm4mean]
+    theErrors = [arm1se, arm2se, arm3se, arm4se]
+
+    results = pd.DataFrame({'Arm':arms, 'x_pos': x_pos, 'theMeans':theMeans, 'theErrors': theErrors, 'theVar': varName_SimpleLabel})
+    return results
+
+def graphMeanByArm(dta, varName, varName_SimpleLabel, yAxisLabel, plotTitle):
+
+    results = getGraphDataByArm(dta, varName, varName_SimpleLabel)
+
+    fig, ax = plt.subplots()
+    ax.bar(results.x_pos, results.theMeans, yerr=results.theErrors, align='center', alpha=0.5, ecolor='black', capsize=10)
+    ax.set_ylabel(yAxisLabel)
+    ax.set_xticks(results.x_pos)
+    ax.set_xticklabels(results.theArms)
+    ax.set_title(plotTitle)
+    ax.yaxis.grid(True)
+
+    # Save the figure and show
+    plt.tight_layout()
+    plt.savefig('bar_plot_with_error_bars.png')
+
+def graphRCTImpact_IndividualBars(dta, dataDir, outputFileName):
+    graphMeanByArm(dta, "percentCorrect_Real", "Percent Correct", "Real Messages: % Correct") # Appropriate Trust
+    graphMeanByArm(dta, "percentCorrect_Scam", "Percent Correct", "Scam Messages: % Correct") # Scam ID
+    graphMeanByArm(dta, "percentCorrect", "Percent Correct", "All Messages: % Correct")
+    graphMeanByArm(dta, "percentCorrect_Email", "Percent Correct", "Emails: % Correct")
+    graphMeanByArm(dta, "percentCorrect_Web", "Percent Correct", "Websites: % Correct")
+    graphMeanByArm(dta, "percentCorrect_Letter", "Percent Correct", "Letters: % Correct")
+    graphMeanByArm(dta, "percentCorrect_Govt", "Percent Correct", "Government Messages: % Correct")
+    graphMeanByArm(dta, "percentCorrect_Biz", "Percent Correct", "Business Messages: % Correct")
+
+def graphRCTImpact_GroupedBar(dta, dataDir, outputFileName):
+    row1 = getGraphDataByArm(dta, "percentCorrect", "All")
+    row2 = getGraphDataByArm(dta, "percentCorrect_Real", "Real") # Appropriate Trust
+    row3 = getGraphDataByArm(dta, "percentCorrect_Scam", "Scam") # Scam ID
+
+    allData = pd.concat([row1, row2, row3])
+    posPivot= allData.pivot(index='theVar', columns='Arm', values='x_pos')
+    meansPivot= allData.pivot(index='theVar', columns='Arm', values='theMeans')
+    errorsPivot = allData.pivot(index='theVar', columns='Arm', values='theErrors')
+    thePlot = meansPivot.plot(kind='bar', yerr=errorsPivot, rot=0,
+                    title = "Percent Correct By Arm",
+                    grid = True,
+                    xlabel = "",
+                    ylabel = "Percent Correct",
+                    alpha=0.5, ecolor='black', capsize=5)
+    plt.savefig(dataDir + outputFileName + 'all_scam_real.png')
+
+
+    row4 = getGraphDataByArm(dta, "percentCorrect_Email", "Emails")
+    row5 = getGraphDataByArm(dta, "percentCorrect_Web", "Websites")
+    row6 = getGraphDataByArm(dta, "percentCorrect_Letter", "Letters")
+
+    allData = pd.concat([row1, row4, row5, row6])
+    posPivot= allData.pivot(index='theVar', columns='Arm', values='x_pos')
+    meansPivot= allData.pivot(index='theVar', columns='Arm', values='theMeans')
+    errorsPivot = allData.pivot(index='theVar', columns='Arm', values='theErrors')
+    thePlot = meansPivot.plot(kind='bar', yerr=errorsPivot, rot=0,
+                    title = "Percent Correct By Arm",
+                    grid = True,
+                    xlabel = "",
+                    ylabel = "Percent Correct",
+                    alpha=0.5, ecolor='black', capsize=10)
+    plt.savefig(dataDir + outputFileName + 'all_email_web_letter.png')
+
+    row7 = getGraphDataByArm(dta, "percentCorrect_Govt", "Government")
+    row8 = getGraphDataByArm(dta, "percentCorrect_Biz", "Business")
+
+    allData = pd.concat([row1, row7, row8])
+    posPivot= allData.pivot(index='theVar', columns='Arm', values='x_pos')
+    meansPivot= allData.pivot(index='theVar', columns='Arm', values='theMeans')
+    errorsPivot = allData.pivot(index='theVar', columns='Arm', values='theErrors')
+    thePlot = meansPivot.plot(kind='bar', yerr=errorsPivot, rot=0,
+                    title = "Percent Correct By Arm",
+                    grid = True,
+                    xlabel = "",
+                    ylabel = "Percent Correct",
+                    alpha=0.5, ecolor='black', capsize=10)
+    plt.savefig(dataDir + outputFileName + 'all_biz_govt.png')
+
+    # fig, ax = plt.subplots()
+    # ax.bar(posPivot, meansPivot, yerr=errorsPivot, align='center', alpha=0.5, ecolor='black', capsize=10)
+    # ax.set_ylabel("Percent Correct")
+    # ax.set_xticks(posPivot)
+    # ax.set_xticklabels(results.theArms)
+    # ax.set_title()
+    # ax.yaxis.grid(True)
+
+    plt.tight_layout()
+    plt.savefig('bar_plot_with_error_bars.png')
+
+    # https://stackoverflow.com/questions/23000418/adding-error-bars-to-grouped-bar-plot-in-pandas
+
+def analyzeRCTImpact(dta, writer):
+
+
     # ###############
     # RQ1: What is the effect?
+    # Experimental Analysis: Does the interactive training help people trust government | online business
+    # CorrectTrustImpostorType ~  Arm
     # ###############
-    row1 = analyzeExperiment_ContinuousVar(dta, "numCorrect")
-    row2 = analyzeExperiment_ContinuousVar(dta, "numFakeLabeledReal")
-    row3 = analyzeExperiment_ContinuousVar(dta, "numRealLabeledFake")
-    row4 = analyzeExperiment_ContinuousVar(dta, "percentCorrect")
-    pd.DataFrame([row1, row2, row3, row4]).to_excel(writer, sheet_name="r1", startrow=1, header=True, index=True)
+    row1 = analyzeExperiment_ContinuousVar(dta, "percentCorrect_Real") # Appropriate Trust
+    row2 = analyzeExperiment_ContinuousVar(dta, "percentCorrect_Scam") # Scam ID
+    row3 = analyzeExperiment_ContinuousVar(dta, "percentCorrect")
+    row4 = analyzeExperiment_ContinuousVar(dta, "percentCorrect_Email")
+    row5 = analyzeExperiment_ContinuousVar(dta, "percentCorrect_Web")
+    row6 = analyzeExperiment_ContinuousVar(dta, "percentCorrect_Letter")
+    row7 = analyzeExperiment_ContinuousVar(dta, "percentCorrect_Govt")
+    row8 = analyzeExperiment_ContinuousVar(dta, "percentCorrect_Biz")
+
+    pd.DataFrame([row1, row2, row3, row4, row5, row6, row7, row8]).to_excel(writer, sheet_name="r1", startrow=1, header=True, index=True)
 
     ##############
     # RQ1* Robustness check on result: is the experiment randomized correctly?
+    # CorrectTrustImpostorType ~  Arm + PreTrustImpostorType + FraudExperienceImpostorType + FraudLossImpostorType + Demographics  + GeneralizedTrust + OtherPotentialTrustPredictors
+
     ##############
     # NumCorrect Regression
-    resultTables = ols('numCorrect ~ C(surveyArm) + daysFromTrainingToTest + GovtConfScore + TrustInSSAScore + TrustInInternetScore + OnlineShoppingScore + LonelyScore + lIncomeAmount + '
-                     'C(employment3) + educYears +  ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
-    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r1_reg", startrow=1, header=False, index=False)
-    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r1_reg", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+    # todo -- THIS IS UNLIKELY WHAT WE WANT; THERE MAY BE INTERACTION EFFECTS WE'RE PICKING UP
+    resultTables = ols('percentCorrect ~ C(surveyArm) + PreTrust_SSA + PreTrust_Internet + OnlineShoppingScore + fraudExperience_YN + fraudLoss_YN + lIncomeAmount + C(employment3) + educYears +  ageYears + ageYearsSq + genderI +  duration_p2_Quantile', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r1_reg_correct", startrow=1, header=False, index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r1_reg_correct", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
+
+    # Experimental Analysis: What are the characteristics of people who respond to the training?
+    # CorrectTrustImpostorType ~  Arm * TreatmentResponsivenessDrivers + Arm  + TreatmentResponsivenessDrivers
+
+    resultTables = ols('percentCorrect ~  C(surveyArm) * ageYears', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r2_interact_age", startrow=1, header=False, index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r2_interact_age", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+
+    resultTables = ols('percentCorrect ~  C(surveyArm) * OnlineShoppingScore', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r2_interact_online", startrow=1, header=False, index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r2_interact_online", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+
+    resultTables = ols('percentCorrect ~  C(surveyArm) * fraudExperience_YN', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r2_interact_fraudexperience", startrow=1, header=False, index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r2_interact_fraudexperience", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+
+    resultTables = ols('percentCorrect ~  C(surveyArm) * fraudExperience_SSA', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r2_interact_fraudSSA", startrow=1, header=False, index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r2_interact_fraudSSA", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+
+    resultTables = ols('percentCorrect ~  C(surveyArm) * fraudLoss_YN', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r2_interact_fraudLoss", startrow=1, header=False, index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r2_interact_fraudLoss", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+
+    # Experimental Analysis: Does the interactive trust training increase distrust?
+    # IncorrectTrustImpostorType ~  Arm + PreTrustImpostorType + FraudExperienceImpostorType + FraudLossImpostorType + Demographics  + GeneralizedTrust + OtherPotentialTrustPredictors
+
+    # Note -- IncorrectTrustImpostorType == 1 -percentCorrect_Scam
+    # BUT distrust - 1-percentCorrect_Real
+
+    resultTables = ols('percentCorrect_Real ~ C(surveyArm) + PreTrust_SSA + PreTrust_Internet + OnlineShoppingScore + fraudExperience_YN + fraudLoss_YN + lIncomeAmount + C(employment3) + educYears +  ageYears + ageYearsSq + genderI +  duration_p2_Quantile', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r3_reg_realasreal", startrow=1, header=False, index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r3_reg_realasreal", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+
+    resultTables = ols('percentCorrect_Scam ~ C(surveyArm) + PreTrust_SSA + PreTrust_Internet + OnlineShoppingScore + fraudExperience_YN + fraudLoss_YN + lIncomeAmount + C(employment3) + educYears +  ageYears + ageYearsSq + genderI +  duration_p2_Quantile', data=dta).fit().summary().tables
+    pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="r3_reg_scamasscam", startrow=1, header=False, index=False)
+    pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="r3_reg_scamasscam", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+
+
+def analyzeCorrelations(dta, writer):
+    # ##############
+    # Correlations
+    ################
+
+    indepVars = ['surveyArm', 'daysFromTrainingToTest', 'Wave', 'GovtConfScore', 'PreTrust_SSA', 'PreTrust_Internet', 'OnlineShoppingScore', 'LonelyScore',
+                 'incomeAmount', 'race5', 'employment3', 'educYears', 'ageYears','genderI',
+                 'fraudExperience_YN', 'fraudLoss_YN', 'duration_p1', 'duration_p1_Quantile', 'duration_p2', 'duration_p2_Quantile', 'Employment']
+
+    depVars = ['numCorrect', 'numFakeLabeledReal', 'numRealLabeledFake']
+
+    dta.Wave = dta.Wave.astype('float64')
+    # Look at  Correlations among variables
+    allVarsToCorr = depVars + indepVars
+    corrMatrix = dta[allVarsToCorr].corr()
+    pd.DataFrame(corrMatrix).to_excel(writer, sheet_name="corrMatrix", startrow=1, header=True, index=True)
+    # duration_p1 is a proxy for arm, so strange results there.
+    # we'd need a fine-tuned var. Let's use p2 instead.  Also, the Quantile shows a much stronger relationship than the raw values (likely since it is not linear in the depvars)
+    # Losing money and income and age show a moderate relationship
+
+
+
+def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  primaryOnly=True):
+
+    if primaryOnly:
+        dta = dta[dta.IsPrimaryWave].copy()
+
+    dta = renameForAnalysis(dta)
+
+    graphRCTImpact_GroupedBar(dta, dataDir, outputFileName)
+
+    ''' Analyze the answers'''
+    writer = pd.ExcelWriter(dataDir + 'RESULTS_' + outputFileName + '.xlsx', engine='xlsxwriter')
+
+    analyzeSummaryStats(dta, writer, scoringVars, primaryOnly)
+    analyzeCorrelations(dta, writer)
+
+    analyzePriorTrust(dta, writer)
+    analyzeRCTImpact(dta, writer)
+
+    # ###############
+    # RQ2: Communication Type
+    # ###############
+
+    """
     # ###############
     # RQ2: Communication Type
     # ###############
@@ -288,7 +552,7 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  pri
                        'C(employment3) + educYears + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="reg_numLabeledFake", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="reg_numLabeledFake", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
-
+    """
     # ###############
     # RQ6: Impostor Type
     # ###############
@@ -333,25 +597,7 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  pri
     pd.DataFrame(theRows).to_excel(writer, sheet_name="r8", startrow=1, header=True, index=True)
 
 
-    # ##############
-    # Correlations
-    ################
-
-    indepVars = ['surveyArm', 'daysFromTrainingToTest', 'Wave', 'GovtConfScore', 'TrustInSSAScore', 'TrustInInternetScore', 'OnlineShoppingScore', 'LonelyScore', 'incomeAmount', 'race5', 'employment3', 'educYears', 'ageYears','Gender',
-                 'previousFraudYN', 'lose_moneyYN', 'duration_p1', 'duration_p1_Quantile', 'duration_p2', 'duration_p2_Quantile', 'Employment']
-
-    depVars = ['numCorrect', 'numFakeLabeledReal', 'numRealLabeledFake']
-
-    dta.Wave = dta.Wave.astype('float64')
-    # Look at  Correlations among variables
-    allVarsToCorr = depVars + indepVars
-    corrMatrix = dta[allVarsToCorr].corr()
-    pd.DataFrame(corrMatrix).to_excel(writer, sheet_name="corrMatrix", startrow=1, header=True, index=True)
-    # duration_p1 is a proxy for arm, so strange results there.
-    # we'd need a fine-tuned var. Let's use p2 instead.  Also, the Quantile shows a much stronger relationship than the raw values (likely since it is not linear in the depvars)
-    # Losing money and income and age show a moderate relationship
-
-
+    """
     # ##############
     # Scatter Plots
     ################
@@ -359,7 +605,7 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  pri
     import seaborn as sns
     sns.set_theme(style="ticks")
 
-    toPlot = dta[['numCorrect', 'surveyArm', 'daysFromTrainingToTest', 'Wave', 'GovtConfScore', 'TrustInSSAScore', 'TrustInInternetScore', 'OnlineShoppingScore', 'LonelyScore', 'lose_moneyYN', 'duration_p2_Quantile']]
+    toPlot = dta[['numCorrect', 'surveyArm', 'daysFromTrainingToTest', 'Wave', 'GovtConfScore', 'PreTrust_SSA', 'PreTrust_Internet', 'OnlineShoppingScore', 'LonelyScore', 'fraudExperience_YN', 'fraudLoss_YN', 'duration_p2_Quantile']]
     sns.pairplot(toPlot, hue="surveyArm")
 
     # ##############
@@ -417,8 +663,10 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  pri
                                            index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="numLabeledFake_ByArm",
                                            startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
+       
+    """
 
-    if (surveyVersion in ['2', '3']):
+    if (surveyVersion in ['2', '3', '10']):
         resultTables = ols('NumWithHeadersOpened ~ C(surveyArm)', data=dta).fit().summary().tables
         pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="NumHeadersOpened_ByArm", startrow=1, header=False, index=False)
         pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="NumHeadersOpened_ByArm", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
@@ -427,7 +675,7 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  pri
         pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="NumWithLinksClicked_ByArm", startrow=1, header=False, index=False)
         pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="NumWithLinksClicked_ByArm", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
 
-
+    """
     resultTables = ols('numFakeLabeledFake ~ C(surveyArm)', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="numFakeLabeledFake_ByArm", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="numFakeLabeledFake_ByArm", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
@@ -435,11 +683,12 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  pri
     resultTables = ols('numRealLabeledReal ~ C(surveyArm)', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="numRealLabeledReal_ByArm", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="numRealLabeledReal_ByArm", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
-
+    """
 
     ## ###########
     # Is there an effect of wave: Additional Exporation
     ##############
+    """
     # NumCorrect Regression
     resultTables = ols('numCorrect ~ C(surveyArm)*Wave + daysFromTrainingToTest + GovtConfScore + TrustInSSAScore + TrustInInternetScore + OnlineShoppingScore + LonelyScore + lIncomeAmount + '
                      'C(employment3) + educYears +  ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
@@ -450,7 +699,7 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  pri
                      'C(employment3) + educYears + ageYears + ageYearsSq + genderI + lose_moneyYN + duration_p2_Quantile ', data=dta).fit().summary().tables
     pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="reg_CorrectWithWave", startrow=1, header=False, index=False)
     pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="reg_CorrectWithWave", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
-
+    """
     # ##############
     # Save the processed data
     # ##############
@@ -459,7 +708,9 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  pri
     writer.save()
     # workbook.close()
 
-    if (debugging):
+    """
+        if (debugging):
+        
         grouped.agg(["count"])
         grouped.percentCorrect.mean()
         grouped.numCorrect.mean()
@@ -476,3 +727,4 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  pri
         grouped['Correct_sms_disability'].value_counts(dropna=False, normalize=True)
         grouped['Correct_lt_suspension'].value_counts(dropna=False, normalize=True)
         grouped['Correct_sms_redcross'].value_counts(dropna=False, normalize=True)
+    """

@@ -19,6 +19,8 @@ def doIt(surveyVersion):
 
     dta = processDemographics(dta)
 
+    dta = processFraud(dta)
+
     dta = processTrust(dta)
 
     dta = markCorrectAnswers(dta, surveyVersion)
@@ -30,7 +32,10 @@ def doIt(surveyVersion):
                    'numFakeLabeledReal', 'numRealLabeledFake',
                     'numRealLabeledReal', 'numFakeLabeledFake', 'numLabeledReal', 'numLabeledFake', 'numNoAnswer']
 
-    if (surveyVersion in ['2', '3', '4', '5', '6', '7']):
+    if (surveyVersion in ['8','9', '10']):
+        scoringVars = scoringVars + ['numLettersCorrect']
+
+    if (surveyVersion in ['2', '3', '4', '5', '6', '7', '8','9', '10']):
         scoringVars = scoringVars + ['NumWithHeadersOpened','NumWithLinksClicked']
 
     analyzeResults(dta, outputFileName = surveyVersion, scoringVars = scoringVars, surveyVersion = surveyVersion, dataDir = dataDir,
@@ -40,6 +45,4 @@ def doIt(surveyVersion):
 
 # Default "Main"
 if __name__ == '__main__':
-    doIt("8")
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    doIt("10")

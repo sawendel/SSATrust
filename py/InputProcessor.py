@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 import random
-
+from re import sub
+from collections import OrderedDict
 
 debugging = False
 
@@ -34,16 +35,17 @@ def getTrainingQuestions(surveyVersion):
                              'email_mcafee': ('Real','Email', 'Biz', 'mcafee.html'),
                              'GetProtected': ('Scam','Email', 'Govt', 'getProtected.html'),
                         }
-    elif surveyVersion in ('5', '6', '7', '8'):
-        trainingQuestions = {'ProtectYourself': ('Real', 'Email', 'Govt', 'protectYourself.html'),
-                             'AmazonHP': ('Real', 'Web', 'Biz', 'amazonHP.html'),
-                             'email_IRS': ('Scam', 'Email', 'Govt', 'irs.html'),
-                             'web_IRS': ('Real', 'Web', 'Govt', 'IRS_YourAccount.html'),
-                             'apple': ('Real', 'Web', 'Biz', 'appleID.html'),
-                             'amazon_Product': ('Scam', 'Web', 'Biz', 'amazonProductPage.html'),
-                             'email_mcafee': ('Real','Email', 'Biz', 'mcafee.html'),
-                             'GetProtected': ('Scam','Email', 'Govt', 'getProtected.html'),
-                        }
+    elif surveyVersion in ('5', '6', '7', '8', '9', '10'):
+        trainingQuestions = OrderedDict([
+            ('ProtectYourself', ('Real', 'Email', 'Govt', 'protectYourself.html')),
+                             ('AmazonHP', ('Real', 'Web', 'Biz', 'amazonHP.html')),
+                             ('email_IRS',('Scam', 'Email', 'Govt', 'irs.html')),
+                             ('web_IRS', ('Real', 'Web', 'Govt', 'IRS_YourAccount.html')),
+                             ('apple', ('Real', 'Web', 'Biz', 'appleID.html')),
+                             ('amazon_Product', ('Scam', 'Web', 'Biz', 'amazonProductPage.html')),
+                             ('email_mcafee', ('Real','Email', 'Biz', 'mcafee.html')),
+                             ('GetProtected', ('Scam','Email', 'Govt', 'getProtected.html')),
+                        ])
 
     return trainingQuestions
 
@@ -81,8 +83,8 @@ def getTestQuestions(surveyVersion):
                             'FB_SSA': ('Scam', 'Web', 'Biz', 'ssaFb.html'),
                             'ssa_optout': ('Scam', 'Email', 'Govt', 'ssa_optOut.html'),
                             'replacementCard': ('Real', 'Email', 'Govt', 'ssa_replacementCard.html'),
-                            'benefitsSuspension': ('Scam', 'Letter', 'Govt', 'benefitsSuspension.html'),
                             'medicareReview': ('Real', 'Letter', 'Govt', 'medicareReview.html'),
+                            'benefitsSuspension': ('Scam', 'Letter', 'Govt', 'benefitsSuspension.html'),
         }
     elif surveyVersion in ('7'):
         testQuestions = {
@@ -110,6 +112,19 @@ def getTestQuestions(surveyVersion):
             'benefitsSuspension': ('Scam', 'Letter', 'Govt', 'benefitsSuspension.html'),
             'replacementCard': ('Real', 'Email', 'Govt', 'ssa_replacementCardClean.html'),
         }
+    elif surveyVersion in ('9', '10'): # TestV9
+        testQuestions = OrderedDict([
+            ('WalmartProduct', ('Real', 'Web', 'Biz', 'walmart.html')),
+            ('RedCross', ('Scam', 'Email', 'Biz', 'redcross_covidRelief.html')),
+            ('SSA_HP', ('Real', 'Web', 'Govt', 'ssa.html')),
+            ('mySSA', ('Scam', 'Web', 'Govt', 'mySocialSecurity.html')),
+            ('AmazonDeliveryDelay', ('Real', 'Email', 'Biz', 'amazon_maskDelivery.html')),
+            ('FB_SSA', ('Scam', 'Web', 'Biz', 'ssaFbClear.html')),
+            ('ssa_optout', ('Scam', 'Email', 'Govt', 'ssa_optOut.html')),
+            ('replacementCard', ('Real', 'Email', 'Govt', 'ssa_replacementCardClean.html')),
+            ('medicareReview', ('Real', 'Letter', 'Govt', 'medicareReview.html')),
+            ('benefitsSuspension', ('Scam', 'Letter', 'Govt', 'benefitsSuspension.html')),
+        ])
     return testQuestions
 
 
@@ -150,6 +165,16 @@ def readData(surveyVersion, dataDir):
               "v8_WalmartEarly_ReplacementEnd/SSA_Y4_v2_FullApp_AfterTraining_July 27, 2022_09.05.csv",
               "v8_WalmartEarly_ReplacementEnd/SSA_Y4_v2_FullApp_FinalSection_July 27, 2022_09.06.csv",
               "v8_WalmartEarly_ReplacementEnd/logs_1658934472618.csv",
+              "V3/SSA Lists_First20_NoPII.csv"),
+        '9': ("v9/SSA_Y4_v2_FullApp_Entry_BBBOrProlific_July 29, 2022_21.03.csv",
+              "v9/SSA_Y4_v2_FullApp_AfterTraining_July 29, 2022_21.04.csv",
+              "v9/SSA_Y4_v2_FullApp_FinalSection_July 29, 2022_21.03.csv",
+              "v9/logs_1659150273222.csv",
+              "V3/SSA Lists_First20_NoPII.csv"),
+        '10': ("v10/SSA_Y4_v2_FullApp_Entry_BBBOrProlific_August 1, 2022_14.24.csv",
+              "v10/SSA_Y4_v2_FullApp_AfterTraining_August 1, 2022_14.25.csv",
+              "v10/SSA_Y4_v2_FullApp_FinalSection_August 1, 2022_15.04.csv",
+              "v10/logs_1659387915154.csv",
               "V3/SSA Lists_First20_NoPII.csv")
 
     }
@@ -163,7 +188,7 @@ def readData(surveyVersion, dataDir):
     if surveyVersion == '1':
         dataFileName = surveyOutputFilesByVersion[surveyVersion][1]
         dta = pd.read_csv(dataDir + dataFileName)
-    if surveyVersion in ('2', '3', '4', '5', '6', '7', '8'):
+    if surveyVersion in ('2', '3', '4', '5', '6', '7', '8', '9', '10'):
         p1File = surveyOutputFilesByVersion[surveyVersion][0]
         dta_p1_BeforeTraining = pd.read_csv(dataDir + p1File)
 
@@ -263,18 +288,15 @@ def cleanData(dta, priorPids, surveyVersion, dataDir):
     # Do core data cleaning / filtering
     # ###############
 
-    dta.rename(columns={'Previous Fraud':'previousFraud',
-                        'Duration (in seconds)':'duration_p1',
+    dta.rename(columns={'Duration (in seconds)':'duration_p1',
                         'Duration (in seconds)_p2':'duration_p2',
                         'Duration (in seconds)_p3':'duration_p3'}, inplace=True)
 
-    dta['previousFraudYN'] = ~dta.previousFraud.isna()
-    dta['lose_moneyYN'] = dta.lose_money == "Yes"
     dta['duration_p1_Quantile'] = pd.qcut(dta.duration_p1, q=5, labels=False)
     dta['duration_p2_Quantile'] = pd.qcut(dta.duration_p2, q=5, labels=False)
     dta['duration_p3_Quantile'] = pd.qcut(dta.duration_p3, q=5, labels=False)
 
-    if surveyVersion in ('2', '3', '4', '5', '6', '7', '8'):
+    if surveyVersion in ('2', '3', '4', '5', '6', '7', '8', '9', '10'):
         dta['daysFromTrainingToTest'] = (dta['StartDate_p3'].astype('datetime64') - dta['StartDate'].astype('datetime64')).dt.days
 
     # dta['duration_p2_Quantile'] = pd.qcut(dta.duration_p2, q=5, labels=False)
@@ -286,7 +308,7 @@ def cleanData(dta, priorPids, surveyVersion, dataDir):
 
     if surveyVersion == '2':
         dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent == 'No'), 'cleanStatus'] = 'No to Consent: First Survey'
-    elif surveyVersion in ('3', '4', '5', '6', '7', '8'):
+    elif surveyVersion in ('3', '4', '5', '6', '7', '8', '9', '10'):
         dta.loc[(dta['cleanStatus'] == "Keep") & ((dta.Consent_Prolific == 'No') | (dta.Consent_BBB == 'No')), 'cleanStatus'] = 'No to Consent: First Survey'
 
     if surveyVersion in ('2', '3', '4', '5', '6', '7', '8'):
@@ -294,13 +316,35 @@ def cleanData(dta, priorPids, surveyVersion, dataDir):
         # No such - only with time delay.  dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent_p3=='No'), 'cleanStatus'] = 'No to Consent: Third Survey'
 
         dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Progress <= 90), 'cleanStatus'] = 'Incomplete: First Survey'
-        dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Progress_p2 <= 90), 'cleanStatus'] = 'Incomplete: Second Survey'
-        dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Progress_p3 <= 90), 'cleanStatus'] = 'Incomplete: Third Survey'
+        dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Progress_p2 <= 85), 'cleanStatus'] = 'Incomplete: Second Survey'
+        # SW Change 31 July -- this is dropping people who never experienced scams.
+        # dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Progress_p3 <= 90), 'cleanStatus'] = 'Incomplete: Third Survey'
+        dta.loc[(dta['cleanStatus'] == "Keep") & (dta.KeepResponse.isna()) & (dta.CyberTraining.isna()), 'cleanStatus'] = 'Incomplete: Third Survey'
 
-        dta.loc[(dta['cleanStatus'] == "Keep") & (dta['duration_p1'] < 60*2), 'cleanStatus'] = 'Too Fast'
+        # SW Change on 31 July: This is disproportionately removing People in the Control (it has shorter text); safter no make less extreme
+        # dta.loc[(dta['cleanStatus'] == "Keep") & (dta['duration_p1'] < 60*2), 'cleanStatus'] = 'Too Fast'
+        dta.loc[(dta['cleanStatus'] == "Keep") & (dta['duration_p1'] < 60*1), 'cleanStatus'] = 'Too Fast'
         dta.loc[(dta['cleanStatus'] == "Keep") & (dta.ExistInPart2 == False), 'cleanStatus'] = 'No Second Survey'
         dta.loc[(dta['cleanStatus'] == "Keep") & (dta.ExistInMongo_Test == False), 'cleanStatus'] = 'No Test Results'
-        dta.loc[(dta['cleanStatus'] == "Keep") & (dta.MongoTest_Complete == False), 'cleanStatus'] = 'Test Results are Incomplete'
+        # dta.loc[(dta['cleanStatus'] == "Keep") & (dta.MongoTest_Complete == False), 'cleanStatus'] = 'Test Results are Incomplete'
+        dta.loc[(dta['cleanStatus'] == "Keep") & (dta.ExistInPart3 == False), 'cleanStatus'] = 'No Third Survey'
+
+    if surveyVersion in ('9', '10'):
+        # No such - only with time delay. dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent_p2=='No'), 'cleanStatus'] = 'No to Consent: Second Survey'
+        # No such - only with time delay.  dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent_p3=='No'), 'cleanStatus'] = 'No to Consent: Third Survey'
+
+        dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Progress <= 90), 'cleanStatus'] = 'Incomplete: First Survey'
+        dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Progress_p2 <= 85), 'cleanStatus'] = 'Incomplete: Second Survey'
+        # SW Change 31 July -- this is dropping people who never experienced scams.
+        # dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Progress_p3 <= 90), 'cleanStatus'] = 'Incomplete: Third Survey'
+        dta.loc[(dta['cleanStatus'] == "Keep") & (dta.KeepResponse.isna()) & (dta.CyberTraining.isna()), 'cleanStatus'] = 'Incomplete: Third Survey'
+
+        # SW Change on 31 July: This is disproportionately removing People in the Control (it has shorter text); safter no make less extreme
+        # dta.loc[(dta['cleanStatus'] == "Keep") & (dta['duration_p1'] < 60*2), 'cleanStatus'] = 'Too Fast'
+        dta.loc[(dta['cleanStatus'] == "Keep") & (dta['duration_p1'] < 60*1), 'cleanStatus'] = 'Too Fast'
+        dta.loc[(dta['cleanStatus'] == "Keep") & (dta.ExistInPart2 == False), 'cleanStatus'] = 'No Second Survey'
+        dta.loc[(dta['cleanStatus'] == "Keep") & (dta.ExistInMongo_Test == False), 'cleanStatus'] = 'No Test Results'
+        # dta.loc[(dta['cleanStatus'] == "Keep") & (dta.MongoTest_Complete == False), 'cleanStatus'] = 'Test Results are Incomplete'
         dta.loc[(dta['cleanStatus'] == "Keep") & (dta.ExistInPart3 == False), 'cleanStatus'] = 'No Third Survey'
 
     if (debugging):
@@ -378,13 +422,19 @@ def processDemographics(dta):
                         "African American or African (Non-Hispanic)":'B',
                                                "Asian American or Asian":'A',
                                                "Native American, Native Hawaiian or Pacific Islander":'O',
+                                        "Other": 'O',
                                         "White or Caucasian (Non-Hispanic),Hispanic": 'H',
                                         "White or Caucasian (Non-Hispanic),Native American, Native Hawaiian or Pacific Islander": 'O',
                                         'White or Caucasian (Non-Hispanic),African American or African (Non-Hispanic)':'B',
                                         'White or Caucasian (Non-Hispanic),African American or African (Non-Hispanic),Native American, Native Hawaiian or Pacific Islander':'O',
-                                        'Asian American or Asian,Hispanic':'O',
+                                        'Asian American or Asian,Hispanic':'H',
                                         'Asian American or Asian,African American or African (Non-Hispanic)':'O',
                                         "White or Caucasian (Non-Hispanic),Asian American or Asian":'A',
+                                        "Hispanic,African American or African (Non-Hispanic)": "H",
+                                        "White or Caucasian (Non-Hispanic),Other": "O",
+                                        "African American or African (Non-Hispanic),Native American, Native Hawaiian or Pacific Islander": "B",
+                                        "Hispanic,Native American, Native Hawaiian or Pacific Islander" : "H",
+                                        
                         "I prefer not to say":'O'})
     dta['employment3'] = dta['Employment'].replace({"Employed, working 1-29 hours per week": 'U',
                                            "Employed, working 30 or more hours per week": 'E',
@@ -401,10 +451,10 @@ def processDemographics(dta):
 
     dta['ageYears'] = dta['Age_1']
 
-
     dta['genderI'] = dta['Gender'].replace({"Male": 0,
                                              "Female": 1,
-                                             "Other": None})
+                                             "Other": None,
+                                            "Prefer not to answer":None})
     dta['ageYearsSq'] = dta.ageYears * dta.ageYears
     dta['lIncomeAmount'] = np.log(dta.incomeAmount)
 
@@ -443,11 +493,37 @@ def markCorrectAnswers(dta, surveyVersion):
     scoringVars = ['numCorrect', 'numEmailsCorrect', 'numLettersCorrect', 'numSMSesCorrect', 'numFakeLabeledReal', 'numRealLabeledFake',
                        'numRealLabeledReal', 'numFakeLabeledFake',  'numLabeledReal', 'numLabeledFake', 'numNoAnswer']
 
+    # Each Version is different in what it tests. So, we count up the # in each group, to calculate %s.
+    numQuestions_Biz = 0
+    numQuestions_Govt = 0
+    numQuestions_Real = 0
+    numQuestions_Scam = 0
+    numQuestions_Email = 0
+    numQuestions_Web = 0
+    numQuestions_Letter = 0
+
+
     for testQuestion in testQuestions.keys():
+
         # Get the correct answer
         correctAnswer = testQuestions[testQuestion][0]
         messageType = testQuestions[testQuestion][1]
         messageSender = testQuestions[testQuestion][2]
+
+        if correctAnswer == "Scam":
+            numQuestions_Scam += 1
+        if correctAnswer == "Real":
+            numQuestions_Real += 1
+        if messageSender == "Biz":
+            numQuestions_Biz += 1
+        if messageSender == "Govt":
+            numQuestions_Govt += 1
+        if messageType == "Email":
+            numQuestions_Email += 1
+        if messageType == "Web":
+            numQuestions_Web += 1
+        if messageType == "Letter":
+            numQuestions_Letter += 1
 
         # Increment each peron's correct count if they go it
         correctMask = dta[testQuestion] == correctAnswer
@@ -495,8 +571,58 @@ def markCorrectAnswers(dta, surveyVersion):
         dta.loc[dta[testQuestion] == 'Scam', 'numLabeledFake'] = 1 + dta.loc[dta[testQuestion] == 'Scam', 'numLabeledFake']
         dta.loc[~(dta[testQuestion].isin(['Scam','Real'])), 'numNoAnswer'] = 1 + dta.loc[~(dta[testQuestion].isin(['Scam','Real'])), 'numNoAnswer']
 
-    dta['percentCorrect'] = dta.numCorrect/len(testQuestions) * 100
+    # ###### Calculate Percents
+    # There's a bug in the platform in that 20-30% of responses on the last question aren't recorded.
+    # Exclude those values from the %s
+    dta['droppedFinalQuestion'] = False
+    lastQuestion = list(testQuestions.keys())[-1]
+    dta.loc[~(dta[lastQuestion].isin(['Scam', 'Real'])) & dta['numNoAnswer'] == 1, 'droppedFinalQuestion'] = True
 
+    numQuestions = len(testQuestions)
+
+    dta['percentCorrect'] = dta.numCorrect/numQuestions * 100
+    dta['percentCorrect_Email'] = dta.numEmailsCorrect/numQuestions_Email * 100
+    dta['percentCorrect_Web'] = dta.numWebsitesCorrect/numQuestions_Web * 100
+    if numQuestions_Letter > 0:
+        dta['percentCorrect_Letter'] = dta.numLettersCorrect/numQuestions_Letter * 100
+    else:
+        dta['percentCorrect_Letter'] = 0
+    dta['percentCorrect_Govt'] = dta.numCorrect_Govt/numQuestions_Govt * 100
+    dta['percentCorrect_Biz'] = dta.numCorrect_Biz/numQuestions_Biz * 100
+    dta['percentCorrect_Scam'] = dta.numFakeLabeledFake/numQuestions_Scam * 100
+    dta['percentCorrect_Real'] = dta.numRealLabeledReal/numQuestions_Real * 100
+
+    return dta
+
+def processFraud(dta):
+    dta.rename(columns={'Previous Fraud':'previousFraud'}, inplace=True)
+
+    dta['fraudExperience_SSA'] = False
+    dta['fraudExperience_Govt'] = False
+    dta['fraudExperience_Biz'] = False
+
+    # Extract particular types of fraud experience. The "True==" converts NAs (no answer at all) to false
+    dta.loc[True == dta.previousFraud.str.contains('Someone claiming to be from the Social Security Administration'),
+        'fraudExperience_SSA'] = True
+
+    dta.loc[(True == dta.previousFraud.str.contains('Someone claiming to be from the IRS')) | (True == dta.previousFraud.str.contains('Someone claiming to be from the Social Security Administration')) |
+            (True == dta.previousFraud.str.contains('Someone claiming to be from another government agency')),
+        'fraudExperience_Govt'] = True
+
+    dta.loc[(True == dta.previousFraud.str.contains('Someone otherwise claiming to be from an organization')) | (True == dta.previousFraud.str.contains('Someone selling fraudulent goods or services')),
+        'fraudExperience_Biz'] = True
+
+    dta['fraudExperience_YN'] = ~dta.previousFraud.isna()
+    dta['fraudLoss_YN'] = dta.lose_money == "Yes"
+    dta['fraudLoss_Amount'] = dta['amount_lost'].astype(str).replace(' ', '').replace(r'[^\d.]', '', regex=True). \
+            replace(r'(\d*).*', r'\1', regex=True).replace(np.nan, "0").replace("^(?![\s\S])", "0", regex=True).astype(float)
+
+    """
+    if debug:
+        testSequence = pd.Series(['a', '100', '105.3', '$4'])
+        testSequence.astype(str).replace(' ', '').replace(r'[^\d.]', '', regex=True). \
+            replace(r'(\d*).*', r'\1', regex=True).replace(np.nan, "0").replace("^(?![\s\S])", "0", regex=True).astype(float)
+        """
     return dta
 
 
@@ -544,8 +670,9 @@ def processTrust(dta):
 
     # OnlineShopping
     dta['OnlineShoppingScore'] = (dta['OnlineShopping'].replace({"Never": 1, "Once a year": 2,
-                                                                 "Few times a year": 3, "Once a month": 4,
-                                                                 "Once a week": 5, "Few times a week/Daily": 6}))
+                                                                 "A few times a year": 3, "Once a month": 4,
+                                                                 "Once a week": 5, "Few times a week/Daily": 6,
+                                                                 "A few times a week / Daily":6}))
 
     dta['LonelyScore'] = (
                 dta['Lonely1'].replace({"Hardly ever": 1, "Some of the time": 2, "Often": 3}) + \
@@ -555,3 +682,4 @@ def processTrust(dta):
 
 
     return dta
+
