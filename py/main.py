@@ -32,10 +32,10 @@ def doIt(surveyVersion):
                    'numFakeLabeledReal', 'numRealLabeledFake',
                     'numRealLabeledReal', 'numFakeLabeledFake', 'numLabeledReal', 'numLabeledFake', 'numNoAnswer']
 
-    if (surveyVersion in ['8','9', '10']):
+    if (surveyVersion in ['8','9', '10', '11']):
         scoringVars = scoringVars + ['numLettersCorrect']
 
-    if (surveyVersion in ['2', '3', '4', '5', '6', '7', '8','9', '10']):
+    if (surveyVersion in ['2', '3', '4', '5', '6', '7', '8','9', '10', '11']):
         scoringVars = scoringVars + ['NumWithHeadersOpened','NumWithLinksClicked']
 
     analyzeResults(dta, outputFileName = surveyVersion, scoringVars = scoringVars, surveyVersion = surveyVersion, dataDir = dataDir,
@@ -45,4 +45,4 @@ def doIt(surveyVersion):
 
 # Default "Main"
 if __name__ == '__main__':
-    doIt("10")
+    doIt("11")

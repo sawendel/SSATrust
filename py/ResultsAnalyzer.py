@@ -666,7 +666,7 @@ def analyzeResults(dta, outputFileName, scoringVars, surveyVersion,dataDir,  pri
        
     """
 
-    if (surveyVersion in ['2', '3', '10']):
+    if (surveyVersion in ['2', '3', '10', '11']):
         resultTables = ols('NumWithHeadersOpened ~ C(surveyArm)', data=dta).fit().summary().tables
         pd.DataFrame(resultTables[0]).to_excel(writer, sheet_name="NumHeadersOpened_ByArm", startrow=1, header=False, index=False)
         pd.DataFrame(resultTables[1]).to_excel(writer, sheet_name="NumHeadersOpened_ByArm", startrow=1 + len(resultTables[0]) + 2, header=False, index=False)
