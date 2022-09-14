@@ -35,7 +35,7 @@ def getTrainingQuestions(surveyVersion):
                              'email_mcafee': ('Real','Email', 'Biz', 'mcafee.html'),
                              'GetProtected': ('Scam','Email', 'Govt', 'getProtected.html'),
                         }
-    elif surveyVersion in ('5', '6', '7', '8', '9', '10', '11'):
+    elif surveyVersion in ('5', '6', '7', '8', '9', '10', '11', '14', '15'):
         trainingQuestions = OrderedDict([
             ('ProtectYourself', ('Real', 'Email', 'Govt', 'protectYourself.html')),
                              ('AmazonHP', ('Real', 'Web', 'Biz', 'amazonHP.html')),
@@ -112,7 +112,7 @@ def getTestQuestions(surveyVersion):
             'benefitsSuspension': ('Scam', 'Letter', 'Govt', 'benefitsSuspension.html'),
             'replacementCard': ('Real', 'Email', 'Govt', 'ssa_replacementCardClean.html'),
         }
-    elif surveyVersion in ('9', '10', '11'): # TestV9
+    elif surveyVersion in ('9', '10', '11', '14', '15'): # TestV9
         testQuestions = OrderedDict([
             ('WalmartProduct', ('Real', 'Web', 'Biz', 'walmart.html')),
             ('RedCross', ('Scam', 'Email', 'Biz', 'redcross_covidRelief.html')),
@@ -171,18 +171,31 @@ def readData(surveyVersion, dataDir):
               "v9/SSA_Y4_v2_FullApp_FinalSection_July 29, 2022_21.03.csv",
               "v9/logs_1659150273222.csv",
               "V3/SSA Lists_First20_NoPII.csv"),
-        '10': ("v10/SSA_Y4_v2_FullApp_Entry_BBBOrProlific_August 1, 2022_14.24.csv",
-              "v10/SSA_Y4_v2_FullApp_AfterTraining_August 1, 2022_14.25.csv",
-              "v10/SSA_Y4_v2_FullApp_FinalSection_August 1, 2022_15.04.csv",
-              "v10/logs_1659387915154.csv",
+        '10': ("FinalCombinedSurveyData/SSA_Y4_v2_FullApp_Entry_BBBOrProlific_September 13, 2022_15.18.csv",
+               "FinalCombinedSurveyData/SSA_Y4_v2_FullApp_AfterTraining_September 13, 2022_15.25.csv",
+               "FinalCombinedSurveyData/SSA_Y4_v2_FullApp_FinalSection_September 13, 2022_15.10.csv",
+               "FinalCombinedSurveyData/logs_1663104944347_July28_to_Sept13.csv",
+        # '10': ("v10/SSA_Y4_v2_FullApp_Entry_BBBOrProlific_August 1, 2022_14.24.csv",
+        #      "v10/SSA_Y4_v2_FullApp_AfterTraining_August 1, 2022_14.25.csv",
+        #      "v10/SSA_Y4_v2_FullApp_FinalSection_August 1, 2022_15.04.csv",
+        #      "v10/logs_1659387915154.csv",
               "V3/SSA Lists_First20_NoPII.csv"),
         '11': ("v11_FixVerifcation/SSA_Y4_v2_FullApp_Entry_BorP_TrainingOnly_August 11, 2022_14.14.csv",
               "v11_FixVerifcation/SSA_Y4_v2_FullApp_AfterTraining_August 11, 2022_14.18.csv",
               "v11_FixVerifcation/SSA_Y4_v2_FullApp_FinalSection_August 11, 2022_14.15.csv",
               "v11_FixVerifcation/logs_1660248951341.csv",
               "V3/SSA Lists_First20_NoPII.csv"),
-
-
+        '14': ("FinalCombinedSurveyData/SSA_Y4_v2_FullApp_Entry_BBBOrProlific_September 13, 2022_15.18.csv",
+               "FinalCombinedSurveyData/SSA_Y4_v2_FullApp_AfterTraining_September 13, 2022_15.25.csv",
+               "FinalCombinedSurveyData/SSA_Y4_v2_FullApp_FinalSection_September 13, 2022_15.10.csv",
+               "FinalCombinedSurveyData/logs_1663104944347_July28_to_Sept13.csv",
+               "V3/SSA Lists_First20_NoPII.csv"),
+        '15': ("v15_Delay/SSA_Y4_v12_2WeekDelay_Entry_September 13, 2022_16.12.csv",
+               "v15_Delay/SSA_Y4_v12_2WeekDelay_AfterTraining_September 13, 2022_16.13.csv",
+               "v15_Delay/SSA_Y4_V12_2WkDelay_ReturnOnSecondWeek_September 13, 2022_16.19.csv",
+               "v15_Delay/SSA_Y4_v12_2WeekDelay_Final_September 13, 2022_16.22.csv",
+               "v15_Delay/logs_1663104944347_July28_to_Sept13.csv",
+               ),
     }
 
     # ###############
@@ -194,7 +207,8 @@ def readData(surveyVersion, dataDir):
     if surveyVersion == '1':
         dataFileName = surveyOutputFilesByVersion[surveyVersion][1]
         dta = pd.read_csv(dataDir + dataFileName)
-    if surveyVersion in ('2', '3', '4', '5', '6', '7', '8', '9', '10', '11'):
+
+    if surveyVersion in ('2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '14'):
         p1File = surveyOutputFilesByVersion[surveyVersion][0]
         dta_p1_BeforeTraining = pd.read_csv(dataDir + p1File)
 
@@ -224,6 +238,45 @@ def readData(surveyVersion, dataDir):
         dta = dta.merge(dta_p3_Closing, right_on="PID", left_on="PID", how="left", suffixes=["", "_p3"])
         dta['ExistInPart3'] = ~dta['ResponseId_p3'].isna()
 
+    if surveyVersion in ('15'): # delay test
+        p1_Day1_File = surveyOutputFilesByVersion[surveyVersion][0]
+        dta_p1_BeforeTraining = pd.read_csv(dataDir + p1_Day1_File)
+
+        p2_Day1_File = surveyOutputFilesByVersion[surveyVersion][1]
+        dta_p2_AfterTraining = pd.read_csv(dataDir + p2_Day1_File)
+
+        p3_Day2_File = surveyOutputFilesByVersion[surveyVersion][2]
+        dta_p3_ReturnAfterDelay = pd.read_csv(dataDir + p3_Day2_File)
+
+        p4_Day2_File = surveyOutputFilesByVersion[surveyVersion][3]
+        dta_p4_Final = pd.read_csv(dataDir + p4_Day2_File)
+
+        mongoFile = surveyOutputFilesByVersion[surveyVersion][4]
+        mongoDta = pd.read_csv(dataDir + mongoFile)
+
+        # Process the Training Responses directly after the opening demographics
+        trainingQuestions = getTrainingQuestions(surveyVersion)
+        dta = convertMongoToResponseHistory(dta_p1_BeforeTraining, mongoDta, trainingQuestions)
+        dta['ExistInMongo_Training'] = dta[trainingQuestions.keys()].isin(["Scam", "Real","Both"]).any(axis=1)
+        dta['MongoTraining_Complete'] = dta[trainingQuestions.keys()].isin(["Scam", "Real","Both"]).all(axis=1)
+        # Pull in the survey questions in the middle - betweeen training and test
+        dta = dta.merge(dta_p2_AfterTraining, left_on="PID", right_on="PID", how="left", suffixes=["", "_p2"])
+        dta['ExistInPart2'] = ~dta['ResponseId_p2'].isna()
+
+        # Process the 'Return to Study' after delay
+        dta = dta.merge(dta_p3_ReturnAfterDelay, right_on="PID", left_on="PID", how="left", suffixes=["", "_p3"])
+        dta['ExistInPart3'] = ~dta['ResponseId_p3'].isna()
+
+        # Process the Test Responses directly after
+        testQuestions = getTestQuestions(surveyVersion)
+        dta = convertMongoToResponseHistory(dta, mongoDta, testQuestions)
+        dta['ExistInMongo_Test'] = dta[testQuestions.keys()].isin(["Scam", "Real","Both"]).any(axis=1)
+        dta['MongoTest_Complete'] = dta[testQuestions.keys()].isin(["Scam", "Real","Both"]).all(axis=1)
+
+        # Pull in the survey questions at the end
+        dta = dta.merge(dta_p4_Final, right_on="PID", left_on="PID", how="left", suffixes=["", "_p4"])
+        dta['ExistInPart4'] = ~dta['ResponseId_p4'].isna()
+
     # remove empty columns
     # dta = dta.dropna(axis=1, how='all')
     dta.surveyArm.fillna(value="Unknown", inplace=True)
@@ -239,10 +292,15 @@ def readData(surveyVersion, dataDir):
     dta['IsPrimaryWave'] = False
 
 
-    if surveyVersion == 'LALA':  # Final Prolific
-        dta['Wave'] = 1
-        dta.loc[(dta.StartDate < '8/1/2021 23:59'), 'Wave'] = 1
-        dta.loc[dta.Wave.isin([3]), "IsPrimaryWave"] = True
+    if surveyVersion == '10':  # Final Prolific Analysis
+        # Drop ALL Data before the start of the Nat Rep Sample
+        dta = dta.loc[dta.BID.isna() & (dta.StartDate >= '7/30/2022 01:01') & (dta.StartDate <= '8/01/2022 23:59')].copy()
+        dta['Wave'] = 1 # Prolific
+        dta['IsPrimaryWave'] = True
+    if surveyVersion == '14':  # Final BBB Analysis
+        dta = dta.loc[~dta.BID.isna() & (dta.StartDate >= '7/30/2022 01:01')].copy()
+        dta['Wave'] = 1  # Prolific
+        dta['IsPrimaryWave'] = True
     else:
         dta.Wave = 1
         dta['IsPrimaryWave'] = True
@@ -302,7 +360,7 @@ def cleanData(dta, priorPids, surveyVersion, dataDir):
     dta['duration_p2_Quantile'] = pd.qcut(dta.duration_p2, q=5, labels=False)
     dta['duration_p3_Quantile'] = pd.qcut(dta.duration_p3, q=5, labels=False)
 
-    if surveyVersion in ('2', '3', '4', '5', '6', '7', '8', '9', '10', '11'):
+    if surveyVersion in ('2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '14', '15'):
         dta['daysFromTrainingToTest'] = (dta['StartDate_p3'].astype('datetime64') - dta['StartDate'].astype('datetime64')).dt.days
 
     # dta['duration_p2_Quantile'] = pd.qcut(dta.duration_p2, q=5, labels=False)
@@ -314,8 +372,11 @@ def cleanData(dta, priorPids, surveyVersion, dataDir):
 
     if surveyVersion == '2':
         dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent == 'No'), 'cleanStatus'] = 'No to Consent: First Survey'
-    elif surveyVersion in ('3', '4', '5', '6', '7', '8', '9', '10', '11'):
+    elif surveyVersion in ('3', '4', '5', '6', '7', '8', '9', '10', '11', '14'):
         dta.loc[(dta['cleanStatus'] == "Keep") & ((dta.Consent_Prolific == 'No') | (dta.Consent_BBB == 'No')), 'cleanStatus'] = 'No to Consent: First Survey'
+    elif surveyVersion in ('15'):
+        dta.loc[(dta['cleanStatus'] == "Keep") & ((dta.Consent_Prolific == 'No')), 'cleanStatus'] = 'No to Consent: First Survey'
+        dta.loc[(dta['cleanStatus'] == "Keep") & ((dta.Consent_Prolific_P2 == 'No')), 'cleanStatus'] = 'No to Consent: Second Survey'
 
     if surveyVersion in ('2', '3', '4', '5', '6', '7', '8'):
         # No such - only with time delay. dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent_p2=='No'), 'cleanStatus'] = 'No to Consent: Second Survey'
@@ -335,7 +396,7 @@ def cleanData(dta, priorPids, surveyVersion, dataDir):
         # dta.loc[(dta['cleanStatus'] == "Keep") & (dta.MongoTest_Complete == False), 'cleanStatus'] = 'Test Results are Incomplete'
         dta.loc[(dta['cleanStatus'] == "Keep") & (dta.ExistInPart3 == False), 'cleanStatus'] = 'No Third Survey'
 
-    if surveyVersion in ('9', '10', '11'):
+    if surveyVersion in ('9', '10', '11', '14', '15'):
         # No such - only with time delay. dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent_p2=='No'), 'cleanStatus'] = 'No to Consent: Second Survey'
         # No such - only with time delay.  dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Consent_p3=='No'), 'cleanStatus'] = 'No to Consent: Third Survey'
 
@@ -343,6 +404,8 @@ def cleanData(dta, priorPids, surveyVersion, dataDir):
         dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Progress_p2 <= 85), 'cleanStatus'] = 'Incomplete: Second Survey'
         # SW Change 31 July -- this is dropping people who never experienced scams.
         # dta.loc[(dta['cleanStatus'] == "Keep") & (dta.Progress_p3 <= 90), 'cleanStatus'] = 'Incomplete: Third Survey'
+
+        # NOTE -- in the timed delay test, this is actually part of Survey 2 (before the delay)
         dta.loc[(dta['cleanStatus'] == "Keep") & (dta.KeepResponse.isna()) & (dta.CyberTraining.isna()), 'cleanStatus'] = 'Incomplete: Third Survey'
 
         # SW Change on 31 July: This is disproportionately removing People in the Control (it has shorter text); safter no make less extreme
@@ -363,7 +426,9 @@ def cleanData(dta, priorPids, surveyVersion, dataDir):
     dta.loc[(dta['cleanStatus'] == "Keep"), 'DuplicatedCleanPID'] = dta.loc[(dta['cleanStatus'] == "Keep"), 'PID'].duplicated(keep='first')
     dta.loc[(dta['cleanStatus'] == "Keep") & (dta['DuplicatedCleanPID']), 'cleanStatus'] = 'Dup PID within current Version'
 
-    dta.loc[(dta['cleanStatus'] == "Keep") & (~dta.KeepResponse.eq("Yes, use the responses.")), 'cleanStatus'] = 'Honesty Check Failed'
+
+    if surveyVersion not in ('14'): # For the BBB population, this question was confusing and incorrect. It should not have been included. Do not use for that population We had many blanks. Remove.
+        dta.loc[(dta['cleanStatus'] == "Keep") & (~dta.KeepResponse.eq("Yes, use the responses.")), 'cleanStatus'] = 'Honesty Check Failed'
 
 
     # dta['DuplicatedIP'] = dta.IPAddress.duplicated(keep='first')
@@ -423,6 +488,9 @@ def processDemographics(dta):
                         "$40,000 - $59,999":60, "$60,000 - $79,999":70, "$80,000 - $99,999":90,
                         "$100,000 - $149,999":125, "$150,000 or more":175})
 
+    # Rule applied here: Native American and Pacific Islander are too small of groups to count on their own
+    #   Count minority status when given
+    #   If mutiple minority groups given  = other
     dta['race5'] = dta['Race'].replace({"White or Caucasian (Non-Hispanic)":'W',
                                                "Hispanic":'H',
                         "African American or African (Non-Hispanic)":'B',
@@ -431,16 +499,27 @@ def processDemographics(dta):
                                         "Other": 'O',
                                         "White or Caucasian (Non-Hispanic),Hispanic": 'H',
                                         "White or Caucasian (Non-Hispanic),Native American, Native Hawaiian or Pacific Islander": 'O',
-                                        'White or Caucasian (Non-Hispanic),African American or African (Non-Hispanic)':'B',
-                                        'White or Caucasian (Non-Hispanic),African American or African (Non-Hispanic),Native American, Native Hawaiian or Pacific Islander':'O',
-                                        'Asian American or Asian,Hispanic':'H',
-                                        'Asian American or Asian,African American or African (Non-Hispanic)':'O',
                                         "White or Caucasian (Non-Hispanic),Asian American or Asian":'A',
-                                        "Hispanic,African American or African (Non-Hispanic)": "H",
-                                        "White or Caucasian (Non-Hispanic),Other": "O",
+                                        'White or Caucasian (Non-Hispanic),African American or African (Non-Hispanic)':'B',
+
                                         "African American or African (Non-Hispanic),Native American, Native Hawaiian or Pacific Islander": "B",
                                         "Hispanic,Native American, Native Hawaiian or Pacific Islander" : "H",
-                                        
+                                        "Asian American or Asian, Native American, Native Hawaiian or Pacific Islander": "A",
+
+                                        "Asian American or Asian,African American or African (Non-Hispanic),Native American, Native Hawaiian or Pacific Islander": "O",
+                                        "Asian American or Asian,Hispanic,African American or African (Non-Hispanic),Native American, Native Hawaiian or Pacific Islander": "O",
+                                        "Hispanic,Other": "H",
+
+                                        'Asian American or Asian,Hispanic':'O',
+                                        "White or Caucasian (Non-Hispanic),Asian American or Asian,African American or African (Non-Hispanic),Native American, Native Hawaiian or Pacific Islander": "O",
+                                        "White or Caucasian (Non-Hispanic),Hispanic,Native American, Native Hawaiian or Pacific Islander,Other":"O",
+                                        "White or Caucasian (Non-Hispanic),I prefer not to say":"O",
+                                        "White or Caucasian (Non-Hispanic),Native American, Native Hawaiian or Pacific Islander,Other":"O",
+                                        'Asian American or Asian,African American or African (Non-Hispanic)':'O',
+                                        "Hispanic,African American or African (Non-Hispanic)": "O",
+                                        'White or Caucasian (Non-Hispanic),African American or African (Non-Hispanic),Native American, Native Hawaiian or Pacific Islander':'O',
+                                        "White or Caucasian (Non-Hispanic),Other": "O",
+                                        "White or Caucasian (Non-Hispanic),Asian American or Asian,Hispanic": "O",
                         "I prefer not to say":'O'})
     dta['employment3'] = dta['Employment'].replace({"Employed, working 1-29 hours per week": 'U',
                                            "Employed, working 30 or more hours per week": 'E',
@@ -595,8 +674,11 @@ def markCorrectAnswers(dta, surveyVersion):
         dta['percentCorrect_Letter'] = 0
     dta['percentCorrect_Govt'] = dta.numCorrect_Govt/numQuestions_Govt * 100
     dta['percentCorrect_Biz'] = dta.numCorrect_Biz/numQuestions_Biz * 100
-    dta['percentCorrect_Scam'] = dta.numFakeLabeledFake/numQuestions_Scam * 100
-    dta['percentCorrect_Real'] = dta.numRealLabeledReal/numQuestions_Real * 100
+    dta['percentCorrect_IsScam'] = dta.numFakeLabeledFake/numQuestions_Scam * 100
+    dta['percentCorrect_IsReal'] = dta.numRealLabeledReal/numQuestions_Real * 100
+    dta['percentIncorrect_ActuallyScam'] = dta.numFakeLabeledReal/numQuestions_Scam * 100
+    dta['percentIncorrect_ActuallyReal'] = dta.numRealLabeledFake/numQuestions_Real * 100
+
 
     return dta
 
@@ -622,6 +704,11 @@ def processFraud(dta):
     dta['fraudLoss_YN'] = dta.lose_money == "Yes"
     dta['fraudLoss_Amount'] = dta['amount_lost'].astype(str).replace(' ', '').replace(r'[^\d.]', '', regex=True). \
             replace(r'(\d*).*', r'\1', regex=True).replace(np.nan, "0").replace("^(?![\s\S])", "0", regex=True).astype(float)
+
+    dta['reportFraud_YN'] = dta.report_loss == "Yes"
+    dta.loc[dta.previousFraud.isna(), 'reportFraud_YN'] = None
+
+
 
     """
     if debug:

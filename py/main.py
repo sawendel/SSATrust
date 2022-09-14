@@ -32,10 +32,10 @@ def doIt(surveyVersion):
                    'numFakeLabeledReal', 'numRealLabeledFake',
                     'numRealLabeledReal', 'numFakeLabeledFake', 'numLabeledReal', 'numLabeledFake', 'numNoAnswer']
 
-    if (surveyVersion in ['8','9', '10', '11']):
+    if (surveyVersion in ['8','9', '10', '11', '14', '15']):
         scoringVars = scoringVars + ['numLettersCorrect']
 
-    if (surveyVersion in ['2', '3', '4', '5', '6', '7', '8','9', '10', '11']):
+    if (surveyVersion in ['2', '3', '4', '5', '6', '7', '8','9', '10', '11', '14', '15']):
         scoringVars = scoringVars + ['NumWithHeadersOpened','NumWithLinksClicked']
 
     analyzeResults(dta, outputFileName = surveyVersion, scoringVars = scoringVars, surveyVersion = surveyVersion, dataDir = dataDir,
@@ -45,4 +45,17 @@ def doIt(surveyVersion):
 
 # Default "Main"
 if __name__ == '__main__':
-    doIt("11")
+    # 3: First Nat Rep, Prolific, No Delay
+    # 10: Final Nat Rep, Prolific, No Delay
+    # 14: Final BBB, No Delay
+    # 15: Final Nat Rep, Prolific, With Delay
+
+    if True:
+        doIt("3")
+        print("Done with 3: First Nat Rep, Prolific, No Delay")
+        doIt("10")
+        print("Done with 10: Final Nat Rep, Prolific, No Delay")
+        doIt("14")
+        print("Done with 14: Final BBB, No Delay")
+        doIt("15")
+        print("Done with 15: Final Nat Rep, Prolific, With Delay")
