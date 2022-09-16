@@ -171,10 +171,10 @@ def readData(surveyVersion, dataDir):
               "v9/SSA_Y4_v2_FullApp_FinalSection_July 29, 2022_21.03.csv",
               "v9/logs_1659150273222.csv",
               "V3/SSA Lists_First20_NoPII.csv"),
-        '10': ("FinalCombinedSurveyData/SSA_Y4_v2_FullApp_Entry_BBBOrProlific_September 13, 2022_15.18.csv",
-               "FinalCombinedSurveyData/SSA_Y4_v2_FullApp_AfterTraining_September 13, 2022_15.25.csv",
-               "FinalCombinedSurveyData/SSA_Y4_v2_FullApp_FinalSection_September 13, 2022_15.10.csv",
-               "FinalCombinedSurveyData/logs_1663104944347_July28_to_Sept13.csv",
+        '10': ("FinalCombinedSurveyData/SSA_Y4_v2_FullApp_Entry_BBBOrProlific_September 15, 2022_12.42.csv",
+               "FinalCombinedSurveyData/SSA_Y4_v2_FullApp_AfterTraining_September 15, 2022_12.43.csv",
+               "FinalCombinedSurveyData/SSA_Y4_v2_FullApp_FinalSection_September 15, 2022_12.44.csv",
+               "FinalCombinedSurveyData/logs_1663268057676_July28_Sept15.csv",
         # '10': ("v10/SSA_Y4_v2_FullApp_Entry_BBBOrProlific_August 1, 2022_14.24.csv",
         #      "v10/SSA_Y4_v2_FullApp_AfterTraining_August 1, 2022_14.25.csv",
         #      "v10/SSA_Y4_v2_FullApp_FinalSection_August 1, 2022_15.04.csv",
@@ -185,16 +185,16 @@ def readData(surveyVersion, dataDir):
               "v11_FixVerifcation/SSA_Y4_v2_FullApp_FinalSection_August 11, 2022_14.15.csv",
               "v11_FixVerifcation/logs_1660248951341.csv",
               "V3/SSA Lists_First20_NoPII.csv"),
-        '14': ("FinalCombinedSurveyData/SSA_Y4_v2_FullApp_Entry_BBBOrProlific_September 13, 2022_15.18.csv",
-               "FinalCombinedSurveyData/SSA_Y4_v2_FullApp_AfterTraining_September 13, 2022_15.25.csv",
-               "FinalCombinedSurveyData/SSA_Y4_v2_FullApp_FinalSection_September 13, 2022_15.10.csv",
-               "FinalCombinedSurveyData/logs_1663104944347_July28_to_Sept13.csv",
+        '14': ("FinalCombinedSurveyData/SSA_Y4_v2_FullApp_Entry_BBBOrProlific_September 15, 2022_12.42.csv",
+               "FinalCombinedSurveyData/SSA_Y4_v2_FullApp_AfterTraining_September 15, 2022_12.43.csv",
+               "FinalCombinedSurveyData/SSA_Y4_v2_FullApp_FinalSection_September 15, 2022_12.44.csv",
+               "FinalCombinedSurveyData/logs_1663268057676_July28_Sept15.csv",
                "V3/SSA Lists_First20_NoPII.csv"),
-        '15': ("v15_Delay/SSA_Y4_v12_2WeekDelay_Entry_September 13, 2022_16.12.csv",
-               "v15_Delay/SSA_Y4_v12_2WeekDelay_AfterTraining_September 13, 2022_16.13.csv",
-               "v15_Delay/SSA_Y4_V12_2WkDelay_ReturnOnSecondWeek_September 13, 2022_16.19.csv",
-               "v15_Delay/SSA_Y4_v12_2WeekDelay_Final_September 13, 2022_16.22.csv",
-               "v15_Delay/logs_1663104944347_July28_to_Sept13.csv",
+        '15': ("v15_Delay/SSA_Y4_v12_2WeekDelay_Entry_September 15, 2022_12.46.csv",
+               "v15_Delay/SSA_Y4_v12_2WeekDelay_AfterTraining_September 15, 2022_12.47.csv",
+               "v15_Delay/SSA_Y4_V12_2WkDelay_ReturnOnSecondWeek_September 15, 2022_12.49.csv",
+               "v15_Delay/SSA_Y4_v12_2WeekDelay_Final_September 15, 2022_12.48.csv",
+               "v15_Delay/logs_1663268057676_July28_Sept15.csv",
                ),
     }
 
@@ -485,7 +485,7 @@ def processDemographics(dta):
     # Demographic processing, etc
     # ##############
     dta['incomeAmount'] = dta['TotalIncome'].replace({"$0 - $19,999":10, "$20,000 - $39,999":30,
-                        "$40,000 - $59,999":60, "$60,000 - $79,999":70, "$80,000 - $99,999":90,
+                        "$40,000 - $59,999":50, "$60,000 - $79,999":70, "$80,000 - $99,999":90,
                         "$100,000 - $149,999":125, "$150,000 or more":175})
 
     # Rule applied here: Native American and Pacific Islander are too small of groups to count on their own
@@ -679,6 +679,12 @@ def markCorrectAnswers(dta, surveyVersion):
     dta['percentIncorrect_ActuallyScam'] = dta.numFakeLabeledReal/numQuestions_Scam * 100
     dta['percentIncorrect_ActuallyReal'] = dta.numRealLabeledFake/numQuestions_Real * 100
 
+    dta['RevealedTrust'] = None
+    dta.loc[dta.surveyArm.isin(["arm1_control", "arm2_generalinfo"]), 'RevealedTrust'] = dta.loc[dta.surveyArm.isin(["arm1_control", "arm2_generalinfo"]), 'percentCorrect_IsReal']
+    dta['RevealedTrust'] = dta['RevealedTrust'].astype(float)
+
+
+
 
     return dta
 
@@ -730,12 +736,12 @@ def processTrust(dta):
                         'govt_trust_4': 'GovtConf4_Views'}, inplace=True)
 
     dta['GovtConfScore'] = (
-                dta['GovtConf1_Future'].replace({"None at all": 1, "Very little": 2, "Some": 3, "Quite a lot": 4}) + \
-                (4 - dta['GovtConf2_Feel'].replace({"Basically content": 1, "Frustrated": 2, "Angry": 3})) + \
-                dta['GovtConf3_Trust'].replace(
-                    {"Never": 1, "Only some of the time": 2, "Most of the time": 3, "Just about always": 4}) + \
+                (dta['GovtConf1_Future'].replace({"None at all": 1, "Very little": 2, "Some": 3, "Quite a lot": 4})-1)/3 + \
+                (4 - dta['GovtConf2_Feel'].replace({"Basically content": 1, "Frustrated": 2, "Angry": 3})-1)/2+ \
+                (dta['GovtConf3_Trust'].replace(
+                    {"Never": 1, "Only some of the time": 2, "Most of the time": 3, "Just about always": 4})-1)/3 + \
                 (3 - dta['GovtConf4_Views'].replace({"Government should do more to solve problems.": 1,
-                                                     "Government is doing too many things better left to businesses and individuals.": 2})))
+                                                     "Government is doing too many things better left to businesses and individuals.": 2})-1))/4
 
     # TrustInSSA_3	TrustInSSA_4	TrustInSSA_5	TrustInSSA_6	TrustInSSA_7	TrustInSSA_8	TrustInSSA_9	TrustInSSA_10
     likert7WeakToStrong = {"Strongly Disagree": 1, "Disagree": 2, "Slightly Disagree": 3,
